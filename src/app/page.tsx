@@ -1,65 +1,324 @@
-import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { LinkButton } from "@/components/link-button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { ContactForm } from "@/components/contact-form";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
+    <main className="flex-1">
+      {/* Nav */}
+      <header className="border-b">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <span className="text-lg font-semibold tracking-tight">
+            Stratus Creative
+          </span>
+          <nav className="hidden gap-6 text-sm text-muted-foreground sm:flex">
             <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="#services"
+              className="transition-colors hover:text-foreground"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
+              Services
+            </a>
             <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="#pricing"
+              className="transition-colors hover:text-foreground"
             >
-              Learning
-            </a>{" "}
-            center.
+              Pricing
+            </a>
+            <a
+              href="#how-it-works"
+              className="transition-colors hover:text-foreground"
+            >
+              How It Works
+            </a>
+            <a
+              href="#contact"
+              className="transition-colors hover:text-foreground"
+            >
+              Contact
+            </a>
+          </nav>
+          <LinkButton href="#contact" size="sm">
+            Get Started
+          </LinkButton>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="mx-auto max-w-6xl px-6 py-24 text-center sm:py-32">
+        <Badge variant="secondary" className="mb-6">
+          Now serving local businesses
+        </Badge>
+        <h1 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+          Your business deserves a website that works as hard as you do
+        </h1>
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+          We build professional, mobile-friendly websites for local service
+          businesses. No DIY builders. No hassle. We research your business,
+          build your site, and handle everything.
+        </p>
+        <div className="mt-10 flex items-center justify-center gap-4">
+          <LinkButton href="#contact" size="lg">
+            Get Your Website
+          </LinkButton>
+          <LinkButton href="#how-it-works" size="lg" variant="outline">
+            See How It Works
+          </LinkButton>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Services */}
+      <section id="services" className="mx-auto max-w-6xl px-6 py-20">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold tracking-tight">
+            Built for local service businesses
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+            Plumbers, electricians, cleaners, landscapers, HVAC techs, dog
+            groomers, pressure washers, handymen — if you serve your local
+            community, we build your website.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              title: "Mobile-First Design",
+              description:
+                "Your customers search on their phones. Every site we build looks great on mobile, tablet, and desktop.",
+            },
+            {
+              title: "Content from Your Reviews",
+              description:
+                "We write your website copy using your Google reviews, services, and business info. No questionnaires needed.",
+            },
+            {
+              title: "SEO Built In",
+              description:
+                "Title tags, meta descriptions, local keywords, and Google Maps integration so customers find you.",
+            },
+            {
+              title: "Click-to-Call",
+              description:
+                "One tap and your customers are calling you. Every site includes a prominent phone button.",
+            },
+            {
+              title: "Fast & Secure",
+              description:
+                "SSL certificates, fast hosting, and modern web technology. Your site loads in under 2 seconds.",
+            },
+            {
+              title: "No Maintenance Headaches",
+              description:
+                "We host, maintain, and update your site. You never have to touch it unless you want to.",
+            },
+          ].map((service) => (
+            <Card key={service.title}>
+              <CardHeader>
+                <CardTitle className="text-base">{service.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  {service.description}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-      </main>
-    </div>
+      </section>
+
+      <Separator />
+
+      {/* How It Works */}
+      <section id="how-it-works" className="mx-auto max-w-6xl px-6 py-20">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold tracking-tight">How it works</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+            We do the work upfront. You just say yes.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              step: "1",
+              title: "We find you",
+              description:
+                "We research local businesses in your area and identify those without a website.",
+            },
+            {
+              step: "2",
+              title: "We build your site",
+              description:
+                "Using your Google reviews, services, and public info, we create a professional website for your business.",
+            },
+            {
+              step: "3",
+              title: "We reach out",
+              description:
+                "We send you a preview of your new website. No obligation — just take a look.",
+            },
+            {
+              step: "4",
+              title: "You go live",
+              description:
+                "Love it? Pay once and your site goes live. Add hosting and we handle everything going forward.",
+            },
+          ].map((item) => (
+            <div key={item.step} className="text-center">
+              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                {item.step}
+              </div>
+              <h3 className="mt-4 font-semibold">{item.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {item.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Pricing */}
+      <section id="pricing" className="mx-auto max-w-6xl px-6 py-20">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold tracking-tight">
+            Simple, transparent pricing
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+            One-time build fee based on your business size. No hidden costs.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>Essential</CardTitle>
+              <CardDescription>
+                For solo operators getting started online
+              </CardDescription>
+              <div className="mt-4">
+                <span className="text-3xl font-bold">$1,000</span>
+                <span className="text-muted-foreground"> – $1,500</span>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>&#10003; Single-page responsive website</li>
+                <li>&#10003; Click-to-call phone button</li>
+                <li>&#10003; Google Maps embed</li>
+                <li>&#10003; Basic SEO optimization</li>
+                <li>&#10003; SSL certificate</li>
+                <li>&#10003; Content written from your reviews</li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="border-primary">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Professional</CardTitle>
+                <Badge>Most Popular</Badge>
+              </div>
+              <CardDescription>
+                For growing businesses ready to compete online
+              </CardDescription>
+              <div className="mt-4">
+                <span className="text-3xl font-bold">$2,000</span>
+                <span className="text-muted-foreground"> – $3,000</span>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>&#10003; Multi-page site (3–5 pages)</li>
+                <li>&#10003; Contact form with email notifications</li>
+                <li>&#10003; Photo gallery / portfolio</li>
+                <li>&#10003; Testimonials section</li>
+                <li>&#10003; Google Business Profile optimization</li>
+                <li>&#10003; Everything in Essential</li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Premium</CardTitle>
+              <CardDescription>
+                For established businesses with complex needs
+              </CardDescription>
+              <div className="mt-4">
+                <span className="text-3xl font-bold">$3,500</span>
+                <span className="text-muted-foreground"> – $5,000</span>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>&#10003; Full site (5–8 pages)</li>
+                <li>&#10003; Team page</li>
+                <li>&#10003; Service area pages</li>
+                <li>&#10003; Testimonials showcase</li>
+                <li>&#10003; Advanced SEO</li>
+                <li>&#10003; Everything in Professional</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="mt-12 text-center">
+          <h3 className="text-lg font-semibold">Optional Add-Ons</h3>
+          <div className="mx-auto mt-6 grid max-w-3xl gap-4 text-sm sm:grid-cols-2">
+            <div className="flex items-center justify-between rounded-lg border px-4 py-3">
+              <span>Hosting &amp; Maintenance</span>
+              <span className="font-semibold">$49/mo</span>
+            </div>
+            <div className="flex items-center justify-between rounded-lg border px-4 py-3">
+              <span>Hosting + Monthly Updates</span>
+              <span className="font-semibold">$99/mo</span>
+            </div>
+            <div className="flex items-center justify-between rounded-lg border px-4 py-3">
+              <span>Google Ads Management</span>
+              <span className="font-semibold">$149/mo</span>
+            </div>
+            <div className="flex items-center justify-between rounded-lg border px-4 py-3">
+              <span>Google Business Optimization</span>
+              <span className="font-semibold">$250</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Contact Form */}
+      <section id="contact" className="mx-auto max-w-6xl px-6 py-20">
+        <div className="mx-auto max-w-xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight">
+            Ready to get your website?
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Tell us about your business and we&apos;ll get started. No
+            obligation, no pressure.
+          </p>
+        </div>
+        <div className="mx-auto mt-10 max-w-lg">
+          <ContactForm />
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
+          <span>&copy; 2026 Stratus Creative. All rights reserved.</span>
+          <span>business@stratus-creative.com</span>
+        </div>
+      </footer>
+    </main>
   );
 }
