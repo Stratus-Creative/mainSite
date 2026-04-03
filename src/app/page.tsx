@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/link-button";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ContactForm } from "@/components/contact-form";
+import { CheckoutButton } from "@/components/checkout-button";
 
 export default function Home() {
   return (
@@ -44,6 +46,12 @@ export default function Home() {
             >
               Contact
             </a>
+            <Link
+              href="/support"
+              className="transition-colors hover:text-foreground"
+            >
+              Support
+            </Link>
           </nav>
           <LinkButton href="#contact" size="sm">
             Get Started
@@ -205,11 +213,10 @@ export default function Home() {
                 For solo operators getting started online
               </CardDescription>
               <div className="mt-4">
-                <span className="text-3xl font-bold">$1,000</span>
-                <span className="text-muted-foreground"> – $1,500</span>
+                <span className="text-3xl font-bold">$1,250</span>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-4">
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>&#10003; Single-page responsive website</li>
                 <li>&#10003; Click-to-call phone button</li>
@@ -218,6 +225,12 @@ export default function Home() {
                 <li>&#10003; SSL certificate</li>
                 <li>&#10003; Content written from your reviews</li>
               </ul>
+              <CheckoutButton
+                plan="essential"
+                className="mt-auto w-full rounded-md border border-input bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
+              >
+                Get started
+              </CheckoutButton>
             </CardContent>
           </Card>
 
@@ -231,11 +244,10 @@ export default function Home() {
                 For growing businesses ready to compete online
               </CardDescription>
               <div className="mt-4">
-                <span className="text-3xl font-bold">$2,000</span>
-                <span className="text-muted-foreground"> – $3,000</span>
+                <span className="text-3xl font-bold">$2,500</span>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-4">
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>&#10003; Multi-page site (3–5 pages)</li>
                 <li>&#10003; Contact form with email notifications</li>
@@ -244,6 +256,12 @@ export default function Home() {
                 <li>&#10003; Google Business Profile optimization</li>
                 <li>&#10003; Everything in Essential</li>
               </ul>
+              <CheckoutButton
+                plan="professional"
+                className="mt-auto w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+              >
+                Get started
+              </CheckoutButton>
             </CardContent>
           </Card>
 
@@ -254,11 +272,10 @@ export default function Home() {
                 For established businesses with complex needs
               </CardDescription>
               <div className="mt-4">
-                <span className="text-3xl font-bold">$3,500</span>
-                <span className="text-muted-foreground"> – $5,000</span>
+                <span className="text-3xl font-bold">$4,250</span>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-4">
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>&#10003; Full site (5–8 pages)</li>
                 <li>&#10003; Team page</li>
@@ -267,6 +284,12 @@ export default function Home() {
                 <li>&#10003; Advanced SEO</li>
                 <li>&#10003; Everything in Professional</li>
               </ul>
+              <CheckoutButton
+                plan="premium"
+                className="mt-auto w-full rounded-md border border-input bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
+              >
+                Get started
+              </CheckoutButton>
             </CardContent>
           </Card>
         </div>
@@ -275,12 +298,28 @@ export default function Home() {
           <h3 className="text-lg font-semibold">Optional Add-Ons</h3>
           <div className="mx-auto mt-6 grid max-w-3xl gap-4 text-sm sm:grid-cols-2">
             <div className="flex items-center justify-between rounded-lg border px-4 py-3">
-              <span>Hosting &amp; Maintenance</span>
-              <span className="font-semibold">$49/mo</span>
+              <div>
+                <span className="font-medium">Hosting &amp; Maintenance</span>
+                <span className="ml-3 font-semibold">$49/mo</span>
+              </div>
+              <CheckoutButton
+                plan="hosting_basic"
+                className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+              >
+                Subscribe
+              </CheckoutButton>
             </div>
             <div className="flex items-center justify-between rounded-lg border px-4 py-3">
-              <span>Hosting + Monthly Updates</span>
-              <span className="font-semibold">$99/mo</span>
+              <div>
+                <span className="font-medium">Hosting + Monthly Updates</span>
+                <span className="ml-3 font-semibold">$99/mo</span>
+              </div>
+              <CheckoutButton
+                plan="hosting_plus"
+                className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+              >
+                Subscribe
+              </CheckoutButton>
             </div>
             <div className="flex items-center justify-between rounded-lg border px-4 py-3">
               <span>Google Ads Management</span>
@@ -291,6 +330,15 @@ export default function Home() {
               <span className="font-semibold">$250</span>
             </div>
           </div>
+          <p className="mt-6 text-xs text-muted-foreground">
+            Already a customer?{" "}
+            <a
+              href="mailto:business@stratus-creative.com?subject=Manage my subscription"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              Contact us to manage your subscription
+            </a>
+          </p>
         </div>
       </section>
 
@@ -316,7 +364,11 @@ export default function Home() {
       <footer className="border-t">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
           <span>&copy; 2026 Stratus Creative. All rights reserved.</span>
-          <span>business@stratus-creative.com</span>
+          <div className="flex gap-4">
+            <a href="/privacy" className="hover:text-foreground">Privacy</a>
+            <a href="/terms" className="hover:text-foreground">Terms</a>
+            <span>business@stratus-creative.com</span>
+          </div>
         </div>
       </footer>
     </main>

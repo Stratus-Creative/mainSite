@@ -117,6 +117,16 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Base UI Accordion panel height animation */
+.support-faq-panel {
+  height: var(--collapsible-panel-height);
+  transition: height 0.2s ease;
+}
+.support-faq-panel[data-starting-style],
+.support-faq-panel[data-ending-style] {
+  height: 0;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
