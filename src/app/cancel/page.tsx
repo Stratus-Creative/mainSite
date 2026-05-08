@@ -1,42 +1,52 @@
 import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 
 export default function CancelPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <div className="max-w-md">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-muted text-muted-foreground">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="h-8 w-8"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+    <>
+      <SiteHeader />
+
+      <main className="flex flex-1 items-center justify-center px-6 py-24">
+        <div className="max-w-xl text-center">
+          <p className="section-label justify-center">Payment cancelled</p>
+          <h1 className="display-heading mt-8 text-4xl sm:text-6xl">
+            No worries.{" "}
+            <span className="text-accent">Take your time.</span>
+          </h1>
+          <p className="mt-6 text-base text-muted-foreground">
+            Your payment wasn&apos;t processed. Head back to pricing whenever
+            you&apos;re ready, or reach out if there&apos;s something you
+            wanted to ask first.
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Questions? Reach us at{" "}
+            <a
+              href="mailto:business@stratus-creative.com"
+              className="underline-hover text-foreground"
+            >
+              business@stratus-creative.com
+            </a>
+          </p>
+          <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              Back to pricing
+            </Link>
+            <Link
+              href="/start"
+              className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-foreground"
+            >
+              Talk to us instead
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         </div>
-        <h1 className="text-3xl font-bold tracking-tight">Payment cancelled</h1>
-        <p className="mt-4 text-muted-foreground">
-          No worries — your payment was not processed. Head back whenever
-          you&apos;re ready.
-        </p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Have questions? Reach us at{" "}
-          <a
-            href="mailto:business@stratus-creative.com"
-            className="underline underline-offset-4 hover:text-foreground"
-          >
-            business@stratus-creative.com
-          </a>
-        </p>
-        <Link
-          href="/#pricing"
-          className="mt-8 inline-flex items-center justify-center rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-        >
-          Back to pricing
-        </Link>
-      </div>
-    </main>
+      </main>
+
+      <SiteFooter />
+    </>
   );
 }

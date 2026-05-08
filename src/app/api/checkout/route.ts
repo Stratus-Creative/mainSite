@@ -7,9 +7,7 @@ const PRICES: Record<
   string,
   { name: string; amount: number; mode: Stripe.Checkout.SessionCreateParams["mode"]; interval?: "month" }
 > = {
-  essential: { name: "Essential Website Build", amount: 125000, mode: "payment" },
-  professional: { name: "Professional Website Build", amount: 250000, mode: "payment" },
-  premium: { name: "Premium Website Build", amount: 425000, mode: "payment" },
+  starter: { name: "Starter Website Build", amount: 149500, mode: "payment" },
   hosting_basic: { name: "Hosting & Maintenance", amount: 4900, mode: "subscription", interval: "month" },
   hosting_plus: { name: "Hosting + Monthly Updates", amount: 9900, mode: "subscription", interval: "month" },
 };

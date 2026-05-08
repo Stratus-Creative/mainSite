@@ -1,317 +1,700 @@
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { CheckoutButton } from "@/components/checkout-button";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { CheckoutButton } from "@/components/checkout-button";
+import { ServiceJsonLd, FaqJsonLd } from "@/components/structured-data";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Pricing — Stratus Creative",
   description:
-    "Simple, transparent pricing for professional websites. One-time build fee plus optional monthly hosting and maintenance.",
+    "Two ways to start: a flat-priced Starter site or a custom engagement. Transparent pricing, no retainers, no fluff.",
 };
+
+const STARTER_INCLUDES = [
+  "Single-page or compact multi-page site",
+  "Custom design — no templates",
+  "Mobile-first, fast, accessible",
+  "Click-to-call & contact buttons",
+  "Google Maps & Business Profile integration",
+  "Live Google reviews on your site",
+  "Basic on-page SEO + meta tags",
+  "SSL certificate included",
+  "Delivered in 5–7 business days",
+];
+
+const CUSTOM_INCLUDES = [
+  "Multi-page sites & brand systems",
+  "Internal process automation",
+  "Marketing automation & CRM integration",
+  "Customer-facing flows (booking, intake, quoting)",
+  "AI tools, chatbots, and agents",
+  "Reputation & reviews management",
+  "Advanced SEO and local visibility",
+  "Custom integrations with your existing tools",
+  "Scoped per project · 2–6 weeks typical",
+];
+
+const FAQ = [
+  {
+    q: "What if my project is smaller than the Starter?",
+    a: "Tell us anyway. If we can do it for less, we will. The Starter price is a ceiling for productized work, not a floor.",
+  },
+  {
+    q: "Do I have to provide content, copy, or photos?",
+    a: "Mostly no. We research your business using public info — Google reviews, business profile, existing materials. You approve. For custom engagements we'll work with what you have or write fresh.",
+  },
+  {
+    q: "Do I own the website?",
+    a: "Yes, fully. Once you've paid, the site is yours. Host it yourself, or let us handle it.",
+  },
+  {
+    q: "What about ongoing changes?",
+    a: "Minor changes are free for 30 days after launch. After that, our Hosting + Updates plan covers up to 2 changes per month, or we can do one-off updates as needed.",
+  },
+  {
+    q: "Why not have three tiers like everyone else?",
+    a: "Because three tiers is a sales tactic, not a pricing strategy. One flat price for productized work. Custom for everything else. If you fall in between, we talk.",
+  },
+  {
+    q: "Can I cancel hosting?",
+    a: "Anytime. Your site stays live for the rest of the billing period. After that you can move it elsewhere or we take it down.",
+  },
+];
 
 export default function PricingPage() {
   return (
-    <main className="flex-1">
-      {/* Nav */}
-      <header className="border-b">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="text-lg font-semibold tracking-tight">
-            Stratus Creative
-          </Link>
-          <nav className="hidden gap-6 text-sm text-muted-foreground sm:flex">
-            <Link href="/#services" className="transition-colors hover:text-foreground">
-              Services
-            </Link>
-            <Link href="/pricing" className="text-foreground">
-              Pricing
-            </Link>
-            <Link href="/#how-it-works" className="transition-colors hover:text-foreground">
-              How It Works
-            </Link>
-            <Link href="/#contact" className="transition-colors hover:text-foreground">
-              Contact
-            </Link>
-            <Link href="/support" className="transition-colors hover:text-foreground">
-              Support
-            </Link>
-          </nav>
-          <Link
-            href="/#contact"
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Get Started
-          </Link>
-        </div>
-      </header>
+    <>
+      <SiteHeader activePath="/pricing" />
 
-      {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 py-20 text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Simple, transparent pricing
-        </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          One-time build fee. Optional monthly hosting. No contracts, no
-          surprises.
-        </p>
-      </section>
+      <ServiceJsonLd />
+      <FaqJsonLd items={FAQ} />
 
-      <Separator />
-
-      {/* Build Plans */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold tracking-tight">Website Build</h2>
-          <p className="mt-2 text-muted-foreground">
-            Pay once. Own your site.
-          </p>
-        </div>
-
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          {/* Essential */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Essential</CardTitle>
-              <CardDescription>For solo operators getting online</CardDescription>
-              <div className="mt-4">
-                <span className="text-4xl font-bold">$1,250</span>
-                <span className="ml-1 text-sm text-muted-foreground">one-time</span>
-              </div>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6">
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>&#10003; Single-page responsive website</li>
-                <li>&#10003; Content written from your Google reviews</li>
-                <li>&#10003; Click-to-call phone button</li>
-                <li>&#10003; Google Maps embed</li>
-                <li>&#10003; Basic on-page SEO</li>
-                <li>&#10003; SSL certificate included</li>
-                <li>&#10003; Delivered in 5–7 business days</li>
-              </ul>
-              <CheckoutButton
-                plan="essential"
-                className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
-              >
-                Get started — $1,250
-              </CheckoutButton>
-            </CardContent>
-          </Card>
-
-          {/* Professional */}
-          <Card className="border-primary">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Professional</CardTitle>
-                <Badge>Most Popular</Badge>
-              </div>
-              <CardDescription>For businesses ready to compete</CardDescription>
-              <div className="mt-4">
-                <span className="text-4xl font-bold">$2,500</span>
-                <span className="ml-1 text-sm text-muted-foreground">one-time</span>
-              </div>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6">
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>&#10003; Multi-page site (3–5 pages)</li>
-                <li>&#10003; Contact form with email notifications</li>
-                <li>&#10003; Photo gallery / portfolio section</li>
-                <li>&#10003; Testimonials section</li>
-                <li>&#10003; Google Business Profile optimization</li>
-                <li>&#10003; Everything in Essential</li>
-                <li>&#10003; Delivered in 7–10 business days</li>
-              </ul>
-              <CheckoutButton
-                plan="professional"
-                className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
-              >
-                Get started — $2,500
-              </CheckoutButton>
-            </CardContent>
-          </Card>
-
-          {/* Premium */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Premium</CardTitle>
-              <CardDescription>For established businesses</CardDescription>
-              <div className="mt-4">
-                <span className="text-4xl font-bold">$4,250</span>
-                <span className="ml-1 text-sm text-muted-foreground">one-time</span>
-              </div>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6">
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>&#10003; Full site (5–8 pages)</li>
-                <li>&#10003; Team / About page</li>
-                <li>&#10003; Service area pages</li>
-                <li>&#10003; Testimonials showcase</li>
-                <li>&#10003; Advanced on-page SEO</li>
-                <li>&#10003; Everything in Professional</li>
-                <li>&#10003; Delivered in 10–14 business days</li>
-              </ul>
-              <CheckoutButton
-                plan="premium"
-                className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
-              >
-                Get started — $4,250
-              </CheckoutButton>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      <Separator />
-
-      {/* Hosting Add-Ons */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold tracking-tight">Hosting &amp; Maintenance</h2>
-          <p className="mt-2 text-muted-foreground">
-            Add a hosting plan and we handle everything. Cancel anytime.
-          </p>
-        </div>
-
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:mx-auto lg:max-w-3xl">
-          <Card>
-            <CardHeader>
-              <CardTitle>Basic Hosting</CardTitle>
-              <CardDescription>Hosting and uptime monitoring</CardDescription>
-              <div className="mt-4">
-                <span className="text-4xl font-bold">$49</span>
-                <span className="ml-1 text-sm text-muted-foreground">/month</span>
-              </div>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6">
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>&#10003; Managed hosting on Vercel</li>
-                <li>&#10003; SSL certificate renewal</li>
-                <li>&#10003; Uptime monitoring</li>
-                <li>&#10003; Security updates</li>
-                <li>&#10003; Cancel anytime</li>
-              </ul>
-              <CheckoutButton
-                plan="hosting_basic"
-                className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
-              >
-                Subscribe — $49/mo
-              </CheckoutButton>
-            </CardContent>
-          </Card>
-
-          <Card className="border-primary">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Hosting + Updates</CardTitle>
-                <Badge>Best Value</Badge>
-              </div>
-              <CardDescription>Hosting plus monthly content edits</CardDescription>
-              <div className="mt-4">
-                <span className="text-4xl font-bold">$99</span>
-                <span className="ml-1 text-sm text-muted-foreground">/month</span>
-              </div>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6">
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>&#10003; Everything in Basic Hosting</li>
-                <li>&#10003; Up to 2 content updates/month</li>
-                <li>&#10003; New photos or service changes</li>
-                <li>&#10003; Priority support</li>
-                <li>&#10003; Cancel anytime</li>
-              </ul>
-              <CheckoutButton
-                plan="hosting_plus"
-                className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
-              >
-                Subscribe — $99/mo
-              </CheckoutButton>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      <Separator />
-
-      {/* Other Add-Ons */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold tracking-tight">More Add-Ons</h2>
-          <p className="mt-2 text-muted-foreground">
-            Reach more customers with these optional services.
-          </p>
-        </div>
-        <div className="mx-auto mt-10 grid max-w-3xl gap-4 text-sm sm:grid-cols-2">
-          <div className="flex items-center justify-between rounded-lg border px-4 py-3">
-            <span>Google Ads Management</span>
-            <span className="font-semibold">$149/mo</span>
+      <main className="flex-1">
+        {/* Hero */}
+        <section className="relative overflow-hidden border-b border-border/60">
+          <div
+            className="editorial-grid absolute inset-0 opacity-30"
+            aria-hidden="true"
+          />
+          <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <p className="section-label">Pricing</p>
+            <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6rem]">
+              Two paths.{" "}
+              <span className="text-accent">One conversation.</span>
+            </h1>
+            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+              Productized for the straightforward. Custom for everything else.
+              No tier ladders, no &quot;starting from $X*&quot; with hidden
+              footnotes — just transparent pricing.
+            </p>
           </div>
-          <div className="flex items-center justify-between rounded-lg border px-4 py-3">
-            <span>Google Business Profile Optimization</span>
-            <span className="font-semibold">$250</span>
-          </div>
-        </div>
-        <p className="mt-6 text-center text-sm text-muted-foreground">
-          Interested in an add-on?{" "}
-          <Link href="/#contact" className="underline underline-offset-4 hover:text-foreground">
-            Contact us
-          </Link>
-        </p>
-      </section>
+        </section>
 
-      <Separator />
+        {/* Two pricing cards */}
+        <section className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="grid gap-px bg-border/60 lg:grid-cols-2">
+              {/* STARTER */}
+              <article className="flex flex-col bg-background p-8 lg:p-12">
+                <div className="flex items-center justify-between">
+                  <p className="section-label">Starter</p>
+                  <span className="rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    Productized · Self-serve
+                  </span>
+                </div>
 
-      {/* FAQ */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold tracking-tight">Common questions</h2>
-        </div>
-        <div className="mx-auto mt-10 max-w-2xl space-y-6 text-sm">
-          {[
-            {
-              q: "Do I need to provide anything?",
-              a: "No. We research your business using public info — Google reviews, Yelp listings, your phone number and address. You just approve the site.",
-            },
-            {
-              q: "What if I want changes after launch?",
-              a: "Minor changes are free within 30 days. For ongoing updates, our Hosting + Updates plan covers up to 2 changes per month.",
-            },
-            {
-              q: "Do I own the website?",
-              a: "Yes. Once paid, the site is yours. You can host it yourself or let us handle hosting.",
-            },
-            {
-              q: "Can I cancel the hosting subscription?",
-              a: "Yes, anytime. Your site stays live for the remainder of the billing period. After that you can move it elsewhere or we take it down.",
-            },
-            {
-              q: "Is a domain included?",
-              a: "Domain registration is not included but we can help you purchase and connect one. Most .com domains are around $15/year.",
-            },
-          ].map((item) => (
-            <div key={item.q} className="rounded-lg border px-5 py-4">
-              <p className="font-medium">{item.q}</p>
-              <p className="mt-1 text-muted-foreground">{item.a}</p>
+                <h2 className="display-heading mt-12 text-3xl sm:text-4xl">
+                  A real website,
+                  <br />
+                  without the markup.
+                </h2>
+
+                <div className="mt-10 flex items-baseline gap-2">
+                  <span className="text-6xl font-semibold tracking-tight sm:text-7xl">
+                    $1,495
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    flat · one-time
+                  </span>
+                </div>
+                <p className="mt-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">
+                  vs $5,000–$10,000 at typical agencies
+                </p>
+
+                <p className="mt-6 text-sm text-muted-foreground">
+                  For solo operators, contractors, and local service businesses
+                  who want a real site without the $10,000 marketing-firm
+                  markup. Ships in 5–7 business days.
+                </p>
+
+                <p className="mt-4 inline-flex items-center gap-2 self-start rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                  <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
+                  7-day money-back guarantee
+                </p>
+
+                <ul className="mt-10 space-y-3 border-t border-border/60 pt-8 text-sm">
+                  {STARTER_INCLUDES.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-muted-foreground"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="mt-2 size-1 shrink-0 rounded-full bg-accent"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/start?plan=starter"
+                  className="mt-12 inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  Get started — $1,495
+                  <span aria-hidden="true">→</span>
+                </Link>
+                <p className="mt-3 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                  Quick form · Reply in 4 hours
+                </p>
+              </article>
+
+              {/* CUSTOM */}
+              <article className="flex flex-col bg-background p-8 lg:p-12">
+                <div className="flex items-center justify-between">
+                  <p className="section-label">Custom</p>
+                  <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                    Scoped engagement
+                  </span>
+                </div>
+
+                <h2 className="display-heading mt-12 text-3xl sm:text-4xl">
+                  Built around what
+                  <br />
+                  <span className="text-accent">
+                    your business actually needs.
+                  </span>
+                </h2>
+
+                <div className="mt-10 flex items-baseline gap-2">
+                  <span className="text-6xl font-semibold tracking-tight sm:text-7xl">
+                    From $5,000
+                  </span>
+                </div>
+                <p className="mt-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">
+                  vs $15,000–$50,000+ at full-service agencies
+                </p>
+
+                <p className="mt-6 text-sm text-muted-foreground">
+                  Multi-page sites, automation, AI tools, online presence
+                  systems. Quoted per project. Most engagements land between
+                  $5,000–$15,000.
+                </p>
+
+                <ul className="mt-10 space-y-3 border-t border-border/60 pt-8 text-sm">
+                  {CUSTOM_INCLUDES.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-muted-foreground"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="mt-2 size-1 shrink-0 rounded-full bg-accent"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/start"
+                  className="mt-12 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background"
+                >
+                  Get a custom quote
+                  <span aria-hidden="true">→</span>
+                </Link>
+                <p className="mt-3 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                  Quote within 2 business days
+                </p>
+              </article>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="border-t">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
-          <span>&copy; 2026 Stratus Creative. All rights reserved.</span>
-          <div className="flex gap-4">
-            <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
-            <Link href="/terms" className="hover:text-foreground">Terms</Link>
-            <span>business@stratus-creative.com</span>
+            {/* Capture path: doesn't fit either */}
+            <div className="mt-px bg-border/60">
+              <div className="bg-background p-8 lg:p-12">
+                <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+                  <div className="lg:col-span-8">
+                    <p className="section-label">In between?</p>
+                    <p className="mt-4 text-2xl tracking-tight sm:text-3xl">
+                      You don&apos;t fit either path?{" "}
+                      <span className="text-accent">
+                        That&apos;s usually the most interesting kind of project.
+                      </span>{" "}
+                      <span className="text-muted-foreground">
+                        Tell us what you&apos;re trying to do — we&apos;ll
+                        figure out a fair way to price it.
+                      </span>
+                    </p>
+                  </div>
+                  <div className="lg:col-span-4 lg:justify-self-end">
+                    <Link
+                      href="/start"
+                      className="group inline-flex items-center gap-3 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background"
+                    >
+                      Start the conversation
+                      <span
+                        aria-hidden="true"
+                        className="transition-transform group-hover:translate-x-0.5"
+                      >
+                        →
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </footer>
-    </main>
+        </section>
+
+        {/* Typical engagement ranges */}
+        <section className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="mb-16 grid gap-8 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">Typical ranges</p>
+              </div>
+              <div className="lg:col-span-8">
+                <h2 className="display-heading text-4xl sm:text-5xl">
+                  What custom work{" "}
+                  <span className="text-accent">usually lands at.</span>
+                </h2>
+                <p className="mt-6 max-w-2xl text-base text-muted-foreground">
+                  Custom is custom — every quote is scoped to the project. But
+                  here&apos;s where similar work has historically landed, so
+                  you can budget honestly before we talk.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-px bg-border/60 lg:grid-cols-2">
+              {[
+                {
+                  pillar: "Websites",
+                  scope: "Multi-page marketing or brand site",
+                  range: "$3K – $7K",
+                  detail: "Custom design, 4–8 pages, copywriting, basic SEO. 3–5 weeks.",
+                },
+                {
+                  pillar: "Websites",
+                  scope: "Brand system + multi-page site",
+                  range: "$6K – $12K",
+                  detail: "Logo refinement, full brand system, content-heavy site. 5–8 weeks.",
+                },
+                {
+                  pillar: "Workflows",
+                  scope: "Process automation project",
+                  range: "$3K – $8K",
+                  detail: "Quote-to-invoice, lead capture, intake forms, integrations. 2–4 weeks.",
+                  ongoing: "+ $0 – $200/mo if AI is in the loop (pass-through API)",
+                },
+                {
+                  pillar: "Workflows",
+                  scope: "AI tools, agents, or chatbots",
+                  range: "$5K – $15K",
+                  detail: "Custom AI agent for support, sales, or internal ops. 3–6 weeks.",
+                  ongoing: "+ AI Care from $199/mo + $50 – $500/mo API (pass-through)",
+                },
+                {
+                  pillar: "Online presence",
+                  scope: "Google Business Profile setup",
+                  range: "$250 one-time",
+                  detail: "Profile build, optimization, photos, services, posts.",
+                },
+                {
+                  pillar: "Online presence",
+                  scope: "Reputation & reviews management",
+                  range: "$149/mo",
+                  detail: "Ongoing review requests, response, and on-site display.",
+                },
+              ].map((item) => (
+                <div
+                  key={`${item.pillar}-${item.scope}`}
+                  className="bg-background p-8 lg:p-10"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[11px] uppercase tracking-widest text-accent">
+                      {item.pillar}
+                    </span>
+                    <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                      Typical
+                    </span>
+                  </div>
+                  <p className="mt-6 text-xl font-medium tracking-tight">
+                    {item.scope}
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold tracking-tight">
+                    {item.range}
+                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {item.detail}
+                  </p>
+                  {"ongoing" in item && item.ongoing && (
+                    <p className="mt-3 border-t border-border/60 pt-3 text-xs text-accent">
+                      {item.ongoing}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 flex flex-col items-center gap-3 text-center">
+              <div className="flex items-center gap-5">
+                <span
+                  aria-hidden="true"
+                  className="hidden h-px w-12 bg-border sm:block"
+                />
+                <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
+                  These are historical ranges, not contracts. Your quote
+                  depends on scope.
+                </p>
+                <span
+                  aria-hidden="true"
+                  className="hidden h-px w-12 bg-border sm:block"
+                />
+              </div>
+              <p className="text-base font-medium text-accent sm:text-lg">
+                Ask for a real one — it&apos;s free.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Hosting add-ons */}
+        <section className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="mb-16 grid gap-8 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">Hosting & care</p>
+              </div>
+              <div className="lg:col-span-8">
+                <h2 className="display-heading text-4xl sm:text-5xl">
+                  Optional. Useful.{" "}
+                  <span className="text-accent">Cancel anytime.</span>
+                </h2>
+                <p className="mt-6 max-w-2xl text-base text-muted-foreground">
+                  You can host the site yourself or let us handle it. Both
+                  options run on Vercel, both include SSL, both are
+                  month-to-month.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-px bg-border/60 sm:grid-cols-2">
+              <div className="bg-background p-8 lg:p-10">
+                <p className="section-label">Basic Hosting</p>
+                <p className="mt-8 text-5xl font-semibold tracking-tight">
+                  $49
+                  <span className="ml-2 text-base font-normal text-muted-foreground">
+                    /month
+                  </span>
+                </p>
+                <ul className="mt-8 space-y-2.5 text-sm text-muted-foreground">
+                  <li className="flex items-start gap-3">
+                    <span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    Managed hosting on Vercel
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    SSL certificate renewal
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    Uptime monitoring
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    Security updates
+                  </li>
+                </ul>
+                <CheckoutButton
+                  plan="hosting_basic"
+                  className="mt-10 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background disabled:opacity-60"
+                >
+                  Subscribe — $49/mo
+                </CheckoutButton>
+              </div>
+
+              <div className="bg-background p-8 lg:p-10">
+                <div className="flex items-center justify-between">
+                  <p className="section-label">Hosting + Updates</p>
+                  <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                    Best value
+                  </span>
+                </div>
+                <p className="mt-8 text-5xl font-semibold tracking-tight">
+                  $99
+                  <span className="ml-2 text-base font-normal text-muted-foreground">
+                    /month
+                  </span>
+                </p>
+                <ul className="mt-8 space-y-2.5 text-sm text-muted-foreground">
+                  <li className="flex items-start gap-3">
+                    <span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    Everything in Basic Hosting
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    Up to 2 content updates per month
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    New photos, services, or copy changes
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    Priority support
+                  </li>
+                </ul>
+                <CheckoutButton
+                  plan="hosting_plus"
+                  className="mt-10 inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
+                >
+                  Subscribe — $99/mo
+                </CheckoutButton>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* AI Workflow Care — three tiers */}
+        <section id="ai-care" className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="mb-16 grid gap-8 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">AI Workflow Care</p>
+              </div>
+              <div className="lg:col-span-8">
+                <h2 className="display-heading text-4xl sm:text-5xl">
+                  Keep the AI running.{" "}
+                  <span className="text-accent">Without surprise bills.</span>
+                </h2>
+                <p className="mt-6 max-w-2xl text-base text-muted-foreground">
+                  AI workflows aren&apos;t set-and-forget. Models drift,
+                  prompts need tuning, edge cases surface, costs need watching.
+                  Care covers our time. API costs are always separate and
+                  pass-through, so you only pay for what you use.
+                </p>
+                <Link
+                  href="/tools/cost-estimator"
+                  className="mt-6 inline-flex items-center gap-2 text-sm text-foreground"
+                >
+                  <span className="underline-hover">
+                    Estimate your AI workflow&apos;s monthly cost
+                  </span>
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid gap-px bg-border/60 lg:grid-cols-3">
+              {[
+                {
+                  name: "AI Care · Light",
+                  price: "$199",
+                  hours: "Up to 3 hrs/mo",
+                  description:
+                    "Single-purpose AI workflow with light volume. Monitoring + small fixes + model upgrades.",
+                  fits: [
+                    "FAQ chatbot",
+                    "Email triage / classification",
+                    "Lead scoring",
+                    "Document tagging",
+                  ],
+                  highlight: false,
+                },
+                {
+                  name: "AI Care · Standard",
+                  price: "$399",
+                  hours: "Up to 6 hrs/mo",
+                  description:
+                    "Multi-step workflows with memory, integrations, or moderate volume. Most clients land here.",
+                  fits: [
+                    "Customer support bot with memory",
+                    "Quote / estimate generators",
+                    "Lead qualification with research",
+                    "Document Q&A with RAG",
+                  ],
+                  highlight: true,
+                },
+                {
+                  name: "AI Care · Pro",
+                  price: "$899",
+                  hours: "Up to 12 hrs/mo",
+                  description:
+                    "High-volume or complex multi-agent systems. White-glove monitoring + priority response.",
+                  fits: [
+                    "Voice AI agents (telephony + AI)",
+                    "Multi-agent autonomous systems",
+                    "High-volume real-time pipelines",
+                    "Enterprise integrations",
+                  ],
+                  highlight: false,
+                },
+              ].map((tier) => (
+                <article
+                  key={tier.name}
+                  className="flex flex-col bg-background p-8 lg:p-10"
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="section-label">{tier.name.split("·")[1].trim()}</p>
+                    {tier.highlight && (
+                      <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                        Most common
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="mt-6 text-5xl font-semibold tracking-tight">
+                    {tier.price}
+                    <span className="ml-2 text-base font-normal text-muted-foreground">
+                      /month
+                    </span>
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {tier.hours}
+                  </p>
+
+                  <p className="mt-6 text-sm text-muted-foreground">
+                    {tier.description}
+                  </p>
+
+                  <ul className="mt-8 space-y-2.5 border-t border-border/60 pt-6 text-sm text-muted-foreground">
+                    {tier.fits.map((fit) => (
+                      <li key={fit} className="flex items-start gap-3">
+                        <span
+                          aria-hidden="true"
+                          className="mt-2 size-1 shrink-0 rounded-full bg-accent"
+                        />
+                        {fit}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link
+                    href="/start"
+                    className="mt-10 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background"
+                  >
+                    Discuss {tier.name.split("·")[1].trim()}
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* How AI workflows are priced */}
+        <section className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="grid gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">How AI workflows are priced</p>
+                <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
+                  Three lines.{" "}
+                  <span className="text-accent">Always shown.</span>
+                </h2>
+                <p className="mt-6 text-sm text-muted-foreground">
+                  Most agencies hide the ongoing cost of AI and surprise-bill
+                  clients later. We don&apos;t. Every AI quote is broken into
+                  these three components, in writing, before you commit.
+                </p>
+              </div>
+              <div className="space-y-8 lg:col-span-8">
+                <div className="rounded-2xl border border-border bg-card p-6 lg:p-8">
+                  <p className="font-mono text-xs uppercase tracking-widest text-accent">
+                    01 — Build (one-time)
+                  </p>
+                  <p className="mt-3 text-xl font-semibold tracking-tight">
+                    The engineering work to design, build, test, and deploy.
+                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Quoted firm in your proposal. Includes design,
+                    implementation, integration testing, and a launch playbook.
+                    For most AI workflows: $5K – $15K.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-border bg-card p-6 lg:p-8">
+                  <p className="font-mono text-xs uppercase tracking-widest text-accent">
+                    02 — AI Care (recurring, our time)
+                  </p>
+                  <p className="mt-3 text-xl font-semibold tracking-tight">
+                    Monitoring, prompt tuning, model upgrades, and small fixes.
+                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Light $199/mo · Standard $399/mo · Pro $899/mo. Tier
+                    matched to your workflow&apos;s complexity. Includes the
+                    observability stack — Sentry, LLM tracing, uptime
+                    monitoring — so you don&apos;t pay for tools separately.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-border bg-card p-6 lg:p-8">
+                  <p className="font-mono text-xs uppercase tracking-widest text-accent">
+                    03 — API costs (recurring, pass-through)
+                  </p>
+                  <p className="mt-3 text-xl font-semibold tracking-tight">
+                    LLM tokens, third-party APIs, vector storage.
+                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Always pass-through. You can use your own API keys (we
+                    just consume them) or we manage the keys and bill you cost
+                    + 15% admin. Light workflows: $0–$50/mo. Moderate (most):
+                    $50–$500/mo. Heavy (voice, real-time): $500+/mo.
+                  </p>
+                  <Link
+                    href="/tools/cost-estimator"
+                    className="mt-4 inline-flex items-center gap-2 text-sm text-foreground"
+                  >
+                    <span className="underline-hover">
+                      Estimate your specific workflow
+                    </span>
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="grid gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">Common questions</p>
+                <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
+                  Anything else?
+                </h2>
+              </div>
+              <div className="lg:col-span-8">
+                <ul className="divide-y divide-border/60 border-y border-border/60">
+                  {FAQ.map((item) => (
+                    <li key={item.q} className="py-6 lg:py-8">
+                      <p className="text-lg font-medium tracking-tight">
+                        {item.q}
+                      </p>
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        {item.a}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
   );
 }
