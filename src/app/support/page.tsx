@@ -1,8 +1,11 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import { SupportFaq } from "@/components/support-faq";
 import { SupportForm } from "@/components/support-form";
+import { FaqJsonLd } from "@/components/structured-data";
+import { SUPPORT_FAQ } from "@/lib/faq-data";
 
 export const metadata: Metadata = {
   title: "Support — Stratus Creative",
@@ -12,85 +15,79 @@ export const metadata: Metadata = {
 
 export default function SupportPage() {
   return (
-    <main className="flex-1">
-      {/* Nav */}
-      <header className="border-b">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="text-lg font-semibold tracking-tight">
-            Stratus Creative
-          </Link>
-          <nav className="hidden gap-6 text-sm text-muted-foreground sm:flex">
-            <Link href="/#services" className="transition-colors hover:text-foreground">
-              Services
-            </Link>
-            <Link href="/pricing" className="transition-colors hover:text-foreground">
-              Pricing
-            </Link>
-            <Link href="/#how-it-works" className="transition-colors hover:text-foreground">
-              How It Works
-            </Link>
-            <Link href="/support" className="text-foreground">
-              Support
-            </Link>
-          </nav>
-          <Link
-            href="/#contact"
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Get Started
-          </Link>
-        </div>
-      </header>
+    <>
+      <FaqJsonLd items={SUPPORT_FAQ} />
+      <SiteHeader activePath="/support" />
 
-      {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 py-16 text-center sm:py-24">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          How can we help?
-        </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Find answers to common questions below, or submit a request and
-          we&apos;ll get back to you within{" "}
-          <span className="font-medium text-foreground">
-            24–48 business hours
-          </span>
-          .
-        </p>
-      </section>
+      <main className="flex-1">
+        {/* Hero */}
+        <section className="relative overflow-hidden border-b border-border/60">
+          <div
+            className="editorial-grid absolute inset-0 opacity-30"
+            aria-hidden="true"
+          />
+          <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <p className="section-label">Support</p>
+            <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6rem]">
+              How can{" "}
+              <span className="text-accent">we help?</span>
+            </h1>
+            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+              Browse common questions below, or submit a request — we reply
+              within{" "}
+              <span className="font-medium text-foreground">
+                24–48 business hours
+              </span>
+              .
+            </p>
+          </div>
+        </section>
 
-      <Separator />
+        {/* FAQ */}
+        <section className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="grid gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">Frequently asked</p>
+                <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
+                  The questions we hear most.
+                </h2>
+              </div>
+              <div className="lg:col-span-8">
+                <SupportFaq />
+              </div>
+            </div>
+          </div>
+        </section>
 
-      {/* FAQ */}
-      <section className="mx-auto max-w-3xl px-6 py-16">
-        <h2 className="mb-8 text-2xl font-bold tracking-tight">
-          Frequently asked questions
-        </h2>
-        <SupportFaq />
-      </section>
+        {/* Contact form */}
+        <section id="contact" className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="grid gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">Submit a request</p>
+                <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
+                  Tell us what&apos;s going on.
+                </h2>
+                <p className="mt-6 text-sm text-muted-foreground">
+                  For existing clients only.{" "}
+                  <Link
+                    href="/start"
+                    className="underline-hover text-foreground"
+                  >
+                    Not a client yet?
+                  </Link>
+                </p>
+              </div>
+              <div className="lg:col-span-8">
+                <SupportForm />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
-      <Separator />
-
-      {/* Contact form */}
-      <section id="contact" className="mx-auto max-w-3xl px-6 py-16">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold tracking-tight">
-            Submit a support request
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            For existing clients only.{" "}
-            <Link href="/#contact" className="underline underline-offset-4 hover:text-foreground">
-              Not a client yet?
-            </Link>
-          </p>
-        </div>
-        <SupportForm />
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t py-8">
-        <div className="mx-auto max-w-6xl px-6 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Stratus Creative. All rights reserved.
-        </div>
-      </footer>
-    </main>
+      <SiteFooter />
+    </>
   );
 }

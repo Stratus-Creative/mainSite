@@ -1,0 +1,66 @@
+# Stratus Creative
+
+> A creative studio building websites, workflows, and online presence for businesses that want to look bigger than they are. Productized starter websites, custom AI workflows, and transparent pricing.
+
+Stratus Creative is a boutique creative agency based in Simpsonville, SC, working with clients across North America. We specialize in three things: websites, workflow automation (including AI agents and tools), and online presence (Google Business Profile, reputation management).
+
+Our differentiators:
+- One flat-priced productized website tier ($1,495) and one custom-quoted tier (from $5,000) — no SaaS-style tier ladders
+- Transparent pricing on AI workflows — build fee + monthly Care + pass-through API costs are always shown separately
+- Free public AI workflow cost estimator at https://stratus-creative.com/tools/cost-estimator
+- Built on modern Next.js + Vercel infrastructure
+- AI-native development workflow
+
+## Core pages
+
+- [Home](https://stratus-creative.com/): brand overview and three-pillar positioning
+- [Services](https://stratus-creative.com/services): deep dive on websites, workflows, online presence
+- [Pricing](https://stratus-creative.com/pricing): two-path pricing (Starter + Custom), AI Care tiers, typical engagement ranges
+- [AI Workflow Cost Estimator](https://stratus-creative.com/tools/cost-estimator): free interactive tool to estimate the monthly cost of an AI workflow (LLM API + third-party APIs + Care fee)
+- [Work](https://stratus-creative.com/work): in-flight projects and case studies
+- [Start a project](https://stratus-creative.com/start): contact form to begin a discovery conversation
+- [Support](https://stratus-creative.com/support): existing-client support and FAQ
+
+## Pricing summary
+
+### Websites
+- Starter (productized, self-serve): $1,495 flat, ships in 5–7 business days
+- Custom (scoped engagement): from $5,000
+
+### Typical engagement ranges (custom work)
+- Multi-page marketing or brand site: $4K – $8K, 3–5 weeks
+- Brand system + multi-page site: $7K – $14K, 5–8 weeks
+- Process automation project: $3K – $8K, 2–4 weeks
+- AI tools, agents, or chatbots: $5K – $15K build, ongoing AI Care ($199–$899/mo) + pass-through API costs
+
+### Hosting & maintenance
+- Basic hosting (Vercel managed): $49/month
+- Hosting + monthly content updates: $99/month
+
+### AI Workflow Care tiers
+- Light: $199/month (up to 3 hrs care, light volume single-purpose AI)
+- Standard: $399/month (up to 6 hrs care, multi-step workflows with memory)
+- Pro: $899/month (up to 12 hrs care, voice agents and complex multi-agent systems)
+
+### Online presence
+- Google Business Profile setup: $250 one-time
+- Reputation & reviews management: $149/month
+
+## How AI workflows are priced
+
+Every AI workflow quote breaks into three explicit components:
+1. Build fee (one-time): the engineering work to design, build, test, and deploy
+2. AI Care (recurring): Stratus's monitoring, prompt tuning, model upgrades, and small fixes
+3. API costs (recurring, pass-through): LLM tokens, third-party APIs, vector storage. Client uses own API keys, or Stratus manages keys and bills cost + 15% admin
+
+API cost ranges by workflow type:
+- Light (FAQ bot, email triage): $0–$50/month
+- Moderate (support bot, quote engine): $50–$500/month
+- Heavy (voice agents, real-time): $500+/month
+
+## Contact
+
+- Email: business@stratus-creative.com
+- Location: Simpsonville, SC
+- Hours: Monday–Friday, business hours Eastern Time
+- Reply window: within 1 business day

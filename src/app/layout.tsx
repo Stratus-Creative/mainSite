@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import {
+  LocalBusinessJsonLd,
+  OrganizationJsonLd,
+  WebsiteJsonLd,
+} from "@/components/structured-data";
+import { FloatingCta } from "@/components/floating-cta";
+import { ClarityScript } from "@/components/clarity-script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,17 +21,60 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
-  title: "Stratus Creative — Professional Websites for Local Businesses",
+  metadataBase: new URL("https://stratus-creative.com"),
+  title: {
+    default: "Stratus Creative — Websites, workflows, and online presence",
+    template: "%s · Stratus Creative",
+  },
   description:
-    "We build professional, mobile-friendly websites for local service businesses. No hassle, no DIY. We handle everything.",
+    "We build websites, workflows, and online presence for businesses that want to look bigger than they are. Productized starter sites, custom AI workflows, and transparent pricing.",
+  keywords: [
+    "creative agency",
+    "web design",
+    "web development",
+    "AI workflow automation",
+    "AI agents",
+    "AI chatbots",
+    "Google Business Profile",
+    "reputation management",
+    "local SEO",
+    "Simpsonville SC",
+    "small business website",
+    "Next.js agency",
+  ],
+  authors: [{ name: "Stratus Creative" }],
   openGraph: {
-    title: "Stratus Creative — Professional Websites for Local Businesses",
+    title: "Stratus Creative — Websites, workflows, and online presence",
     description:
-      "We build professional, mobile-friendly websites for local service businesses. No hassle, no DIY. We handle everything.",
+      "Websites, workflows, and online presence for businesses that want to look bigger than they are.",
     url: "https://stratus-creative.com",
     siteName: "Stratus Creative",
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Stratus Creative",
+    description:
+      "Websites, workflows, and online presence for businesses that want to look bigger than they are.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
@@ -34,9 +86,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-background text-foreground">
+        {children}
+        <FloatingCta />
+        <OrganizationJsonLd />
+        <WebsiteJsonLd />
+        <LocalBusinessJsonLd />
+        <ClarityScript />
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
