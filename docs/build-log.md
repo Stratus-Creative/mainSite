@@ -2,7 +2,7 @@
 
 Comprehensive record of everything built across this session — pages, components, infrastructure, content, and what's still pending.
 
-Last updated: May 8, 2026.
+Last updated: May 8, 2026. · PR #1 opened against `main`.
 
 ---
 
