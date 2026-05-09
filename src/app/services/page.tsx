@@ -63,7 +63,8 @@ const SERVICES: Service[] = [
       "Integration between the tools you already use",
       "Internal dashboards and admin panels",
     ],
-    starterFit: null,
+    starterFit:
+      "AI Chat Widget at $800 flat. A custom-trained AI assistant — live on your site in 3–5 days. Streaming chat, page-context awareness, proactive nudge, and full conversation logging. Ongoing care via AI Care Light ($199/mo) + pass-through API.",
     customFit:
       "Process automation $3K–$8K. AI tools, agents, or chatbots $5K–$15K build, plus AI Care from $199/mo and pass-through API costs.",
     pricingLinks: [
@@ -159,11 +160,11 @@ export default function ServicesPage() {
                 <div className="lg:col-span-7">
                   <div className="border-t border-border/60 pt-8">
                     <p className="section-label">What&apos;s included</p>
-                    <ul className="mt-8 space-y-4">
+                    <ul className="mt-6 divide-y divide-border/40">
                       {service.deliverables.map((item) => (
                         <li
                           key={item}
-                          className="flex items-start gap-4 border-b border-border/40 pb-4 text-base"
+                          className="flex items-start gap-4 py-4 text-base"
                         >
                           <span
                             aria-hidden="true"
@@ -175,20 +176,29 @@ export default function ServicesPage() {
                     </ul>
                   </div>
 
-                  <div className="mt-12 grid gap-px bg-border/60 sm:grid-cols-2">
-                    {service.starterFit && (
-                      <div className="bg-background p-6 lg:p-8">
-                        <p className="section-label">In Starter</p>
-                        <p className="mt-4 text-sm text-muted-foreground">
-                          {service.starterFit}
+                  <div className="mt-10">
+                    <p className="font-mono text-sm font-medium uppercase tracking-widest text-accent">
+                      Pricing fit
+                    </p>
+                    <div className="mt-6 divide-y divide-border/60 border-y border-border/60">
+                      {service.starterFit && (
+                        <div className="grid gap-3 py-6 sm:grid-cols-12 sm:gap-8 lg:py-8">
+                          <p className="section-label sm:col-span-3">
+                            In Starter
+                          </p>
+                          <p className="text-base text-muted-foreground sm:col-span-9">
+                            {service.starterFit}
+                          </p>
+                        </div>
+                      )}
+                      <div className="grid gap-3 py-6 sm:grid-cols-12 sm:gap-8 lg:py-8">
+                        <p className="section-label sm:col-span-3">
+                          In Custom
+                        </p>
+                        <p className="text-base text-muted-foreground sm:col-span-9">
+                          {service.customFit}
                         </p>
                       </div>
-                    )}
-                    <div className="bg-background p-6 lg:p-8">
-                      <p className="section-label">In Custom</p>
-                      <p className="mt-4 text-sm text-muted-foreground">
-                        {service.customFit}
-                      </p>
                     </div>
                   </div>
 

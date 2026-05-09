@@ -260,7 +260,26 @@ export function CostEstimatorForm() {
       const res = await fetch("/api/email-estimate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: emailValue, estimateSummary: summaryText }),
+        body: JSON.stringify({
+          email: emailValue,
+          estimateSummary: summaryText,
+          estimate: {
+            workflow: TEMPLATES[template].name,
+            monthlyVolume,
+            model: MODELS[model].name,
+            buildLow: buildEstimate.low,
+            buildHigh: buildEstimate.high,
+            buildWeeks: buildEstimate.weeks,
+            careTierName: careTier.name,
+            careMonthly: careTier.monthly,
+            apiMonthlyLow: result.apiTotalMonthly,
+            apiMonthlyHigh: result.apiTotalMonthlyWithBuffer,
+            monthlyInvoiceLow: result.monthlyInvoiceLow,
+            monthlyInvoiceHigh: result.monthlyInvoiceHigh,
+            costPerRequest: result.costPerRequest,
+            latencyMs: latency.totalMs,
+          },
+        }),
       });
       if (!res.ok) {
         const data: unknown = await res.json();
@@ -551,11 +570,7 @@ export function CostEstimatorForm() {
                   </span>
                 </div>
               </div>
-              <Row
-                label="Expected latency"
-                value={`~${formatLatency(latency.totalMs)} per request`}
-                muted
-              />
+              <LatencyChart breakdown={latency.breakdown} totalMs={latency.totalMs} />
             </div>
           </div>
 
@@ -875,45 +890,31 @@ function NumberInput({
   min?: number;
   step?: number;
 }) {
-  function clamp(n: number) {
-    if (Number.isNaN(n)) return min;
-    return Math.max(min, n);
+  function handle(raw: string) {
+    if (raw === "") {
+      onChange(0);
+      return;
+    }
+    const n = Number(raw);
+    if (Number.isNaN(n)) return;
+    onChange(Math.max(min, n));
   }
 
   return (
     <label className="block">
-      <span className="text-sm font-medium">{label}</span>
+      <span className="text-sm font-medium text-foreground">{label}</span>
       {help && (
-        <span className="mt-0.5 block text-xs text-muted-foreground">
-          {help}
-        </span>
+        <span className="mt-1 block text-xs text-muted-foreground">{help}</span>
       )}
-      <div className="mt-2 flex items-stretch gap-2">
-        <button
-          type="button"
-          aria-label="Decrement"
-          onClick={() => onChange(clamp(value - step))}
-          className="flex w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-base text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
-        >
-          −
-        </button>
-        <input
-          type="number"
-          min={min}
-          step={step}
-          value={value}
-          onChange={(e) => onChange(clamp(Number(e.target.value)))}
-          className="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 text-center text-base text-foreground focus:border-foreground focus:outline-none"
-        />
-        <button
-          type="button"
-          aria-label="Increment"
-          onClick={() => onChange(clamp(value + step))}
-          className="flex w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-base text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
-        >
-          +
-        </button>
-      </div>
+      <input
+        type="number"
+        inputMode="decimal"
+        min={min}
+        step={step}
+        value={value}
+        onChange={(e) => handle(e.target.value)}
+        className="mt-2 block w-full rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground focus:border-foreground focus:outline-none"
+      />
     </label>
   );
 }
@@ -1033,6 +1034,68 @@ function Row({
       >
         {value}
       </span>
+    </div>
+  );
+}
+
+const SEGMENT_COLORS = [
+  "bg-foreground/25",
+  "bg-foreground/40",
+  "bg-foreground/15",
+  "bg-foreground/10",
+];
+const LLM_COLOR = "bg-accent";
+
+function LatencyChart({
+  breakdown,
+  totalMs,
+}: {
+  breakdown: Array<{ label: string; ms: number }>;
+  totalMs: number;
+}) {
+  if (breakdown.length === 0 || totalMs === 0) return null;
+
+  return (
+    <div className="space-y-3 pt-1">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-muted-foreground">Expected latency</span>
+        <span className="font-mono text-sm text-muted-foreground">
+          ~{formatLatency(totalMs)} / request
+        </span>
+      </div>
+
+      {/* Stacked bar */}
+      <div className="flex h-5 w-full overflow-hidden rounded-full">
+        {breakdown.map((step, i) => {
+          const isLlm = step.label.toLowerCase().includes("generation");
+          const color = isLlm ? LLM_COLOR : SEGMENT_COLORS[i % SEGMENT_COLORS.length];
+          const pct = (step.ms / totalMs) * 100;
+          return (
+            <div
+              key={step.label}
+              className={`${color} transition-all`}
+              style={{ width: `${pct}%` }}
+              title={`${step.label}: ${formatLatency(step.ms)}`}
+            />
+          );
+        })}
+      </div>
+
+      {/* Legend */}
+      <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+        {breakdown.map((step, i) => {
+          const isLlm = step.label.toLowerCase().includes("generation");
+          const color = isLlm ? LLM_COLOR : SEGMENT_COLORS[i % SEGMENT_COLORS.length];
+          return (
+            <div key={step.label} className="flex items-center gap-1.5">
+              <span className={`inline-block size-2 rounded-full ${color}`} />
+              <span className="font-mono text-[10px] text-muted-foreground">
+                {step.label} · {formatLatency(step.ms)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

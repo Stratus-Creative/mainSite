@@ -1,7 +1,21 @@
 import { NextResponse } from "next/server";
+import NewsletterWelcomeEmail from "@/emails/newsletter-welcome";
+import { renderEmail } from "@/emails/render";
+import { emitEvent } from "@/lib/webhook-dispatch";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const rl = await checkRateLimit({
+      bucket: `newsletter:${ip}`,
+      max: 5,
+      windowMs: 60 * 60 * 1000, // 5 signups per hour per IP
+    });
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+    }
+
     const { email } = await request.json();
 
     if (!email || typeof email !== "string" || !email.includes("@")) {
@@ -26,6 +40,8 @@ export async function POST(request: Request) {
       );
       if (!res.ok && res.status !== 409) {
         console.error("Resend audience add failed", await res.text());
+      } else {
+        await emitEvent(null, "subscriber.added", { email });
       }
     } else if (resendKey) {
       // No audience configured yet — notify admin so the signup isn't lost
@@ -44,6 +60,30 @@ export async function POST(request: Request) {
       });
     } else {
       console.log("[newsletter] subscribed (no Resend key):", email);
+    }
+
+    // Welcome email to subscriber (non-blocking)
+    if (resendKey) {
+      try {
+        const { html, text } = await renderEmail(NewsletterWelcomeEmail());
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${resendKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "Stratus Creative <business@stratus-creative.com>",
+            to: email,
+            reply_to: "business@stratus-creative.com",
+            subject: "Welcome — you're in",
+            html,
+            text,
+          }),
+        });
+      } catch (err) {
+        console.error("Newsletter welcome email failed", err);
+      }
     }
 
     return NextResponse.json({ ok: true });

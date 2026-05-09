@@ -80,6 +80,7 @@ export function StartForm() {
   const [ownerName, setOwnerName] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [phone, setPhone] = useState("");
 
   // Load saved progress on mount (only if not coming from estimator with prefilled message).
@@ -196,10 +197,19 @@ export function StartForm() {
         setSubmitting(true);
         const form = e.currentTarget;
         const data = new FormData(form);
+        const chatSessionId =
+          typeof window !== "undefined"
+            ? sessionStorage.getItem("stratus_chat_session")
+            : null;
+        const visitorSessionId = readVisitorSessionId();
         fetch("/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(Object.fromEntries(data)),
+          body: JSON.stringify({
+            ...Object.fromEntries(data),
+            chatSessionId,
+            visitorSessionId,
+          }),
         })
           .then(async (res) => {
             const json = await res.json().catch(() => ({}));
@@ -346,7 +356,13 @@ export function StartForm() {
             placeholder="jane@doeco.com"
             required
             value={email}
-            onChange={setEmail}
+            onChange={(v) => { setEmail(v); setEmailError(null); }}
+            onBlur={(v) => {
+              if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+                setEmailError("Enter a valid email address.");
+              }
+            }}
+            error={emailError ?? undefined}
           />
           <FormField
             id="phone"
@@ -356,6 +372,7 @@ export function StartForm() {
             placeholder="(555) 123-4567"
             value={phone}
             onChange={setPhone}
+            onBlur={(v) => setPhone(formatPhone(v))}
           />
         </div>
 
@@ -474,6 +491,25 @@ export function StartForm() {
   );
 }
 
+function readVisitorSessionId(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem("stratus_visitor_session");
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { id?: unknown };
+    return typeof parsed?.id === "string" && parsed.id.length > 0 ? parsed.id : null;
+  } catch {
+    return null;
+  }
+}
+
+function formatPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  const ten = digits.length === 11 && digits.startsWith("1") ? digits.slice(1) : digits;
+  if (ten.length !== 10) return raw;
+  return `(${ten.slice(0, 3)}) ${ten.slice(3, 6)}-${ten.slice(6)}`;
+}
+
 function FormField({
   id,
   name,
@@ -483,6 +519,8 @@ function FormField({
   required = false,
   value,
   onChange,
+  onBlur,
+  error,
 }: {
   id: string;
   name: string;
@@ -492,6 +530,8 @@ function FormField({
   required?: boolean;
   value?: string;
   onChange?: (v: string) => void;
+  onBlur?: (v: string) => void;
+  error?: string;
 }) {
   return (
     <label
@@ -510,8 +550,12 @@ function FormField({
         required={required}
         value={value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
+        onBlur={onBlur ? (e) => onBlur(e.target.value) : undefined}
         className="w-full bg-transparent text-base text-foreground placeholder:text-muted-foreground/80 focus:outline-none"
       />
+      {error && (
+        <span className="font-mono text-[10px] text-destructive">{error}</span>
+      )}
     </label>
   );
 }

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { BreadcrumbJsonLd } from "@/components/structured-data";
 import { CASE_STUDIES, getCaseStudy } from "@/lib/case-studies-data";
 
 interface Params {
@@ -19,11 +20,25 @@ export async function generateMetadata({
   const { slug } = await params;
   const c = getCaseStudy(slug);
   if (!c) return { title: "Not found" };
+  const title = `${c.hero.title} ${c.hero.accent} — Stratus Creative`;
+  const description = c.shortDescription;
   return {
-    title: `${c.hero.title} ${c.hero.accent} — Stratus Creative`,
-    description: c.shortDescription,
+    title,
+    description,
     alternates: {
       canonical: `https://stratus-creative.com/work/${slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      url: `https://stratus-creative.com/work/${slug}`,
+      images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
   };
 }
@@ -44,6 +59,13 @@ export default async function CaseStudyPage({ params }: Params) {
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Work", url: "/work" },
+          { name: `${c.hero.title} ${c.hero.accent}`, url: `/work/${c.slug}` },
+        ]}
+      />
       <SiteHeader activePath="/work" />
 
       <main className="flex-1">

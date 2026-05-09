@@ -3,7 +3,11 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
-import { NOTES } from "@/lib/notes-data";
+import { getAllNotes } from "@/lib/notes";
+
+// 10 minutes — short enough that newly-due articles surface promptly,
+// long enough that we're not regenerating on every visit.
+export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "Decoded — Stratus Creative",
@@ -13,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 function formatDate(iso: string): string {
-  return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", {
+  return new Date(iso).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -21,8 +25,8 @@ function formatDate(iso: string): string {
   });
 }
 
-export default function NotesIndex() {
-  const sorted = [...NOTES].sort((a, b) => (a.date < b.date ? 1 : -1));
+export default async function NotesIndex() {
+  const notes = await getAllNotes();
 
   return (
     <>
@@ -53,7 +57,7 @@ export default function NotesIndex() {
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <ul className="divide-y divide-border/60 border-y border-border/60">
-              {sorted.map((note) => (
+              {notes.map((note) => (
                 <li key={note.slug}>
                   <Link
                     href={`/notes/${note.slug}`}
@@ -61,7 +65,7 @@ export default function NotesIndex() {
                   >
                     <div className="lg:col-span-3">
                       <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                        {formatDate(note.date)}
+                        {formatDate(note.published_at!)}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {note.tags.map((tag) => (
@@ -92,7 +96,6 @@ export default function NotesIndex() {
             </ul>
           </div>
         </section>
-
       </main>
 
       <SiteFooter />

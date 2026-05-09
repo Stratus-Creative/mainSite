@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/structured-data";
 import { COMPARISONS } from "@/lib/comparison-data";
 
 interface Params {
@@ -19,11 +20,25 @@ export async function generateMetadata({
   const { competitor } = await params;
   const c = COMPARISONS[competitor];
   if (!c) return { title: "Not found" };
+  const title = `Stratus Creative vs ${c.competitor} — honest comparison`;
+  const description = `An honest comparison of Stratus Creative and ${c.competitor}. When each one is the right call, what each actually costs, and how to decide.`;
   return {
-    title: `Stratus Creative vs ${c.competitor} — honest comparison`,
-    description: `An honest comparison of Stratus Creative and ${c.competitor}. When each one is the right call, what each actually costs, and how to decide.`,
+    title,
+    description,
     alternates: {
       canonical: `https://stratus-creative.com/vs/${c.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://stratus-creative.com/vs/${c.slug}`,
+      images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
   };
 }
@@ -33,8 +48,48 @@ export default async function VsPage({ params }: Params) {
   const c = COMPARISONS[competitor];
   if (!c) notFound();
 
+  const faqItems = [
+    {
+      q: `When should I choose Stratus Creative over ${c.competitor}?`,
+      a: c.whenStratus.join(" "),
+    },
+    {
+      q: `When should I choose ${c.competitor} over Stratus Creative?`,
+      a: c.whenCompetitor.join(" "),
+    },
+  ];
+
+  const tableSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Stratus Creative vs ${c.competitor} — feature comparison`,
+    description: `Side-by-side feature comparison of Stratus Creative and ${c.competitor}.`,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    numberOfItems: c.rows.length,
+    itemListElement: c.rows.map((row, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      item: {
+        "@type": "Thing",
+        name: row.feature,
+        description: `${c.competitor}: ${row.competitor}. Stratus Creative: ${row.stratus}.`,
+      },
+    })),
+  };
+
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "/" },
+          { name: `Stratus vs ${c.competitor}`, url: `/vs/${c.slug}` },
+        ]}
+      />
+      <FaqJsonLd items={faqItems} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(tableSchema) }}
+      />
       <SiteHeader />
 
       <main className="flex-1">
@@ -151,6 +206,15 @@ export default async function VsPage({ params }: Params) {
             <p className="section-label">Pricing math</p>
             <p className="mt-6 text-lg leading-relaxed text-foreground sm:text-xl">
               {c.pricingNote}
+            </p>
+            <p className="mt-8 text-base text-muted-foreground">
+              Want a Loom audit of your current site instead?{" "}
+              <Link
+                href="/resources/free-website-audit"
+                className="underline-hover text-foreground"
+              >
+                It&apos;s free.
+              </Link>
             </p>
           </div>
         </section>

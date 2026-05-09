@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { Resend } from "resend";
 import { createServerClient } from "@/lib/supabase";
-
-async function isAuthenticated(): Promise<boolean> {
-  const store = await cookies();
-  const session = store.get("admin-session");
-  return session?.value === process.env.ADMIN_PASSWORD;
-}
+import { getCurrentAdmin } from "@/lib/admin-auth";
+import QuoteSentEmail from "@/emails/quote-sent";
+import { renderEmail } from "@/emails/render";
+import { emitEvent } from "@/lib/webhook-dispatch";
 
 export async function POST(request: Request) {
-  if (!(await isAuthenticated())) {
+  const admin = await getCurrentAdmin();
+  if (!admin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -77,32 +75,25 @@ export async function POST(request: Request) {
   // Send quote email to client
   const resend = new Resend(process.env.RESEND_API_KEY);
   try {
+    const { html, text } = await renderEmail(
+      QuoteSentEmail({
+        name: submission.owner_name ?? null,
+        businessName: submission.business_name ?? null,
+        projectType: submission.project_type ?? null,
+        amount,
+        scope,
+        submissionId: id,
+        paymentLink,
+        sentAt: new Date(),
+      })
+    );
     await resend.emails.send({
       from: "James at Stratus Creative <james@stratus-creative.com>",
       to: submission.email!,
       replyTo: "business@stratus-creative.com",
       subject: `Your quote from Stratus Creative — ${formattedAmount}`,
-      text: [
-        `Hi ${clientName},`,
-        "",
-        "Thanks for reaching out — I've put together a quote based on our conversation.",
-        "",
-        `Project: ${scope}`,
-        "",
-        `Investment: ${formattedAmount}`,
-        "",
-        paymentLink
-          ? `To accept and get started, use this payment link:\n${paymentLink}`
-          : "Reply to this email and I'll send over next steps to get started.",
-        "",
-        "Any questions, just reply here.",
-        "",
-        "— James",
-        "Stratus Creative",
-        "business@stratus-creative.com",
-        "",
-        `Reference: ${id}`,
-      ].join("\n"),
+      html,
+      text,
     });
   } catch (err) {
     console.error("Quote email failed:", err);
@@ -120,6 +111,15 @@ export async function POST(request: Request) {
       ...(paymentLink ? { stripe_payment_link: paymentLink } : {}),
     })
     .eq("id", id);
+
+  await emitEvent(admin.id, "quote.sent", {
+    id,
+    amount,
+    scope,
+    business_name: submission.business_name,
+    owner_name: submission.owner_name,
+    paymentLink,
+  });
 
   return NextResponse.json({ ok: true, paymentLink });
 }

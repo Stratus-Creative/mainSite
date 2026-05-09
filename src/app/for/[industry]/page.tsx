@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { FaqJsonLd } from "@/components/structured-data";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/structured-data";
 import { INDUSTRY_PAGES } from "@/lib/landing-data";
 
 interface Params {
@@ -20,11 +20,25 @@ export async function generateMetadata({
   const { industry } = await params;
   const i = INDUSTRY_PAGES[industry];
   if (!i) return { title: "Not found" };
+  const title = `Websites for ${i.industry} — Stratus Creative`;
+  const description = i.hero.intro;
   return {
-    title: `Websites for ${i.industry} — Stratus Creative`,
-    description: i.hero.intro,
+    title,
+    description,
     alternates: {
       canonical: `https://stratus-creative.com/for/${i.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://stratus-creative.com/for/${i.slug}`,
+      images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
   };
 }
@@ -37,6 +51,13 @@ export default async function IndustryPage({ params }: Params) {
   return (
     <>
       <FaqJsonLd items={i.faqs} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Services", url: "/services" },
+          { name: i.industry, url: `/for/${i.slug}` },
+        ]}
+      />
       <SiteHeader />
 
       <main className="flex-1">

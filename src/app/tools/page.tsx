@@ -28,36 +28,36 @@ const TOOLS: Tool[] = [
     cta: "Open the estimator →",
   },
   {
-    href: null,
+    href: "/tools/website-roi",
     name: "Website ROI calculator",
     blurb:
-      "Plug in your average ticket, lead volume, and conversion rate to see what a real website would actually be worth to your business.",
-    status: "soon",
-    cta: "Coming soon",
+      "Plug in your average ticket, monthly visitors, and conversion rate. See expected revenue lift, payback period on a Starter site, and 3-year value.",
+    status: "live",
+    cta: "Run the numbers →",
   },
   {
-    href: null,
-    name: "Brand questionnaire generator",
-    blurb:
-      "Auto-generate a discovery brief for your project — business overview, target audience, brand voice, success criteria. Submit it with your inquiry.",
-    status: "soon",
-    cta: "Coming soon",
-  },
-  {
-    href: null,
-    name: "Local SEO audit",
-    blurb:
-      "Drop in your business name and city. Get a one-page report of where you rank, where competitors rank, and what to fix first.",
-    status: "planned",
-    cta: "Planned",
-  },
-  {
-    href: null,
+    href: "/tools/workflow-roi",
     name: "Workflow ROI calculator",
     blurb:
-      "How much time does your team spend on the manual process? See what an automation would pay back per month.",
-    status: "planned",
-    cta: "Planned",
+      "Hours per week on a manual process, hourly cost, build budget — out comes monthly net savings, payback months, and 3-year ROI. Conservative / realistic / aggressive presets included.",
+    status: "live",
+    cta: "Calculate payback →",
+  },
+  {
+    href: "/tools/brand-brief",
+    name: "Brand brief generator",
+    blurb:
+      "Describe your business in two sentences. AI drafts a structured discovery brief — overview, audience, voice, success criteria. Edit, copy as Markdown, or send it with your inquiry.",
+    status: "live",
+    cta: "Generate a brief →",
+  },
+  {
+    href: "/tools/seo-audit",
+    name: "Local SEO audit",
+    blurb:
+      "Drop in your business name, city, and website. We read your homepage HTML and run heuristic rules — local signals, page basics, structure, technical, opportunities. Honest, not a fake ranking check.",
+    status: "live",
+    cta: "Audit your site →",
   },
 ];
 

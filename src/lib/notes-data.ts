@@ -224,7 +224,7 @@ The question isn't whether the bot needs ongoing attention — it does. The ques
 
 The "support retainer" trap: agencies bundle their time into a "$200/mo retainer" that sounds like it covers everything. Read the contract. In most cases, that covers their availability to respond to tickets, not the API spend, not database hosting, not any proactive monitoring. The API bill still lands on your card.
 
-We separate these explicitly. Our [Care tier](/pricing#care) is our time — $199/month for a bot in the Essential tier, $399 for a production workflow getting regular updates. API spend is always pass-through: you use your own keys, or we manage and bill at cost. There's no markup hidden in a bundled retainer.
+We separate these explicitly. Our [Care tier](/pricing#ai-care) is our time — $199/month for a bot in the Essential tier, $399 for a production workflow getting regular updates. API spend is always pass-through: you use your own keys, or we manage and bill at cost. There's no markup hidden in a bundled retainer.
 
 **What to ask before you sign**
 
@@ -527,9 +527,126 @@ The agencies that don't know about it quote a model bill based on naive token co
 
 The model bill isn't a fixed cost. It's an engineering problem. The gap between an unoptimized AI workflow and an optimized one is often 80–95% in API spend, which at any real volume is the difference between a sustainable product and one that's quietly underwater.
 
-Any AI workflow we build at Stratus includes this optimization layer as part of the build. Our [Care tier](/pricing#care) includes ongoing monitoring and optimization as usage patterns evolve — because caching hit rates, model routing thresholds, and pre-processing rules all need tuning as real usage data comes in.
+Any AI workflow we build at Stratus includes this optimization layer as part of the build. Our [Care tier](/pricing#ai-care) includes ongoing monitoring and optimization as usage patterns evolve — because caching hit rates, model routing thresholds, and pre-processing rules all need tuning as real usage data comes in.
 
 If you've been quoted a monthly API cost for an AI workflow and it was based on "X tokens per call × Y calls per month," run that number through our [cost estimator](/tools/cost-estimator) and then ask the agency what their optimization plan is. If they don't have one, the real number is worse.
+`.trim(),
+  },
+  {
+    slug: "what-the-98-percent-sms-open-rate-actually-means",
+    title: "What the 98% SMS open rate actually means",
+    date: "2026-05-18",
+    description:
+      "The number is real. The comparison it's used to make isn't. Here's what SMS actually does — and doesn't do — for small businesses.",
+    tags: ["Marketing", "SMS"],
+    body: `
+The 98% SMS open rate is real. Text messages are read by nearly everyone who receives them — 90% within three minutes of delivery, average response time 90 seconds. No other marketing channel comes close on raw engagement speed.
+
+But the comparison that follows in every marketing deck — "SMS outperforms direct mail at 4.4% response rate" — is measuring two completely different populations, and nobody says that out loud.
+
+The 45% response rate cited for SMS is always measured on opted-in subscriber lists. These are people who gave you their number and agreed to receive texts. The 4.4% direct mail response rate is measured on cold prospect lists — people who have never heard of the business. Comparing these two numbers isn't a channel comparison. It's a relationship comparison.
+
+**The part that collapses the comparison**
+
+There's a legal reason this matters more than the math. The TCPA (Telephone Consumer Protection Act) requires express written consent before you send any promotional text. Violations cost $500–$1,500 per message, and class action lawsuits in this space are well-documented. You cannot cold-prospect via SMS at any real scale.
+
+USPS Every Door Direct Mail, by contrast, requires zero prior consent. A local HVAC company can blanket an entire carrier route — every address on it — for roughly $0.35–$0.60 per piece, no list required, no opt-in form, no prior relationship. SMS legally cannot replicate this. The channels aren't competing on the same use case.
+
+**Where SMS actually wins**
+
+Inside an existing customer relationship, SMS has no rival. Appointment reminders open at near-100% because they're expected and useful. Re-engagement texts to customers who haven't booked in 90 days outperform email at that stage — the inbox is crowded, the phone isn't. Time-sensitive offers — last-minute availability, expiring promotions — convert in minutes rather than days.
+
+The ANA's cross-channel ROI data shows direct mail house lists (existing customers) at 112–161% ROI. SMS on opted-in lists comes in around 102%. For acquisition via cold outreach, postcards win by default because they're the only legal option. For retention and re-engagement, SMS and email split the work depending on urgency.
+
+**What makes the channel work**
+
+An SMS list only compounds if the workflow underneath it is automated. A text that goes out manually for every appointment isn't a strategy — it's a task. Businesses getting real ROI from SMS have their CRM triggering messages automatically: post-visit follow-up the next morning, reactivation text at 90 days of silence, appointment confirmation the morning of the service.
+
+That's not a marketing decision. It's a workflow build — the automation layer connecting your CRM, booking system, and your customers' phones, set up once and running without manual effort.
+
+[We build that infrastructure.](/services/workflows) If you're sending texts manually right now and want to know what automating it would cost, [start with a quote](/quote).
+`.trim(),
+  },
+  {
+    slug: "what-the-36-dollar-email-roi-number-actually-means",
+    title: `What the "$36 for every $1 spent" email ROI number actually means`,
+    date: "2026-05-19",
+    description:
+      "The $36 ROI figure and the 112% direct mail ROI figure use completely different math. Here's what they actually mean side by side.",
+    tags: ["Marketing", "Email"],
+    body: `
+The $36-for-every-$1-spent email ROI number comes from the ANA (Association of National Advertisers) and gets cited so often it's become table stakes in any marketing conversation. It sounds decisive.
+
+Here's the other ROI number that shows up in the same ANA data: direct mail house-list campaigns return 112–161% ROI. That sounds much lower than $36:1 — until you look at how both figures are calculated.
+
+**Two different calculations**
+
+Email ROI divides total channel revenue by the near-zero variable cost of sending an email. At most platforms, you're paying fractions of a cent per send. If your email list generates $36,000 in attributed revenue and you spent $1,000 on your ESP this year, that's a 3,500% return. When framed as "$36 per $1 spent," the $1 is essentially your platform subscription divided by number of sends. The number is real. The denominator is doing a lot of work.
+
+Direct mail ROI is fully loaded — print, postage, and list acquisition all go in the denominator. At $0.50–$0.70 per postcard all-in, the base is much higher. The "112–161% ROI" means 1.12x to 1.61x your actual spend returned. Studies that calculate both channels using the same methodology narrow the gap significantly. Neither clearly dominates.
+
+**The open rate problem nobody mentions**
+
+Since September 2021, Apple Mail Privacy Protection pre-loads tracking pixels before any human opens an email. If your recipients use Apple Mail — a large percentage of most consumer lists — your open rate is at least partially artificial. It reflects Apple's servers loading the pixel, not a person reading your subject line.
+
+Mailchimp's industry-average open rate was around 21% in 2019. By 2024 it's 35.63%. Most of that increase is MPP. Click-to-open rate is now the only reliable engagement signal for email, and it's much lower: 2–3% CTR across most industries.
+
+**The stability finding most marketers miss**
+
+Email lists decay at 22–25% annually. People change jobs (work email addresses deactivate immediately), abandon inboxes, unsubscribe. A 10,000-person email list you built this year has roughly 7,500–8,000 active addresses next year without active hygiene.
+
+Postal address decay is 8–10% annually. About 12% of Americans move each year, and 80% file a USPS change-of-address card — meaning most movers can be found automatically via NCOA processing. Your mailing list is more durable than your email list. That's almost never the assumption.
+
+**Where email actually delivers**
+
+Automated flows are where email ROI is real and defensible. Welcome sequences, abandoned cart recovery, post-purchase follow-up, and reactivation campaigns consistently hit 48–50% open rates — because they're triggered by behavior, sent at the right moment, and relevant. Klaviyo's platform data shows automated flows generate 41% of total email revenue from just 5.3% of total sends.
+
+That's not email as a broadcast channel. That's email as a workflow — triggered, personalized, running without manual effort every week.
+
+The broadcast-a-newsletter model is declining. The behavior-triggered automation model is where the return is. They're not the same build, and they're not the same investment.
+
+[Building those workflows](/services/workflows) is exactly what we do — triggered sequences wired to your CRM or booking system, not a recurring task on someone's calendar.
+`.trim(),
+  },
+  {
+    slug: "why-postcards-still-work",
+    title: "Why postcards still work (and what to use them for)",
+    date: "2026-05-20",
+    description:
+      "Postcards do something texts and emails legally can't. Here's the honest breakdown of when each channel wins — and why the best answer is usually sequencing all three.",
+    tags: ["Marketing", "Strategy"],
+    body: `
+After two pieces on what SMS and email do well, the contrarian case: postcards do something digital channels legally can't, and for certain businesses, that's the whole game.
+
+**The opt-in wall**
+
+Every SMS marketing guide will cite 98% open rates and 90-second response times. What those guides don't mention: the TCPA requires express written consent from every recipient before a promotional text goes out. For a local HVAC company trying to reach new customers in a neighborhood where they have no existing relationships, there is no SMS list to send to. You have to build one first, which requires the relationship you're trying to initiate.
+
+USPS Every Door Direct Mail solves this. No list required. Pick a carrier route, and every address on it receives the piece. EDDM postage runs $0.247 per piece — add printing and you're at $0.35–$0.60 all-in. For cold local acquisition at geographic scale, it's the only channel that doesn't require a prior relationship.
+
+**Where postcards hold**
+
+The data is specific about where direct mail outperforms. The 55+ demographic rates it as their preferred advertising channel at 50%. That preference widens for healthcare, financial services, and high-consideration purchases — categories where trust matters and time isn't the main variable.
+
+Use cases where postcards reliably outperform digital cold outreach:
+
+- **Local home services (HVAC, plumbing, electrical):** Seasonal acquisition to new service areas. ANA data puts response rates at 3.16% for this vertical — unexciting until you realize the alternative is paid search at $30–$80 per click with no guarantee of intent.
+- **Healthcare and dental:** New-mover targeting for patient acquisition, recall campaigns for lapsed patients. Response rates run 3.38–4.09% (ANA). For new practices or new locations, EDDM is the standard acquisition play.
+- **Real estate:** Geographic targeting by neighborhood, investor outreach to specific property types. Each conversion is valuable enough that a 1–3% cold response rate is highly profitable.
+
+**The multichannel finding**
+
+The most useful number in this whole comparison comes from the ANA cross-channel data: combining direct mail with a digital follow-up generates 27–118% higher response than direct mail alone.
+
+The sequence that works: the postcard goes out. Forty-eight hours later, an email that references the piece — if you have the address. A week later, an SMS if you have the number and the consent. The postcard creates awareness and dwell time (pieces stay in a home an average of 17 days). Digital channels close the loop. The businesses getting the best return from direct mail aren't running it in isolation. They're using it as the first touch in a coordinated sequence.
+
+**Your site is the landing page for all three**
+
+A postcard QR code, an email click, and an SMS link all land somewhere. A first-time visitor arriving cold from a postcard campaign has no context — they need faster load time, a cleaner conversion path, and a specific reason to call.
+
+A site built as a brochure handles existing referrals fine. A site built to convert cold traffic from any channel — postcard, paid search, EDDM — is a different design problem.
+
+[Our Starter](/pricing#starter) is purpose-built for that: a single-page, fast-loading, conversion-focused site that works as the destination for whatever channels you're running. For businesses with integrations, booking flows, or campaign-specific landing pages to wire up, [Custom engagements](/pricing#custom) handle the more complex builds.
 `.trim(),
   },
 ];

@@ -74,6 +74,12 @@ export function SiteHeader({ activePath: _ }: { activePath?: string } = {}) {
 
           <div className="flex items-center gap-3">
             <Link
+              href="/resources/free-website-audit"
+              className="hidden sm:inline-flex items-center text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Free audit
+            </Link>
+            <Link
               href="/start"
               className="group hidden sm:inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background"
             >
@@ -196,13 +202,21 @@ export function SiteHeader({ activePath: _ }: { activePath?: string } = {}) {
             })}
           </nav>
 
-          <div className="border-t border-border/60 px-6 py-8">
+          <div className="space-y-3 border-t border-border/60 px-6 py-8">
             <Link
               href="/start"
               onClick={() => setOpen(false)}
               className="flex items-center justify-between rounded-full bg-foreground px-6 py-4 text-base font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               Start a project
+              <span aria-hidden="true">→</span>
+            </Link>
+            <Link
+              href="/resources/free-website-audit"
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-between rounded-full border border-border px-6 py-4 text-base font-medium text-foreground transition-colors hover:border-foreground"
+            >
+              Free audit
               <span aria-hidden="true">→</span>
             </Link>
           </div>

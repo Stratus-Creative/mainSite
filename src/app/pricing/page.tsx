@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CheckoutButton } from "@/components/checkout-button";
-import { ServiceJsonLd, FaqJsonLd } from "@/components/structured-data";
+import { ServiceJsonLd, FaqJsonLd, BreadcrumbJsonLd } from "@/components/structured-data";
 import { MiniEstimator } from "@/components/mini-estimator";
 
 export const metadata: Metadata = {
@@ -21,6 +21,7 @@ const STARTER_INCLUDES = [
   "Live Google reviews on your site",
   "Basic on-page SEO + meta tags",
   "SSL certificate included",
+  "1 .com domain (first year, registered in your name)",
   "Delivered in 5–7 business days",
 ];
 
@@ -70,6 +71,12 @@ export default function PricingPage() {
 
       <ServiceJsonLd />
       <FaqJsonLd items={FAQ} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Pricing", url: "/pricing" },
+        ]}
+      />
 
       <main className="flex-1">
         {/* Hero */}
@@ -95,9 +102,16 @@ export default function PricingPage() {
         {/* Two pricing cards */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="mb-16 max-w-3xl">
+              <p className="section-label">Two pricing paths</p>
+              <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
+                How much does a website from Stratus{" "}
+                <span className="text-accent">cost?</span>
+              </h2>
+            </div>
             <div className="grid gap-px bg-border/60 lg:grid-cols-2">
               {/* STARTER */}
-              <article className="flex flex-col bg-background p-8 lg:p-12">
+              <article id="starter" className="scroll-mt-24 flex flex-col bg-background p-8 lg:p-12">
                 <div className="flex items-center justify-between">
                   <p className="section-label">Starter</p>
                   <span className="rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -113,7 +127,7 @@ export default function PricingPage() {
 
                 <div className="mt-10 flex items-baseline gap-2">
                   <span className="text-6xl font-semibold tracking-tight sm:text-7xl">
-                    $1,495
+                    <data value="1495">$1,495</data>
                   </span>
                   <span className="text-sm text-muted-foreground">
                     flat · one-time
@@ -149,20 +163,22 @@ export default function PricingPage() {
                   ))}
                 </ul>
 
-                <Link
-                  href="/start?plan=starter"
-                  className="mt-12 inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
-                >
-                  Get started — $1,495
-                  <span aria-hidden="true">→</span>
-                </Link>
-                <p className="mt-3 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                  Quick form · Reply in 4 hours
-                </p>
+                <div className="mt-12 lg:mt-auto lg:pt-12">
+                  <Link
+                    href="/start?plan=starter"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
+                  >
+                    Get started — <data value="1495">$1,495</data>
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                  <p className="mt-3 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                    Quick form · Reply in 4 hours
+                  </p>
+                </div>
               </article>
 
               {/* CUSTOM */}
-              <article className="flex flex-col bg-background p-8 lg:p-12">
+              <article id="custom" className="scroll-mt-24 flex flex-col bg-background p-8 lg:p-12">
                 <div className="flex items-center justify-between">
                   <p className="section-label">Custom</p>
                   <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
@@ -180,7 +196,7 @@ export default function PricingPage() {
 
                 <div className="mt-10 flex items-baseline gap-2">
                   <span className="text-6xl font-semibold tracking-tight sm:text-7xl">
-                    From $5,000
+                    From <data value="5000">$5,000</data>
                   </span>
                 </div>
                 <p className="mt-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">
@@ -191,6 +207,11 @@ export default function PricingPage() {
                   Multi-page sites, automation, AI tools, online presence
                   systems. Quoted per project. Most engagements land between
                   $5,000–$15,000.
+                </p>
+
+                <p className="mt-4 inline-flex items-center gap-2 self-start rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                  <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
+                  Fixed-price · No retainer
                 </p>
 
                 <ul className="mt-10 space-y-3 border-t border-border/60 pt-8 text-sm">
@@ -208,16 +229,18 @@ export default function PricingPage() {
                   ))}
                 </ul>
 
-                <Link
-                  href="/start"
-                  className="mt-12 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background"
-                >
-                  Get a custom quote
-                  <span aria-hidden="true">→</span>
-                </Link>
-                <p className="mt-3 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                  Quote within 2 business days
-                </p>
+                <div className="mt-12 lg:mt-auto lg:pt-12">
+                  <Link
+                    href="/start"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background"
+                  >
+                    Get a custom quote
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                  <p className="mt-3 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                    Quote within 2 business days
+                  </p>
+                </div>
               </article>
             </div>
 
@@ -309,13 +332,21 @@ export default function PricingPage() {
                 {
                   pillar: "Online presence",
                   scope: "Google Business Profile setup",
-                  range: "$250 one-time",
+                  range: (
+                    <>
+                      <data value="250">$250</data> one-time
+                    </>
+                  ),
                   detail: "Profile build, optimization, photos, services, posts.",
                 },
                 {
                   pillar: "Online presence",
                   scope: "Reputation & reviews management",
-                  range: "$149/mo",
+                  range: (
+                    <>
+                      <data value="149">$149</data>/mo
+                    </>
+                  ),
                   detail: "Ongoing review requests, response, and on-site display.",
                 },
               ].map((item) => (
@@ -468,8 +499,90 @@ export default function PricingPage() {
           </div>
         </section>
 
+        {/* AI Chat Widget — productized add-on */}
+        <section id="ai-widget" className="scroll-mt-24 border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="grid gap-px bg-border/60 lg:grid-cols-12">
+              <article className="flex flex-col bg-background p-8 lg:col-span-12 lg:p-12">
+                <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+                  <div>
+                    <div className="flex items-center gap-4">
+                      <p className="section-label">AI Chat Widget</p>
+                      <span className="rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        Productized · Add-on
+                      </span>
+                    </div>
+
+                    <h2 className="display-heading mt-10 text-3xl sm:text-4xl">
+                      The assistant you see
+                      <br />
+                      <span className="text-accent">on this site. Yours.</span>
+                    </h2>
+
+                    <div className="mt-8 flex items-baseline gap-2">
+                      <span className="text-6xl font-semibold tracking-tight sm:text-7xl">
+                        <data value="800">$800</data>
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        flat · one-time
+                      </span>
+                    </div>
+
+                    <p className="mt-6 text-sm text-muted-foreground">
+                      A custom AI assistant, trained on your business and embedded on your site. The widget you&apos;re looking at in the corner of this page is exactly what you get — minus the Stratus branding. Ships in 3–5 business days.
+                    </p>
+
+                    <p className="mt-4 inline-flex items-center gap-2 self-start rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                      <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
+                      No full workflow build required
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col justify-between gap-8">
+                    <ul className="space-y-3 border-t border-border/60 pt-8 text-sm lg:border-t-0 lg:pt-0">
+                      {[
+                        "Custom AI assistant trained on your business",
+                        "Streaming chat with page-context awareness",
+                        "Proactive nudge on pricing and services pages",
+                        "Full conversation logging — you see every chat",
+                        "Session management + monthly cap protection",
+                        "Plug into AI Care Light ($199/mo) for ongoing tuning",
+                        "Pass-through API costs (~$5–$30/mo for most)",
+                      ].map((item) => (
+                        <li
+                          key={item}
+                          className="flex items-start gap-3 text-muted-foreground"
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="mt-2 size-1 shrink-0 rounded-full bg-accent"
+                          />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="space-y-3">
+                      <Link
+                        href="/start?plan=ai-widget"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        Get the widget — <data value="800">$800</data>
+                        <span aria-hidden="true">→</span>
+                      </Link>
+                      <p className="text-center font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                        Quick form · Reply in 4 hours
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
         {/* AI Workflow Care — three tiers */}
-        <section id="ai-care" className="border-b border-border/60">
+        <section id="ai-care" className="scroll-mt-24 border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
             <div className="mb-16 grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
@@ -477,8 +590,8 @@ export default function PricingPage() {
               </div>
               <div className="lg:col-span-8">
                 <h2 className="display-heading text-4xl sm:text-5xl">
-                  Keep the AI running.{" "}
-                  <span className="text-accent">Without surprise bills.</span>
+                  How much does AI Care{" "}
+                  <span className="text-accent">cost?</span>
                 </h2>
                 <p className="mt-6 max-w-2xl text-base text-muted-foreground">
                   AI workflows aren&apos;t set-and-forget. Models drift,
@@ -503,6 +616,7 @@ export default function PricingPage() {
                 {
                   name: "AI Care · Light",
                   price: "$199",
+                  priceValue: 199,
                   hours: "Up to 3 hrs/mo",
                   description:
                     "Single-purpose AI workflow with light volume. Monitoring + small fixes + model upgrades.",
@@ -517,6 +631,7 @@ export default function PricingPage() {
                 {
                   name: "AI Care · Standard",
                   price: "$399",
+                  priceValue: 399,
                   hours: "Up to 6 hrs/mo",
                   description:
                     "Multi-step workflows with memory, integrations, or moderate volume. Most clients land here.",
@@ -531,6 +646,7 @@ export default function PricingPage() {
                 {
                   name: "AI Care · Pro",
                   price: "$899",
+                  priceValue: 899,
                   hours: "Up to 12 hrs/mo",
                   description:
                     "High-volume or complex multi-agent systems. White-glove monitoring + priority response.",
@@ -557,7 +673,7 @@ export default function PricingPage() {
                   </div>
 
                   <p className="mt-6 text-5xl font-semibold tracking-tight">
-                    {tier.price}
+                    <data value={tier.priceValue}>{tier.price}</data>
                     <span className="ml-2 text-base font-normal text-muted-foreground">
                       /month
                     </span>
@@ -582,12 +698,14 @@ export default function PricingPage() {
                     ))}
                   </ul>
 
-                  <Link
-                    href="/start"
-                    className="mt-10 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background"
-                  >
-                    Discuss {tier.name.split("·")[1].trim()}
-                  </Link>
+                  <div className="mt-10 lg:mt-auto lg:pt-10">
+                    <Link
+                      href="/start"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background"
+                    >
+                      Discuss {tier.name.split("·")[1].trim()}
+                    </Link>
+                  </div>
                 </article>
               ))}
             </div>
@@ -601,8 +719,8 @@ export default function PricingPage() {
               <div className="lg:col-span-4">
                 <p className="section-label">How AI workflows are priced</p>
                 <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
-                  Three lines.{" "}
-                  <span className="text-accent">Always shown.</span>
+                  How does Stratus price{" "}
+                  <span className="text-accent">AI workflows?</span>
                 </h2>
                 <p className="mt-6 text-sm text-muted-foreground">
                   Most agencies hide the ongoing cost of AI and surprise-bill
@@ -632,7 +750,9 @@ export default function PricingPage() {
                     Monitoring, prompt tuning, model upgrades, and small fixes.
                   </p>
                   <p className="mt-3 text-sm text-muted-foreground">
-                    Light $199/mo · Standard $399/mo · Pro $899/mo. Tier
+                    Light <data value="199">$199</data>/mo · Standard{" "}
+                    <data value="399">$399</data>/mo · Pro{" "}
+                    <data value="899">$899</data>/mo. Tier
                     matched to your workflow&apos;s complexity. Includes the
                     observability stack — Sentry, LLM tracing, uptime
                     monitoring — so you don&apos;t pay for tools separately.

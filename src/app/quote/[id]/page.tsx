@@ -185,6 +185,13 @@ export default async function QuotePage({ params }: Params) {
                 <p className="mt-2 text-xs text-muted-foreground">
                   Bookmark this page or save your ID to check back anytime.
                 </p>
+                <a
+                  href={`mailto:?subject=My%20Stratus%20Creative%20quote%20tracker&body=Bookmark%20this%20link%20to%20check%20your%20quote%20status%3A%20https%3A%2F%2Fstratus-creative.com%2Fquote%2F${data.id}`}
+                  className="mt-4 inline-flex items-center gap-2 text-sm text-foreground"
+                >
+                  <span className="underline-hover">Email me this link</span>
+                  <span aria-hidden="true">→</span>
+                </a>
               </div>
               <div className="lg:col-span-6">
                 <p className="section-label">Questions?</p>
@@ -199,6 +206,23 @@ export default async function QuotePage({ params }: Params) {
                   <span aria-hidden="true">→</span>
                 </a>
               </div>
+            </div>
+
+            <div className="mt-12 rounded-2xl border border-accent/40 bg-accent/5 p-6">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-accent">
+                New — client portal
+              </p>
+              <p className="mt-3 text-base text-foreground">
+                Want a richer view of your project — quote, scope, payment link,
+                and recent communications all in one place?
+              </p>
+              <Link
+                href="/portal/login"
+                className="mt-4 inline-flex items-center gap-2 text-sm text-foreground"
+              >
+                <span className="underline-hover">Sign in to your portal</span>
+                <span aria-hidden="true">→</span>
+              </Link>
             </div>
           </div>
         </section>

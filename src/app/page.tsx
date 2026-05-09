@@ -101,25 +101,29 @@ export default function Home() {
             </div>
 
             <h1 className="display-heading max-w-5xl text-5xl sm:text-7xl lg:text-[7.5rem]">
-              Websites, workflows, and{" "}
-              <span className="serif-accent text-accent">online presence</span>{" "}
-              for businesses that want to look bigger than they are.
+              The website you&apos;ve been putting off.
+              <br />
+              <span className="serif-accent text-accent">
+                Done in seven days.
+              </span>
             </h1>
 
             <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:items-end">
               <p className="max-w-xl text-base text-muted-foreground sm:text-lg lg:col-span-7">
-                We build what most agencies bill $10,000 for — a real website, the
-                automations behind it, and the reputation systems that bring
-                customers in. For a fraction of the price, in a fraction of the
-                time.
+                Custom-designed, mobile-first, search-ready.{" "}
+                <span className="text-foreground">
+                  <data value="1495">$1,495</data> flat. Yours the day it ships.
+                </span>{" "}
+                Workflows and AI when you need more, quoted firm from{" "}
+                <data value="5000">$5K</data>. No retainer, no template tax.
               </p>
 
               <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
                 <Link
-                  href="/start"
+                  href="/start?plan=starter"
                   className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-all hover:bg-accent hover:text-accent-foreground"
                 >
-                  Start a project
+                  Get the <data value="1495">$1,495</data> Starter
                   <span
                     aria-hidden="true"
                     className="transition-transform group-hover:translate-x-0.5"
@@ -134,6 +138,18 @@ export default function Home() {
                   See selected work
                 </Link>
               </div>
+            </div>
+
+            <div className="mt-6 flex flex-wrap items-center gap-2 lg:justify-end">
+              <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                7-day money-back
+              </span>
+              <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                Fixed-price
+              </span>
+              <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                No retainer
+              </span>
             </div>
 
             {/* Inline FAQ — answers top 3 prospect questions before they scroll */}
@@ -222,17 +238,17 @@ export default function Home() {
         {/* FREE TOOLS CALLOUT */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <div className="grid gap-px bg-border/60 sm:grid-cols-2">
-              {/* Website audit */}
+            <div className="grid gap-px bg-border/60 lg:grid-cols-5">
+              {/* Website audit — 3/5 */}
               <Link
                 href="/resources/free-website-audit"
-                className="group flex flex-col gap-6 bg-card p-8 transition-colors hover:bg-card/70 lg:p-10"
+                className="group flex flex-col gap-6 bg-card p-8 transition-colors hover:bg-card/70 lg:col-span-3 lg:p-10"
               >
-                <span className="inline-block self-start rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                <span className="inline-block self-start rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
                   Free · No commitment
                 </span>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                  <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl">
                     Free 15-minute website audit
                   </h3>
                   <p className="mt-3 text-sm text-muted-foreground">
@@ -247,21 +263,21 @@ export default function Home() {
                 </div>
               </Link>
 
-              {/* Cost estimator */}
+              {/* Cost estimator — 2/5 */}
               <Link
                 href="/tools/cost-estimator"
-                className="group flex flex-col gap-6 bg-card p-8 transition-colors hover:bg-card/70 lg:p-10"
+                className="group flex flex-col gap-6 bg-card p-8 transition-colors hover:bg-card/70 lg:col-span-2 lg:p-10"
               >
-                <span className="inline-block self-start rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                <span className="inline-block self-start rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Free tool · No signup
                 </span>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                  <h3 className="text-2xl font-semibold tracking-tight">
                     AI workflow cost estimator
                   </h3>
                   <p className="mt-3 text-sm text-muted-foreground">
                     Pick a workflow, set the volume, see the real monthly cost —
-                    LLM API, third-party APIs, Care fee, all in one place.
+                    LLM API, third-party APIs, all in one place.
                   </p>
                 </div>
                 <div className="inline-flex items-center gap-2 text-sm text-foreground transition-colors group-hover:text-accent">
@@ -374,7 +390,7 @@ export default function Home() {
                   Starter
                 </p>
                 <p className="mt-6 text-5xl font-semibold tracking-tight">
-                  $1,495
+                  <data value="1495">$1,495</data>
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">flat, one-time</p>
                 <p className="mt-6 text-sm text-muted-foreground">
@@ -387,7 +403,7 @@ export default function Home() {
                   Custom
                 </p>
                 <p className="mt-6 text-5xl font-semibold tracking-tight">
-                  From $5,000
+                  From <data value="5000">$5,000</data>
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">scoped engagement</p>
                 <p className="mt-6 text-sm text-muted-foreground">

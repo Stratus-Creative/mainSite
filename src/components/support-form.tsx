@@ -1,121 +1,185 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+const REQUEST_TYPES = [
+  { value: "something-broken", label: "Something's broken" },
+  { value: "content-update", label: "Update my content" },
+  { value: "add-something", label: "Add something new" },
+  { value: "billing", label: "Billing or invoicing" },
+  { value: "other", label: "Other" },
+];
+
+const URGENCY_LEVELS = [
+  { value: "normal", label: "Normal", sub: "I can wait a day or two" },
+  { value: "urgent", label: "Urgent", sub: "It's affecting my business" },
+  { value: "critical", label: "Critical", sub: "Site is down" },
+];
+
+type Status = "idle" | "submitting" | "success" | { error: string };
 
 export function SupportForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [urgency, setUrgency] = useState("normal");
 
-  if (submitted) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("submitting");
+
+    const data = Object.fromEntries(new FormData(e.currentTarget));
+
+    try {
+      const res = await fetch("/api/support", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, urgency }),
+      });
+
+      if (!res.ok) throw new Error("Request failed");
+      setStatus("success");
+    } catch {
+      setStatus({ error: "Something went wrong — try again or email us directly at business@stratus-creative.com." });
+    }
+  }
+
+  if (status === "success") {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-center text-lg">Request received!</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-center text-sm text-muted-foreground">
-            We&apos;ll review your request and get back to you within 24–48
-            business hours.
-          </p>
-        </CardContent>
-      </Card>
+      <div className="rounded-2xl border border-accent/30 bg-accent/5 p-8 lg:p-10">
+        <p className="font-mono text-[11px] uppercase tracking-widest text-accent">
+          Request received
+        </p>
+        <p className="mt-4 text-xl font-semibold tracking-tight">
+          We&apos;ll be in touch within 24–48 business hours.
+        </p>
+        <p className="mt-3 text-sm text-muted-foreground">
+          If your site is down or something is critically broken, email us
+          directly at{" "}
+          <a
+            href="mailto:business@stratus-creative.com"
+            className="text-foreground underline underline-offset-2"
+          >
+            business@stratus-creative.com
+          </a>{" "}
+          and put &ldquo;URGENT&rdquo; in the subject.
+        </p>
+      </div>
     );
   }
 
+  const inputClass =
+    "w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-foreground focus:outline-none transition-colors";
+  const labelClass = "mb-2 block font-mono text-[10px] uppercase tracking-widest text-muted-foreground";
+
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const data = new FormData(e.currentTarget);
-            fetch("/api/support", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(Object.fromEntries(data)),
-            }).then(() => setSubmitted(true));
-          }}
-          className="space-y-4"
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Name + Email */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="name" className={labelClass}>Name</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Your name"
+            required
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className={labelClass}>Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            required
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      {/* Website URL */}
+      <div>
+        <label htmlFor="websiteUrl" className={labelClass}>Your website URL</label>
+        <input
+          id="websiteUrl"
+          name="websiteUrl"
+          type="url"
+          placeholder="https://yoursite.com"
+          required
+          className={inputClass}
+        />
+      </div>
+
+      {/* Request type */}
+      <div>
+        <label htmlFor="requestType" className={labelClass}>What do you need?</label>
+        <select
+          id="requestType"
+          name="requestType"
+          required
+          defaultValue=""
+          className={inputClass}
         >
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
-                Name
-              </label>
-              <Input id="name" name="name" placeholder="Your name" required />
-            </div>
-            <div>
-              <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
-                Email
-              </label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-          </div>
+          <option value="" disabled>Select one</option>
+          {REQUEST_TYPES.map((t) => (
+            <option key={t.value} value={t.value}>{t.label}</option>
+          ))}
+        </select>
+      </div>
 
-          <div>
-            <label htmlFor="websiteUrl" className="mb-1.5 block text-sm font-medium">
-              Your Website URL
-            </label>
-            <Input
-              id="websiteUrl"
-              name="websiteUrl"
-              type="url"
-              placeholder="https://yoursite.com"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="requestType" className="mb-1.5 block text-sm font-medium">
-              Request Type
-            </label>
-            <select
-              id="requestType"
-              name="requestType"
-              required
-              defaultValue=""
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+      {/* Urgency */}
+      <div>
+        <p className={labelClass}>How urgent is this?</p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {URGENCY_LEVELS.map((level) => (
+            <button
+              key={level.value}
+              type="button"
+              onClick={() => setUrgency(level.value)}
+              className={`rounded-xl border px-4 py-3 text-left transition-colors ${
+                urgency === level.value
+                  ? "border-accent bg-accent/10"
+                  : "border-border bg-card hover:border-foreground/30"
+              }`}
             >
-              <option value="" disabled>
-                Select a request type
-              </option>
-              <option value="bug-fix">Bug Fix</option>
-              <option value="content-update">Content Update</option>
-              <option value="feature-request">Feature Request</option>
-              <option value="billing-question">Billing Question</option>
-            </select>
-          </div>
+              <p className={`text-sm font-medium ${urgency === level.value ? "text-accent" : "text-foreground"}`}>
+                {level.label}
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">{level.sub}</p>
+            </button>
+          ))}
+        </div>
+      </div>
 
-          <div>
-            <label htmlFor="description" className="mb-1.5 block text-sm font-medium">
-              Description
-            </label>
-            <Textarea
-              id="description"
-              name="description"
-              placeholder="Describe your request in as much detail as possible..."
-              rows={5}
-              required
-            />
-          </div>
+      {/* Description */}
+      <div>
+        <label htmlFor="description" className={labelClass}>Describe what&apos;s happening</label>
+        <textarea
+          id="description"
+          name="description"
+          placeholder="The more detail the better — what did you expect, what actually happened, any error messages you saw."
+          rows={5}
+          required
+          className={`${inputClass} resize-y`}
+        />
+      </div>
 
-          <Button type="submit" className="w-full" size="lg">
-            Submit Request
-          </Button>
-          <p className="text-center text-xs text-muted-foreground">
-            We respond within 24–48 business hours.
-          </p>
-        </form>
-      </CardContent>
-    </Card>
+      {typeof status === "object" && (
+        <p className="text-sm text-destructive">{status.error}</p>
+      )}
+
+      <button
+        type="submit"
+        disabled={status === "submitting"}
+        className="w-full rounded-full bg-foreground py-3 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
+      >
+        {status === "submitting" ? "Sending…" : "Submit request"}
+      </button>
+
+      <p className="text-center text-xs text-muted-foreground">
+        Existing clients only. We reply within 24–48 business hours.
+      </p>
+    </form>
   );
 }
