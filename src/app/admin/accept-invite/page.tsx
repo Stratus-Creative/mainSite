@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Hits Supabase to validate the invite token; must run at request time.
+export const dynamic = "force-dynamic";
+
 type SearchParams = Promise<{ token?: string | string[] }>;
 
 function Shell({ children }: { children: React.ReactNode }) {

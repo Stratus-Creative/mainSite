@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Validates a magic-link token against Supabase at request time.
+export const dynamic = "force-dynamic";
+
 interface Params {
   params: Promise<{ token: string }>;
 }

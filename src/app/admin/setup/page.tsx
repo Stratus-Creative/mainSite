@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Hits Supabase to check whether an admin exists; must run at request time,
+// not at build time when env vars may be unavailable.
+export const dynamic = "force-dynamic";
+
 export default async function AdminSetupPage() {
   // Setup is single-use — once an admin exists, redirect to login.
   if (await adminUsersExist()) {
