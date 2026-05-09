@@ -14,8 +14,19 @@ interface Params {
 }
 
 export async function generateStaticParams() {
-  const slugs = await getAllNotesSlugs();
-  return slugs.map((slug) => ({ slug }));
+  // If Supabase isn't reachable at build time (missing env vars on a preview
+  // deploy, etc.), return empty params — pages will render on-demand via ISR
+  // instead of taking down the build.
+  try {
+    const slugs = await getAllNotesSlugs();
+    return slugs.map((slug) => ({ slug }));
+  } catch (err) {
+    console.warn(
+      "[generateStaticParams] couldn't pre-render note slugs, falling back to on-demand:",
+      err
+    );
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
