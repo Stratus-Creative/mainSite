@@ -5,7 +5,7 @@ import { useState } from "react";
 export function NewsletterSignup({
   variant = "default",
 }: {
-  variant?: "default" | "compact";
+  variant?: "default" | "compact" | "inline";
 }) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -32,6 +32,46 @@ export function NewsletterSignup({
       setError("Couldn't subscribe — try again or email us directly.");
       setSubmitting(false);
     }
+  }
+
+  if (variant === "inline") {
+    if (submitted) {
+      return (
+        <p className="font-mono text-sm text-accent">
+          You&apos;re in. One essay a month, no pitch.
+        </p>
+      );
+    }
+    return (
+      <div>
+        <p className="mb-3 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+          Notes by email
+        </p>
+        <form onSubmit={handleSubmit} className="flex flex-wrap items-center gap-2">
+          <input
+            type="email"
+            required
+            placeholder="your@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-60 rounded-full border border-border bg-card px-5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-foreground focus:outline-none"
+          />
+          <button
+            type="submit"
+            disabled={submitting}
+            className="rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
+          >
+            {submitting ? "…" : "Subscribe"}
+          </button>
+          <span className="text-sm text-muted-foreground">
+            One note a month. No pitch.
+          </span>
+        </form>
+        {error && (
+          <p className="mt-2 text-xs text-destructive">{error}</p>
+        )}
+      </div>
+    );
   }
 
   if (submitted) {

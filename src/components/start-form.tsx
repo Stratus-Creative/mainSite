@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type ProjectType = "starter" | "custom" | "unsure";
 type Budget = "under-2k" | "2k-5k" | "5k-15k" | "15k-plus" | "unsure";
@@ -69,6 +70,7 @@ export function StartForm() {
 
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submissionId, setSubmissionId] = useState<string | null>(null);
   const [projectType, setProjectType] = useState<ProjectType>(initialProjectType);
   const [budget, setBudget] = useState<Budget>("unsure");
   const [contactPref, setContactPref] = useState<ContactPref>("email");
@@ -154,8 +156,8 @@ export function StartForm() {
 
   if (submitted) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-10 text-center">
-        <p className="section-label justify-center">Received</p>
+      <div className="rounded-2xl border border-border bg-card p-10">
+        <p className="section-label">Received</p>
         <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
           Thanks — we&apos;ll be in touch.
         </h2>
@@ -163,6 +165,26 @@ export function StartForm() {
           Expect a reply within 4 hours during business hours. James reads
           every message himself — nothing goes to a queue.
         </p>
+        {submissionId && (
+          <div className="mt-8 rounded-xl border border-border bg-background p-6">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+              Your submission ID
+            </p>
+            <p className="mt-2 font-mono text-sm text-foreground break-all">
+              {submissionId}
+            </p>
+            <Link
+              href={`/quote/${submissionId}`}
+              className="mt-5 inline-flex items-center gap-2 text-sm text-foreground"
+            >
+              <span className="underline-hover">Track your quote status</span>
+              <span aria-hidden="true">→</span>
+            </Link>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Bookmark that link — it shows where things stand at any time.
+            </p>
+          </div>
+        )}
       </div>
     );
   }
@@ -179,8 +201,10 @@ export function StartForm() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(Object.fromEntries(data)),
         })
-          .then(() => {
+          .then(async (res) => {
+            const json = await res.json().catch(() => ({}));
             clearSaved();
+            setSubmissionId(json.id ?? null);
             setSubmitted(true);
           })
           .catch(() => setSubmitting(false));

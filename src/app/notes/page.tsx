@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 import { NOTES } from "@/lib/notes-data";
 
 export const metadata: Metadata = {
@@ -43,6 +44,9 @@ export default function NotesIndex() {
               Short essays on web, workflows, AI pricing, and how we think
               about building production work for small businesses.
             </p>
+            <div className="mt-10">
+              <NewsletterSignup variant="inline" />
+            </div>
           </div>
         </section>
 
@@ -88,6 +92,7 @@ export default function NotesIndex() {
             </ul>
           </div>
         </section>
+
       </main>
 
       <SiteFooter />
