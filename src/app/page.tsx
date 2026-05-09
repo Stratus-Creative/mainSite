@@ -219,32 +219,57 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FREE TOOL CALLOUT */}
+        {/* FREE TOOLS CALLOUT */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <Link
-              href="/tools/cost-estimator"
-              className="group flex flex-col gap-6 rounded-2xl border border-border bg-card p-8 transition-colors hover:border-foreground/40 lg:flex-row lg:items-center lg:gap-12 lg:p-10"
-            >
-              <div className="flex-shrink-0">
-                <span className="inline-block rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+            <div className="grid gap-px bg-border/60 sm:grid-cols-2">
+              {/* Website audit */}
+              <Link
+                href="/resources/free-website-audit"
+                className="group flex flex-col gap-6 bg-card p-8 transition-colors hover:bg-card/70 lg:p-10"
+              >
+                <span className="inline-block self-start rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Free · No commitment
+                </span>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                    Free 15-minute website audit
+                  </h3>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Send your URL. We record a Loom walking through your
+                    site — performance, SEO gaps, conversion red flags, three
+                    specific fixes. Returned in 1–3 days.
+                  </p>
+                </div>
+                <div className="inline-flex items-center gap-2 text-sm text-foreground transition-colors group-hover:text-accent">
+                  <span className="underline-hover">Request your audit</span>
+                  <span aria-hidden="true">→</span>
+                </div>
+              </Link>
+
+              {/* Cost estimator */}
+              <Link
+                href="/tools/cost-estimator"
+                className="group flex flex-col gap-6 bg-card p-8 transition-colors hover:bg-card/70 lg:p-10"
+              >
+                <span className="inline-block self-start rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
                   Free tool · No signup
                 </span>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                  AI workflow cost estimator
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Pick a workflow, set the volume, see the real monthly cost —
-                  LLM API, third-party APIs, Care fee, all in one place.
-                </p>
-              </div>
-              <div className="inline-flex items-center gap-2 text-sm text-foreground transition-colors group-hover:text-accent">
-                <span className="underline-hover">Try the estimator</span>
-                <span aria-hidden="true">→</span>
-              </div>
-            </Link>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                    AI workflow cost estimator
+                  </h3>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Pick a workflow, set the volume, see the real monthly cost —
+                    LLM API, third-party APIs, Care fee, all in one place.
+                  </p>
+                </div>
+                <div className="inline-flex items-center gap-2 text-sm text-foreground transition-colors group-hover:text-accent">
+                  <span className="underline-hover">Try the estimator</span>
+                  <span aria-hidden="true">→</span>
+                </div>
+              </Link>
+            </div>
           </div>
         </section>
 

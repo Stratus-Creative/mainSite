@@ -12,11 +12,12 @@ const FOOTER_NAV = [
     ],
   },
   {
-    label: "Tools & notes",
+    label: "Tools & resources",
     links: [
       { href: "/tools", label: "All tools" },
       { href: "/tools/cost-estimator", label: "AI cost estimator" },
-      { href: "/notes", label: "Notes" },
+      { href: "/resources/free-website-audit", label: "Free website audit" },
+      { href: "/notes", label: "Decoded" },
       { href: "/support", label: "Support" },
     ],
   },
