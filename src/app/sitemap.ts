@@ -7,43 +7,43 @@ import { CASE_STUDIES } from "@/lib/case-studies-data";
 const BASE_URL = "https://stratus-creative.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  const LAST_REDESIGN = new Date("2026-04-01");
 
   const core: MetadataRoute.Sitemap = [
-    { url: `${BASE_URL}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
-    { url: `${BASE_URL}/services`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE_URL}/pricing`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE_URL}/work`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${BASE_URL}/start`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/notes`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE_URL}/tools`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/`, lastModified: LAST_REDESIGN, changeFrequency: "weekly", priority: 1 },
+    { url: `${BASE_URL}/services`, lastModified: LAST_REDESIGN, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${BASE_URL}/pricing`, lastModified: LAST_REDESIGN, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${BASE_URL}/work`, lastModified: LAST_REDESIGN, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE_URL}/start`, lastModified: LAST_REDESIGN, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/about`, lastModified: LAST_REDESIGN, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/notes`, lastModified: LAST_REDESIGN, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/tools`, lastModified: LAST_REDESIGN, changeFrequency: "monthly", priority: 0.7 },
     {
       url: `${BASE_URL}/tools/cost-estimator`,
-      lastModified: now,
+      lastModified: LAST_REDESIGN,
       changeFrequency: "monthly",
       priority: 0.85,
     },
     {
       url: `${BASE_URL}/resources/website-cost-guide`,
-      lastModified: now,
+      lastModified: LAST_REDESIGN,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${BASE_URL}/resources/free-website-audit`,
-      lastModified: now,
+      lastModified: LAST_REDESIGN,
       changeFrequency: "monthly",
       priority: 0.85,
     },
-    { url: `${BASE_URL}/testimonials`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${BASE_URL}/roadmap`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE_URL}/press`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE_URL}/transparency`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
-    { url: `${BASE_URL}/status`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${BASE_URL}/support`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE_URL}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE_URL}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/testimonials`, lastModified: LAST_REDESIGN, changeFrequency: "weekly", priority: 0.5 },
+    { url: `${BASE_URL}/roadmap`, lastModified: LAST_REDESIGN, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/press`, lastModified: LAST_REDESIGN, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/transparency`, lastModified: LAST_REDESIGN, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${BASE_URL}/status`, lastModified: LAST_REDESIGN, changeFrequency: "weekly", priority: 0.5 },
+    { url: `${BASE_URL}/support`, lastModified: LAST_REDESIGN, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/privacy`, lastModified: LAST_REDESIGN, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/terms`, lastModified: LAST_REDESIGN, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   const notes: MetadataRoute.Sitemap = NOTES.map((n) => ({
@@ -56,7 +56,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pillarPages: MetadataRoute.Sitemap = Object.keys(PILLAR_PAGES).map(
     (slug) => ({
       url: `${BASE_URL}/services/${slug}`,
-      lastModified: now,
+      lastModified: LAST_REDESIGN,
       changeFrequency: "monthly",
       priority: 0.8,
     })
@@ -65,7 +65,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const industryPages: MetadataRoute.Sitemap = Object.keys(INDUSTRY_PAGES).map(
     (slug) => ({
       url: `${BASE_URL}/for/${slug}`,
-      lastModified: now,
+      lastModified: LAST_REDESIGN,
       changeFrequency: "monthly",
       priority: 0.75,
     })
@@ -74,7 +74,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const comparisonPages: MetadataRoute.Sitemap = Object.keys(COMPARISONS).map(
     (slug) => ({
       url: `${BASE_URL}/vs/${slug}`,
-      lastModified: now,
+      lastModified: LAST_REDESIGN,
       changeFrequency: "monthly",
       priority: 0.7,
     })

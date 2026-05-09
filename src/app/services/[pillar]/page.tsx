@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { FaqJsonLd } from "@/components/structured-data";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/structured-data";
 import { PILLAR_PAGES } from "@/lib/landing-data";
 
 interface Params {
@@ -20,11 +20,25 @@ export async function generateMetadata({
   const { pillar } = await params;
   const p = PILLAR_PAGES[pillar];
   if (!p) return { title: "Not found" };
+  const title = `${p.pillar} — Stratus Creative`;
+  const description = p.hero.intro;
   return {
-    title: `${p.pillar} — Stratus Creative`,
-    description: p.hero.intro,
+    title,
+    description,
     alternates: {
       canonical: `https://stratus-creative.com/services/${p.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://stratus-creative.com/services/${p.slug}`,
+      images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
   };
 }
@@ -37,6 +51,13 @@ export default async function PillarPage({ params }: Params) {
   return (
     <>
       <FaqJsonLd items={p.faqs} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Services", url: "/services" },
+          { name: p.pillar, url: `/services/${p.slug}` },
+        ]}
+      />
       <SiteHeader activePath="/services" />
 
       <main className="flex-1">
@@ -82,7 +103,7 @@ export default async function PillarPage({ params }: Params) {
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <p className="section-label">What we build</p>
             <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              Capabilities.
+              What does Stratus build for {p.pillar.toLowerCase()}?
             </h2>
             <ul className="mt-12 grid gap-px bg-border/60 sm:grid-cols-2">
               {p.capabilities.map((cap) => (
@@ -106,7 +127,7 @@ export default async function PillarPage({ params }: Params) {
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <p className="section-label">Pricing</p>
             <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              {p.pricing.headline}
+              How much does {p.pillar.toLowerCase()} work cost?
             </h2>
             <div className="mt-12 grid gap-px bg-border/60 lg:grid-cols-3">
               {p.pricing.ranges.map((r) => (
@@ -148,7 +169,7 @@ export default async function PillarPage({ params }: Params) {
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <p className="section-label">Process</p>
             <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              How we work.
+              How does Stratus deliver {p.pillar.toLowerCase()} projects?
             </h2>
             <div className="mt-12 grid gap-px bg-border/60 sm:grid-cols-2 lg:grid-cols-4">
               {p.process.map((step) => (

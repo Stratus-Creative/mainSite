@@ -5,10 +5,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
   LocalBusinessJsonLd,
   OrganizationJsonLd,
+  PersonJsonLd,
   WebsiteJsonLd,
 } from "@/components/structured-data";
-import { FloatingCta } from "@/components/floating-cta";
 import { ClarityScript } from "@/components/clarity-script";
+import { ChatWidget } from "@/components/chat-widget";
+import { PageViewTracker } from "@/components/page-view-tracker";
+import { Suspense } from "react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -91,11 +94,15 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
-        <FloatingCta />
         <OrganizationJsonLd />
+        <PersonJsonLd />
         <WebsiteJsonLd />
         <LocalBusinessJsonLd />
+        <ChatWidget />
         <ClarityScript />
+        <Suspense fallback={null}>
+          <PageViewTracker />
+        </Suspense>
         <Analytics />
         <SpeedInsights />
       </body>

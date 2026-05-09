@@ -42,6 +42,44 @@ export function OrganizationJsonLd() {
     ],
     priceRange: "$$",
     sameAs: [],
+    founder: { "@id": `${BASE_URL}/#person-james-farmer` },
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
+export function PersonJsonLd() {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${BASE_URL}/#person-james-farmer`,
+    name: "James Farmer",
+    givenName: "James",
+    familyName: "Farmer",
+    jobTitle: "Founder",
+    worksFor: { "@id": `${BASE_URL}/#organization` },
+    url: `${BASE_URL}/about`,
+    description:
+      "Solo engineer behind Stratus Creative. Industrial IT engineer at Michelin, builder of Spark Analyzer (300+ users) and AI-native client work.",
+    knowsAbout: [
+      "Next.js",
+      "AI workflows",
+      "AI agents",
+      "Production engineering",
+      "Apache Kafka",
+      "Cost-aware AI orchestration",
+      "Local SEO",
+      "Web performance",
+    ],
+    sameAs: [
+      "https://linkedin.com/in/ja-farmer",
+      "https://alecfarmer.com",
+    ],
+    alumniOf: { "@type": "Organization", name: "Michelin North America" },
   };
   return (
     <script
@@ -147,6 +185,66 @@ export function ServiceJsonLd() {
           priceCurrency: "USD",
           eligibleDuration: { "@type": "QuantitativeValue", value: 1, unitCode: "MON" },
         },
+        {
+          "@type": "Offer",
+          name: "Process automation project",
+          priceSpecification: {
+            "@type": "PriceSpecification",
+            minPrice: 3000,
+            maxPrice: 8000,
+            priceCurrency: "USD",
+          },
+        },
+        {
+          "@type": "Offer",
+          name: "AI agent or chatbot build",
+          priceSpecification: {
+            "@type": "PriceSpecification",
+            minPrice: 5000,
+            maxPrice: 15000,
+            priceCurrency: "USD",
+          },
+        },
+        {
+          "@type": "Offer",
+          name: "AI Care · Light",
+          price: 199,
+          priceCurrency: "USD",
+          category: "Subscription",
+        },
+        {
+          "@type": "Offer",
+          name: "AI Care · Standard",
+          price: 399,
+          priceCurrency: "USD",
+          category: "Subscription",
+        },
+        {
+          "@type": "Offer",
+          name: "AI Care · Pro",
+          price: 899,
+          priceCurrency: "USD",
+          category: "Subscription",
+        },
+        {
+          "@type": "Offer",
+          name: "Google Business Profile setup",
+          price: 250,
+          priceCurrency: "USD",
+        },
+        {
+          "@type": "Offer",
+          name: "Reputation & reviews management",
+          price: 149,
+          priceCurrency: "USD",
+          category: "Subscription",
+        },
+        {
+          "@type": "Offer",
+          name: "AI Chat Widget",
+          price: 800,
+          priceCurrency: "USD",
+        },
       ],
     },
   };
@@ -205,14 +303,11 @@ export function LocalBusinessJsonLd() {
     name: "Stratus Creative",
     image: `${BASE_URL}/opengraph-image`,
     url: BASE_URL,
-    telephone: "",
     email: "business@stratus-creative.com",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "",
       addressLocality: "Simpsonville",
       addressRegion: "SC",
-      postalCode: "",
       addressCountry: "US",
     },
     geo: {
@@ -226,7 +321,7 @@ export function LocalBusinessJsonLd() {
     ],
     priceRange: "$$",
     openingHours: "Mo-Fr 09:00-18:00",
-    sameAs: [],
+    sameAs: ["https://linkedin.com/in/ja-farmer"],
     knowsAbout: [
       "Web design",
       "Web development",

@@ -116,6 +116,7 @@ export const PILLAR_PAGES: Record<string, PillarLanding> = {
       "Live Google reviews displayed on the site",
       "Service area pages with local SEO",
       "Custom design (no templates)",
+      "First-year .com domain included on Starter (registered in your name)",
       "Built on Next.js + Vercel — sub-1-second load time",
     ],
     pricing: {
@@ -171,7 +172,7 @@ export const PILLAR_PAGES: Record<string, PillarLanding> = {
       },
       {
         q: "What if I already have a domain?",
-        a: "Use it. We'll wire it up. If you don't have one, .com domains are about $15/year — we can help you grab one.",
+        a: "Use it — we'll wire it up. If you don't have one, every Starter includes a standard .com domain registered in your name for the first year (we cover registration up to $20). Premium .com names listed above $20, or other TLDs (.io, .co, etc.), are pass-through at-cost — pay the difference or pick a different name.",
       },
     ],
   },

@@ -43,7 +43,7 @@ export default function TransparencyPage() {
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <p className="section-label">When this goes live</p>
             <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              The plan.
+              What will Stratus actually publish here?
             </h2>
             <p className="mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
               We&apos;ll publish this page once we have 5+ AI workflow clients
@@ -119,7 +119,7 @@ export default function TransparencyPage() {
               <div className="lg:col-span-8">
                 <p className="section-label">In the meantime</p>
                 <h2 className="display-heading mt-8 text-4xl sm:text-5xl">
-                  Run the cost estimator yourself.
+                  How can I see real numbers today?
                 </h2>
                 <p className="mt-6 max-w-xl text-base text-muted-foreground">
                   We don&apos;t have client data yet, but we built a public

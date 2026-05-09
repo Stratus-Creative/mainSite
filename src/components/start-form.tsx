@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type ProjectType = "starter" | "custom" | "unsure";
 type Budget = "under-2k" | "2k-5k" | "5k-15k" | "15k-plus" | "unsure";
@@ -69,6 +70,7 @@ export function StartForm() {
 
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submissionId, setSubmissionId] = useState<string | null>(null);
   const [projectType, setProjectType] = useState<ProjectType>(initialProjectType);
   const [budget, setBudget] = useState<Budget>("unsure");
   const [contactPref, setContactPref] = useState<ContactPref>("email");
@@ -78,6 +80,7 @@ export function StartForm() {
   const [ownerName, setOwnerName] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [phone, setPhone] = useState("");
 
   // Load saved progress on mount (only if not coming from estimator with prefilled message).
@@ -154,8 +157,8 @@ export function StartForm() {
 
   if (submitted) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-10 text-center">
-        <p className="section-label justify-center">Received</p>
+      <div className="rounded-2xl border border-border bg-card p-10">
+        <p className="section-label">Received</p>
         <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
           Thanks — we&apos;ll be in touch.
         </h2>
@@ -163,6 +166,26 @@ export function StartForm() {
           Expect a reply within 4 hours during business hours. James reads
           every message himself — nothing goes to a queue.
         </p>
+        {submissionId && (
+          <div className="mt-8 rounded-xl border border-border bg-background p-6">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+              Your submission ID
+            </p>
+            <p className="mt-2 font-mono text-sm text-foreground break-all">
+              {submissionId}
+            </p>
+            <Link
+              href={`/quote/${submissionId}`}
+              className="mt-5 inline-flex items-center gap-2 text-sm text-foreground"
+            >
+              <span className="underline-hover">Track your quote status</span>
+              <span aria-hidden="true">→</span>
+            </Link>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Bookmark that link — it shows where things stand at any time.
+            </p>
+          </div>
+        )}
       </div>
     );
   }
@@ -174,13 +197,24 @@ export function StartForm() {
         setSubmitting(true);
         const form = e.currentTarget;
         const data = new FormData(form);
+        const chatSessionId =
+          typeof window !== "undefined"
+            ? sessionStorage.getItem("stratus_chat_session")
+            : null;
+        const visitorSessionId = readVisitorSessionId();
         fetch("/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(Object.fromEntries(data)),
+          body: JSON.stringify({
+            ...Object.fromEntries(data),
+            chatSessionId,
+            visitorSessionId,
+          }),
         })
-          .then(() => {
+          .then(async (res) => {
+            const json = await res.json().catch(() => ({}));
             clearSaved();
+            setSubmissionId(json.id ?? null);
             setSubmitted(true);
           })
           .catch(() => setSubmitting(false));
@@ -322,7 +356,13 @@ export function StartForm() {
             placeholder="jane@doeco.com"
             required
             value={email}
-            onChange={setEmail}
+            onChange={(v) => { setEmail(v); setEmailError(null); }}
+            onBlur={(v) => {
+              if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+                setEmailError("Enter a valid email address.");
+              }
+            }}
+            error={emailError ?? undefined}
           />
           <FormField
             id="phone"
@@ -332,6 +372,7 @@ export function StartForm() {
             placeholder="(555) 123-4567"
             value={phone}
             onChange={setPhone}
+            onBlur={(v) => setPhone(formatPhone(v))}
           />
         </div>
 
@@ -450,6 +491,25 @@ export function StartForm() {
   );
 }
 
+function readVisitorSessionId(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem("stratus_visitor_session");
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { id?: unknown };
+    return typeof parsed?.id === "string" && parsed.id.length > 0 ? parsed.id : null;
+  } catch {
+    return null;
+  }
+}
+
+function formatPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  const ten = digits.length === 11 && digits.startsWith("1") ? digits.slice(1) : digits;
+  if (ten.length !== 10) return raw;
+  return `(${ten.slice(0, 3)}) ${ten.slice(3, 6)}-${ten.slice(6)}`;
+}
+
 function FormField({
   id,
   name,
@@ -459,6 +519,8 @@ function FormField({
   required = false,
   value,
   onChange,
+  onBlur,
+  error,
 }: {
   id: string;
   name: string;
@@ -468,6 +530,8 @@ function FormField({
   required?: boolean;
   value?: string;
   onChange?: (v: string) => void;
+  onBlur?: (v: string) => void;
+  error?: string;
 }) {
   return (
     <label
@@ -486,8 +550,12 @@ function FormField({
         required={required}
         value={value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
+        onBlur={onBlur ? (e) => onBlur(e.target.value) : undefined}
         className="w-full bg-transparent text-base text-foreground placeholder:text-muted-foreground/80 focus:outline-none"
       />
+      {error && (
+        <span className="font-mono text-[10px] text-destructive">{error}</span>
+      )}
     </label>
   );
 }

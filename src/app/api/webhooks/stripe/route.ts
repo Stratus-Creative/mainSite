@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
+import type Stripe from "stripe";
 import { Resend } from "resend";
+import { getStripe } from "@/lib/stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-const resend = new Resend(process.env.RESEND_API_KEY);
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -13,9 +13,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
   }
 
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    console.error("STRIPE_WEBHOOK_SECRET is not configured");
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
+
+  const stripe = getStripe();
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (err) {
     console.error("Webhook signature verification failed:", err);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });

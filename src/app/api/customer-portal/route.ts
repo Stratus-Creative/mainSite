@@ -1,15 +1,22 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
+import { getStripe } from "@/lib/stripe";
+import { getCurrentAdmin } from "@/lib/admin-auth";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  const { customerId } = await request.json();
-
-  if (!customerId) {
-    return NextResponse.json({ error: "Missing customerId" }, { status: 400 });
+  const admin = await getCurrentAdmin();
+  if (!admin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { customerId } = await request.json();
+
+  if (!customerId || typeof customerId !== "string" || !customerId.startsWith("cus_")) {
+    return NextResponse.json({ error: "Invalid customerId" }, { status: 400 });
+  }
+
+  const stripe = getStripe();
   const origin = request.headers.get("origin") ?? "https://stratus-creative.com";
 
   const session = await stripe.billingPortal.sessions.create({

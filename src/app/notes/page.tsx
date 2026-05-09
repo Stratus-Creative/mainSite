@@ -2,17 +2,22 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { NOTES } from "@/lib/notes-data";
+import { NewsletterSignup } from "@/components/newsletter-signup";
+import { getAllNotes } from "@/lib/notes";
+
+// 10 minutes — short enough that newly-due articles surface promptly,
+// long enough that we're not regenerating on every visit.
+export const revalidate = 600;
 
 export const metadata: Metadata = {
-  title: "Notes — Stratus Creative",
+  title: "Decoded — Stratus Creative",
   description:
-    "Essays on web, workflows, AI pricing transparency, and how we think about building production-grade work for small business clients.",
+    "Plain-language writing on AI, workflows, and web — for people who want to understand how it works without learning to build it.",
   alternates: { canonical: "https://stratus-creative.com/notes" },
 };
 
 function formatDate(iso: string): string {
-  return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", {
+  return new Date(iso).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -20,8 +25,8 @@ function formatDate(iso: string): string {
   });
 }
 
-export default function NotesIndex() {
-  const sorted = [...NOTES].sort((a, b) => (a.date < b.date ? 1 : -1));
+export default async function NotesIndex() {
+  const notes = await getAllNotes();
 
   return (
     <>
@@ -34,22 +39,25 @@ export default function NotesIndex() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Notes</p>
+            <p className="section-label">Decoded</p>
             <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              Notes from{" "}
-              <span className="text-accent">the studio.</span>
+              The machine,{" "}
+              <span className="text-accent">explained.</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Short essays on web, workflows, AI pricing, and how we think
-              about building production work for small businesses.
+              Plain-language writing on AI, workflows, and web — for people
+              who want to understand how it works without learning to build it.
             </p>
+            <div className="mt-10">
+              <NewsletterSignup variant="inline" />
+            </div>
           </div>
         </section>
 
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <ul className="divide-y divide-border/60 border-y border-border/60">
-              {sorted.map((note) => (
+              {notes.map((note) => (
                 <li key={note.slug}>
                   <Link
                     href={`/notes/${note.slug}`}
@@ -57,7 +65,7 @@ export default function NotesIndex() {
                   >
                     <div className="lg:col-span-3">
                       <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                        {formatDate(note.date)}
+                        {formatDate(note.published_at!)}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {note.tags.map((tag) => (

@@ -40,6 +40,23 @@ export function AuditForm() {
         setSubmitting(true);
         const form = e.currentTarget;
         const data = new FormData(form);
+        const chatSessionId =
+          typeof window !== "undefined"
+            ? sessionStorage.getItem("stratus_chat_session")
+            : null;
+        const visitorSessionId = (() => {
+          if (typeof window === "undefined") return null;
+          try {
+            const raw = window.localStorage.getItem("stratus_visitor_session");
+            if (!raw) return null;
+            const parsed = JSON.parse(raw) as { id?: unknown };
+            return typeof parsed?.id === "string" && parsed.id.length > 0
+              ? parsed.id
+              : null;
+          } catch {
+            return null;
+          }
+        })();
         fetch("/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -48,6 +65,8 @@ export function AuditForm() {
             category: "audit-request",
             city: "not-specified",
             source: "free-website-audit",
+            chatSessionId,
+            visitorSessionId,
           }),
         })
           .then(() => setSubmitted(true))

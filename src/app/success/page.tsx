@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function SuccessPage() {
   return (

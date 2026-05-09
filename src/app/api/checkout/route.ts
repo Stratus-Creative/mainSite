@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
+import type Stripe from "stripe";
+import { getStripe } from "@/lib/stripe";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export const dynamic = "force-dynamic";
 
 const PRICES: Record<
   string,
@@ -13,6 +15,16 @@ const PRICES: Record<
 };
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const rl = await checkRateLimit({
+    bucket: `checkout:${ip}`,
+    max: 10,
+    windowMs: 60 * 60 * 1000,
+  });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   const { plan } = await request.json();
 
   const price = PRICES[plan];
@@ -20,6 +32,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
 
+  const stripe = getStripe();
   const origin = request.headers.get("origin") ?? "https://stratus-creative.com";
 
   const lineItem: Stripe.Checkout.SessionCreateParams.LineItem =

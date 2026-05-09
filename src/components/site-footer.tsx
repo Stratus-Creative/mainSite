@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 
 const FOOTER_NAV = [
   {
@@ -12,11 +13,12 @@ const FOOTER_NAV = [
     ],
   },
   {
-    label: "Tools & notes",
+    label: "Tools & resources",
     links: [
       { href: "/tools", label: "All tools" },
       { href: "/tools/cost-estimator", label: "AI cost estimator" },
-      { href: "/notes", label: "Notes" },
+      { href: "/resources/free-website-audit", label: "Free website audit" },
+      { href: "/notes", label: "Decoded" },
       { href: "/support", label: "Support" },
     ],
   },
@@ -25,6 +27,8 @@ const FOOTER_NAV = [
     links: [
       { href: "/privacy", label: "Privacy" },
       { href: "/terms", label: "Terms" },
+      { href: "/refunds", label: "Refunds" },
+      { href: "/acceptable-use", label: "Acceptable use" },
     ],
   },
 ];
@@ -35,6 +39,11 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border/60 mt-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        {/* Newsletter row — quiet line, not a marketing card */}
+        <div className="border-b border-border/60 py-6">
+          <NewsletterSignup variant="compact" />
+        </div>
+
         {/* Top: oversized wordmark + CTA */}
         <div className="grid gap-12 py-20 lg:grid-cols-12">
           <div className="lg:col-span-7">

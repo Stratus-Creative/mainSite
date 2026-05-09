@@ -6,27 +6,30 @@ import { SiteFooter } from "@/components/site-footer";
 export const metadata: Metadata = {
   title: "Work — Stratus Creative",
   description:
-    "Selected work, in-flight projects, and case studies from Stratus Creative.",
+    "What we've built. Real artifacts, real numbers, no padded portfolio.",
 };
 
-const IN_FLIGHT = [
+const BUILDS = [
   {
-    label: "Local services",
-    title: "A multi-trade contractor in the Upstate",
+    label: "Studio · in flight",
+    title: "Stratus Creative client work",
     description:
-      "Single-page Starter build with auto-pulled Google reviews and a click-to-call hero. Currently in design.",
+      "In-flight client builds across local services, internal tooling, and brand sites. Case studies will be published as projects ship and clients give us permission to share specifics.",
+    cta: { href: "/start", label: "Be the first published case", external: false },
   },
   {
-    label: "Internal tooling",
-    title: "AI agent for inbound lead qualification",
+    label: "Product · live",
+    title: "Spark Analyzer",
     description:
-      "A workflow-tier engagement: AI agent that reads inbound emails, scores them, and drafts replies. In build.",
+      "AI-powered Minecraft server performance analysis. 300+ registered users. 400+ reports processed. Per-analysis cost reduced from $5–$7 to cents through orchestration architecture and a pre-processing pipeline. TypeScript, Next.js, AI integration.",
+    cta: { href: "https://sparkanalyzer.com", label: "sparkanalyzer.com", external: true },
   },
   {
-    label: "Brand site",
-    title: "Boutique consultancy refresh",
+    label: "Enterprise · shipped",
+    title: "Michelin MES automation",
     description:
-      "Custom multi-page brand site replacing a template-y Squarespace presence. Discovery phase.",
+      "Industrial PowerShell automation for multi-site MES deployment. Reduced multi-day rollouts to 30 minutes. Adopted as the standard process across 8 international sites including Mexico and Brazil. Kafka, Oracle SQL, VMware vSphere.",
+    cta: null,
   },
 ];
 
@@ -45,34 +48,35 @@ export default function WorkPage() {
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
             <p className="section-label">Work</p>
             <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              Selected work,{" "}
-              <span className="text-accent">coming soon.</span>
+              What I&apos;ve <span className="text-accent">built.</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Stratus is a young studio. We&apos;d rather show you a small
-              number of projects we&apos;re proud of than a portfolio padded
-              with template sites we built in 2019. Case studies arrive as
-              projects ship.
+              A studio is only as credible as what it ships. Here&apos;s
+              what we ship — client builds in flight, a live product with
+              real users, and enterprise automation running in production.
             </p>
           </div>
         </section>
 
-        {/* In flight */}
+        {/* Builds */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
             <div className="mb-16 grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                <p className="section-label">In flight</p>
+                <p className="section-label">Selected builds</p>
               </div>
               <div className="lg:col-span-8">
                 <h2 className="display-heading text-4xl sm:text-5xl lg:text-6xl">
-                  What we&apos;re building right now.
+                  Real artifacts.{" "}
+                  <span className="text-muted-foreground">
+                    Real numbers. No padded portfolio.
+                  </span>
                 </h2>
               </div>
             </div>
 
-            <div className="grid gap-px bg-border/60 sm:grid-cols-2 lg:grid-cols-3">
-              {IN_FLIGHT.map((item) => (
+            <div className="grid gap-px bg-border/60 lg:grid-cols-3">
+              {BUILDS.map((item) => (
                 <article
                   key={item.title}
                   className="group flex flex-col bg-background p-8 lg:p-10"
@@ -87,16 +91,39 @@ export default function WorkPage() {
                   <h3 className="mt-4 text-xl font-semibold tracking-tight">
                     {item.title}
                   </h3>
-                  <p className="mt-3 text-sm text-muted-foreground">
+                  <p className="mt-3 flex-1 text-sm text-muted-foreground">
                     {item.description}
                   </p>
+                  {item.cta && (
+                    <div className="mt-6">
+                      {item.cta.external ? (
+                        <a
+                          href={item.cta.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-sm text-foreground"
+                        >
+                          <span className="underline-hover">{item.cta.label}</span>
+                          <span aria-hidden="true">↗</span>
+                        </a>
+                      ) : (
+                        <Link
+                          href={item.cta.href}
+                          className="inline-flex items-center gap-2 text-sm text-foreground"
+                        >
+                          <span className="underline-hover">{item.cta.label}</span>
+                          <span aria-hidden="true">→</span>
+                        </Link>
+                      )}
+                    </div>
+                  )}
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Case studies, eventually */}
+        {/* Be the first */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
             <div className="grid gap-12 lg:grid-cols-12">
@@ -105,13 +132,10 @@ export default function WorkPage() {
               </div>
               <div className="lg:col-span-8">
                 <h2 className="display-heading text-3xl tracking-tight sm:text-4xl">
-                  Coming as soon as projects ship.{" "}
-                  <span className="text-muted-foreground">
-                    Each one will document the problem, the approach, and the
-                    measurable outcome — not just screenshots.
-                  </span>{" "}
+                  Each one will document the problem, the approach, and the
+                  measurable outcome — not just screenshots.{" "}
                   <span className="text-accent">
-                    Want to be the first?
+                    Want to be the first published case?
                   </span>
                 </h2>
                 <Link

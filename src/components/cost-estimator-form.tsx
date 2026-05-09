@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   buildEstimateSummary,
   buildModelComparison,
@@ -54,25 +54,57 @@ const SELECTABLE_API_KEYS: ThirdPartyApiKey[] = [
   "image-gen",
 ];
 
+// Parse a TemplateKey from a string, falling back to a default.
+function parseTemplateKey(raw: string | null, fallback: TemplateKey): TemplateKey {
+  if (raw && raw in TEMPLATES) return raw as TemplateKey;
+  return fallback;
+}
+
+// Parse a ModelKey from a string, falling back to a default.
+function parseModelKey(raw: string | null, fallback: ModelKey): ModelKey {
+  if (raw && raw in MODELS) return raw as ModelKey;
+  return fallback;
+}
+
 export function CostEstimatorForm() {
-  const [template, setTemplate] = useState<TemplateKey>("support-bot");
+  // Read initial state from URL query params (client-side only, safe fallback to defaults).
+  function readUrlParams(): {
+    templateKey: TemplateKey;
+    modelKey: ModelKey;
+    volume: number;
+    cache: number;
+  } {
+    if (typeof window === "undefined") {
+      return { templateKey: "support-bot", modelKey: "claude-sonnet", volume: 800, cache: 40 };
+    }
+    const params = new URLSearchParams(window.location.search);
+    const templateKey = parseTemplateKey(params.get("tpl"), "support-bot");
+    const tpl = TEMPLATES[templateKey];
+    const modelKey = parseModelKey(params.get("model"), tpl.model);
+    const volume = Number(params.get("vol")) || tpl.monthlyVolume;
+    const cache = Number(params.get("cache") ?? tpl.cachedInputPercent);
+    return { templateKey, modelKey, volume, cache };
+  }
+
+  const initialUrl = readUrlParams();
+  const initialTpl = TEMPLATES[initialUrl.templateKey];
+
+  const [template, setTemplate] = useState<TemplateKey>(initialUrl.templateKey);
   const t = TEMPLATES[template];
 
-  // Form state — initialized from template
-  const [monthlyVolume, setMonthlyVolume] = useState(t.monthlyVolume);
-  const [avgInputTokens, setAvgInputTokens] = useState(t.avgInputTokens);
-  const [avgOutputTokens, setAvgOutputTokens] = useState(t.avgOutputTokens);
-  const [model, setModel] = useState<ModelKey>(t.model);
-  const [useRag, setUseRag] = useState(t.useRag);
-  const [cachedInputPercent, setCachedInputPercent] = useState(
-    t.cachedInputPercent
-  );
-  const [hasMemory, setHasMemory] = useState(t.useRag || template === "support-bot");
-  const [hasVoice, setHasVoice] = useState(template === "voice-agent");
+  // Form state — initialized from template (or URL params on first render)
+  const [monthlyVolume, setMonthlyVolume] = useState(initialUrl.volume);
+  const [avgInputTokens, setAvgInputTokens] = useState(initialTpl.avgInputTokens);
+  const [avgOutputTokens, setAvgOutputTokens] = useState(initialTpl.avgOutputTokens);
+  const [model, setModel] = useState<ModelKey>(initialUrl.modelKey);
+  const [useRag, setUseRag] = useState(initialTpl.useRag);
+  const [cachedInputPercent, setCachedInputPercent] = useState(initialUrl.cache);
+  const [hasMemory, setHasMemory] = useState(initialTpl.useRag || initialUrl.templateKey === "support-bot");
+  const [hasVoice, setHasVoice] = useState(initialUrl.templateKey === "voice-agent");
   const [complexity, setComplexity] = useState<Complexity>("moderate");
   const [thirdPartyUsage, setThirdPartyUsage] = useState<
     Partial<Record<ThirdPartyApiKey, number>>
-  >(t.thirdPartyUsage);
+  >(initialTpl.thirdPartyUsage);
 
   function applyTemplate(key: TemplateKey) {
     const tpl = TEMPLATES[key];
@@ -88,6 +120,26 @@ export function CostEstimatorForm() {
     setHasVoice(key === "voice-agent");
     setComplexity("moderate");
   }
+
+  // Sync shareable URL state without adding to browser history.
+  // Only the four fields that meaningfully identify an estimate are encoded.
+  const isMounted = useRef(false);
+  useEffect(() => {
+    // Skip the very first render — URL was already read to initialize state.
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+    const params = new URLSearchParams();
+    params.set("tpl", template);
+    params.set("model", model);
+    params.set("vol", String(monthlyVolume));
+    if (MODELS[model].cachedInputPerM !== undefined) {
+      params.set("cache", String(cachedInputPercent));
+    }
+    const url = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState(null, "", url);
+  }, [template, model, monthlyVolume, cachedInputPercent]);
 
   const estimatorInput: EstimatorInput = useMemo(
     () => ({
@@ -192,6 +244,60 @@ export function CostEstimatorForm() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+  }
+
+  // Email estimate state
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [emailValue, setEmailValue] = useState("");
+  type EmailStatus = "idle" | "sending" | "sent" | { error: string };
+  const [emailStatus, setEmailStatus] = useState<EmailStatus>("idle");
+
+  async function sendEstimate(e: React.FormEvent) {
+    e.preventDefault();
+    if (!emailValue || !emailValue.includes("@")) return;
+    setEmailStatus("sending");
+    try {
+      const res = await fetch("/api/email-estimate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailValue,
+          estimateSummary: summaryText,
+          estimate: {
+            workflow: TEMPLATES[template].name,
+            monthlyVolume,
+            model: MODELS[model].name,
+            buildLow: buildEstimate.low,
+            buildHigh: buildEstimate.high,
+            buildWeeks: buildEstimate.weeks,
+            careTierName: careTier.name,
+            careMonthly: careTier.monthly,
+            apiMonthlyLow: result.apiTotalMonthly,
+            apiMonthlyHigh: result.apiTotalMonthlyWithBuffer,
+            monthlyInvoiceLow: result.monthlyInvoiceLow,
+            monthlyInvoiceHigh: result.monthlyInvoiceHigh,
+            costPerRequest: result.costPerRequest,
+            latencyMs: latency.totalMs,
+          },
+        }),
+      });
+      if (!res.ok) {
+        const data: unknown = await res.json();
+        const msg =
+          data !== null &&
+          typeof data === "object" &&
+          "error" in data &&
+          typeof (data as Record<string, unknown>).error === "string"
+            ? (data as Record<string, string>).error
+            : "Something went wrong. Please try again.";
+        setEmailStatus({ error: msg });
+      } else {
+        setEmailStatus("sent");
+        setEmailValue("");
+      }
+    } catch {
+      setEmailStatus({ error: "Network error. Please try again." });
+    }
   }
 
   return (
@@ -448,16 +554,23 @@ export function CostEstimatorForm() {
                 label="Estimated API spend"
                 value={`${formatUsd(result.apiTotalMonthly)} – ${formatUsd(result.apiTotalMonthlyWithBuffer)}/mo`}
               />
-              <Row
-                label="Cost per request"
-                value={formatUsd(result.costPerRequest, { cents: true })}
-                muted
-              />
-              <Row
-                label="Expected latency"
-                value={`~${formatLatency(latency.totalMs)} per request`}
-                muted
-              />
+              <div className="flex flex-col gap-0.5">
+                <Row
+                  label="Cost per request"
+                  value={formatUsd(result.costPerRequest, { cents: true })}
+                  muted
+                />
+                <div className="flex justify-end">
+                  <span className="font-mono text-[11px] text-muted-foreground/60">
+                    Range:{" "}
+                    {formatUsd(result.costPerRequest * 0.7, { cents: true })}
+                    {" – "}
+                    {formatUsd(result.costPerRequest * 1.5, { cents: true })}
+                    {" (p25–p75)"}
+                  </span>
+                </div>
+              </div>
+              <LatencyChart breakdown={latency.breakdown} totalMs={latency.totalMs} />
             </div>
           </div>
 
@@ -694,13 +807,62 @@ export function CostEstimatorForm() {
             >
               {copied ? "Copied ✓" : "Copy estimate"}
             </button>
-            <a
-              href={discussHref}
-              className="flex-1 rounded-full bg-foreground px-4 py-2.5 text-center text-sm font-medium text-background transition-colors hover:bg-accent"
+            <button
+              type="button"
+              onClick={() => {
+                setShowEmailForm((v) => !v);
+                setEmailStatus("idle");
+              }}
+              className="flex-1 rounded-full border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-foreground"
             >
-              Discuss this estimate →
-            </a>
+              Email this estimate
+            </button>
           </div>
+
+          {showEmailForm && (
+            <div className="rounded-2xl border border-border bg-card p-5">
+              {emailStatus === "sent" ? (
+                <p className="text-sm text-accent">
+                  Sent! Check your inbox.
+                </p>
+              ) : (
+                <form onSubmit={sendEstimate} className="flex flex-col gap-3">
+                  <label className="block text-sm font-medium" htmlFor="estimate-email">
+                    Your email
+                  </label>
+                  <input
+                    id="estimate-email"
+                    type="email"
+                    required
+                    value={emailValue}
+                    onChange={(e) => {
+                      setEmailValue(e.target.value);
+                      setEmailStatus("idle");
+                    }}
+                    placeholder="you@example.com"
+                    className="rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none"
+                  />
+                  {typeof emailStatus === "object" && "error" in emailStatus && (
+                    <p className="text-xs text-red-500">{emailStatus.error}</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={emailStatus === "sending"}
+                    className="rounded-full bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-accent disabled:opacity-50"
+                  >
+                    {emailStatus === "sending" ? "Sending…" : "Send"}
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
+
+          <a
+            href={discussHref}
+            className="block rounded-full bg-foreground px-4 py-2.5 text-center text-sm font-medium text-background transition-colors hover:bg-accent"
+          >
+            Discuss this estimate →
+          </a>
 
           <p className="text-center font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
             Pricing data updated {PRICING_LAST_UPDATED}
@@ -728,45 +890,31 @@ function NumberInput({
   min?: number;
   step?: number;
 }) {
-  function clamp(n: number) {
-    if (Number.isNaN(n)) return min;
-    return Math.max(min, n);
+  function handle(raw: string) {
+    if (raw === "") {
+      onChange(0);
+      return;
+    }
+    const n = Number(raw);
+    if (Number.isNaN(n)) return;
+    onChange(Math.max(min, n));
   }
 
   return (
     <label className="block">
-      <span className="text-sm font-medium">{label}</span>
+      <span className="text-sm font-medium text-foreground">{label}</span>
       {help && (
-        <span className="mt-0.5 block text-xs text-muted-foreground">
-          {help}
-        </span>
+        <span className="mt-1 block text-xs text-muted-foreground">{help}</span>
       )}
-      <div className="mt-2 flex items-stretch gap-2">
-        <button
-          type="button"
-          aria-label="Decrement"
-          onClick={() => onChange(clamp(value - step))}
-          className="flex w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-base text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
-        >
-          −
-        </button>
-        <input
-          type="number"
-          min={min}
-          step={step}
-          value={value}
-          onChange={(e) => onChange(clamp(Number(e.target.value)))}
-          className="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 text-center text-base text-foreground focus:border-foreground focus:outline-none"
-        />
-        <button
-          type="button"
-          aria-label="Increment"
-          onClick={() => onChange(clamp(value + step))}
-          className="flex w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-base text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
-        >
-          +
-        </button>
-      </div>
+      <input
+        type="number"
+        inputMode="decimal"
+        min={min}
+        step={step}
+        value={value}
+        onChange={(e) => handle(e.target.value)}
+        className="mt-2 block w-full rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground focus:border-foreground focus:outline-none"
+      />
     </label>
   );
 }
@@ -886,6 +1034,68 @@ function Row({
       >
         {value}
       </span>
+    </div>
+  );
+}
+
+const SEGMENT_COLORS = [
+  "bg-foreground/25",
+  "bg-foreground/40",
+  "bg-foreground/15",
+  "bg-foreground/10",
+];
+const LLM_COLOR = "bg-accent";
+
+function LatencyChart({
+  breakdown,
+  totalMs,
+}: {
+  breakdown: Array<{ label: string; ms: number }>;
+  totalMs: number;
+}) {
+  if (breakdown.length === 0 || totalMs === 0) return null;
+
+  return (
+    <div className="space-y-3 pt-1">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-muted-foreground">Expected latency</span>
+        <span className="font-mono text-sm text-muted-foreground">
+          ~{formatLatency(totalMs)} / request
+        </span>
+      </div>
+
+      {/* Stacked bar */}
+      <div className="flex h-5 w-full overflow-hidden rounded-full">
+        {breakdown.map((step, i) => {
+          const isLlm = step.label.toLowerCase().includes("generation");
+          const color = isLlm ? LLM_COLOR : SEGMENT_COLORS[i % SEGMENT_COLORS.length];
+          const pct = (step.ms / totalMs) * 100;
+          return (
+            <div
+              key={step.label}
+              className={`${color} transition-all`}
+              style={{ width: `${pct}%` }}
+              title={`${step.label}: ${formatLatency(step.ms)}`}
+            />
+          );
+        })}
+      </div>
+
+      {/* Legend */}
+      <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+        {breakdown.map((step, i) => {
+          const isLlm = step.label.toLowerCase().includes("generation");
+          const color = isLlm ? LLM_COLOR : SEGMENT_COLORS[i % SEGMENT_COLORS.length];
+          return (
+            <div key={step.label} className="flex items-center gap-1.5">
+              <span className={`inline-block size-2 rounded-full ${color}`} />
+              <span className="font-mono text-[10px] text-muted-foreground">
+                {step.label} · {formatLatency(step.ms)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
