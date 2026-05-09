@@ -33,12 +33,15 @@ export type ModelKey =
   | "claude-sonnet"
   | "claude-opus"
   | "gemini-flash"
-  | "gemini-pro";
+  | "gemini-pro"
+  | "deepseek-r1"
+  | "llama-3-70b"
+  | "grok-3";
 
 export interface ModelPrice {
   key: ModelKey;
   name: string;
-  provider: "openai" | "anthropic" | "google";
+  provider: "openai" | "anthropic" | "google" | "deepseek" | "meta" | "xai";
   inputPerM: number;
   outputPerM: number;
   // Cached input pricing (Anthropic + Google) — falls back to inputPerM
@@ -143,6 +146,36 @@ export const MODELS: Record<ModelKey, ModelPrice> = {
     latencyMs: 1800,
     outputTokensPerSec: 30,
     good_for: "Top-tier reasoning, multimodal, very long context",
+  },
+  "deepseek-r1": {
+    key: "deepseek-r1",
+    name: "DeepSeek R1",
+    provider: "deepseek",
+    inputPerM: 0.55,
+    outputPerM: 2.19,
+    latencyMs: 1200,
+    outputTokensPerSec: 35,
+    good_for: "Reasoning tasks, cost-sensitive high-quality work",
+  },
+  "llama-3-70b": {
+    key: "llama-3-70b",
+    name: "Llama 3.3 70B",
+    provider: "meta",
+    inputPerM: 0.88,
+    outputPerM: 0.88,
+    latencyMs: 800,
+    outputTokensPerSec: 60,
+    good_for: "Open-source, no data retention, cost-effective",
+  },
+  "grok-3": {
+    key: "grok-3",
+    name: "Grok 3",
+    provider: "xai",
+    inputPerM: 3.0,
+    outputPerM: 15.0,
+    latencyMs: 900,
+    outputTokensPerSec: 40,
+    good_for: "Real-time web knowledge, X/Twitter data",
   },
 };
 

@@ -38,14 +38,14 @@ export function NewsletterSignup({
     if (submitted) {
       return (
         <p className="font-mono text-sm text-accent">
-          You&apos;re in. One essay a month, no pitch.
+          You&apos;re in. One decoded piece a month, no pitch.
         </p>
       );
     }
     return (
       <div>
         <p className="mb-3 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-          Notes by email
+          Decoded by email
         </p>
         <form onSubmit={handleSubmit} className="flex flex-wrap items-center gap-2">
           <input
@@ -64,7 +64,7 @@ export function NewsletterSignup({
             {submitting ? "…" : "Subscribe"}
           </button>
           <span className="text-sm text-muted-foreground">
-            One note a month. No pitch.
+            One decoded piece a month. No pitch.
           </span>
         </form>
         {error && (
@@ -85,8 +85,7 @@ export function NewsletterSignup({
           Subscribed
         </p>
         <p className="mt-3 text-base text-foreground">
-          You&apos;ll get one essay like this in your inbox each month. No
-          sales pitch.
+          One decoded piece in your inbox each month. No sales pitch.
         </p>
       </div>
     );
@@ -106,7 +105,7 @@ export function NewsletterSignup({
           variant === "compact" ? "text-lg" : "text-2xl"
         }`}
       >
-        One essay like this. Once a month. No sales pitch.
+        One decoded piece. Once a month. No sales pitch.
       </h3>
       <p className="mt-2 text-sm text-muted-foreground">
         Practical writing on web, workflows, and AI cost transparency. Read

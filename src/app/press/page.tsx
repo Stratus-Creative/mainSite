@@ -22,7 +22,7 @@ const QUICK_FACTS = [
   { label: "Founded", value: "2026" },
   { label: "Based in", value: "Simpsonville, SC, USA" },
   { label: "Team size", value: "Solo studio (founder-led)" },
-  { label: "Stack", value: "Next.js, Vercel, Supabase, Anthropic, OpenAI" },
+  { label: "Stack", value: "Next.js, Tailwind CSS, Vercel, Supabase, Anthropic, OpenAI" },
   { label: "Specialties", value: "Websites, AI workflows, online presence" },
   { label: "Starter price", value: "$1,495 flat" },
   { label: "Custom range", value: "$5K – $20K typical" },
@@ -98,8 +98,8 @@ export default function PressKitPage() {
                 three explicit lines.
               </p>
               <p>
-                Stratus uses modern infrastructure (Next.js, Vercel, Anthropic,
-                OpenAI) and AI-assisted development to ship fast at fair
+                Stratus uses modern infrastructure (Next.js, Tailwind CSS,
+                Vercel, Anthropic, OpenAI) and AI-assisted development to ship fast at fair
                 prices. The Starter — a productized website — is $1,495 flat and
                 ships in 5–7 business days. Custom engagements (multi-page,
                 automation, AI agents) start at $5,000.

@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CheckoutButton } from "@/components/checkout-button";
 import { ServiceJsonLd, FaqJsonLd } from "@/components/structured-data";
+import { MiniEstimator } from "@/components/mini-estimator";
 
 export const metadata: Metadata = {
   title: "Pricing — Stratus Creative",
@@ -660,6 +661,29 @@ export default function PricingPage() {
                     <span aria-hidden="true">→</span>
                   </Link>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Mini estimator */}
+        <section className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <div className="grid gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">Try the estimator</p>
+                <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
+                  See what your workflow{" "}
+                  <span className="text-accent">costs.</span>
+                </h2>
+                <p className="mt-6 text-sm text-muted-foreground">
+                  Pick your workflow type, volume, and model. Get a live cost
+                  range before you talk to anyone. Need a full breakdown with
+                  third-party APIs and latency? Use the detailed estimator.
+                </p>
+              </div>
+              <div className="lg:col-span-8">
+                <MiniEstimator />
               </div>
             </div>
           </div>

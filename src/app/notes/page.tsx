@@ -6,9 +6,9 @@ import { NewsletterSignup } from "@/components/newsletter-signup";
 import { NOTES } from "@/lib/notes-data";
 
 export const metadata: Metadata = {
-  title: "Notes — Stratus Creative",
+  title: "Decoded — Stratus Creative",
   description:
-    "Essays on web, workflows, AI pricing transparency, and how we think about building production-grade work for small business clients.",
+    "Plain-language writing on AI, workflows, and web — for people who want to understand how it works without learning to build it.",
   alternates: { canonical: "https://stratus-creative.com/notes" },
 };
 
@@ -35,14 +35,14 @@ export default function NotesIndex() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Notes</p>
+            <p className="section-label">Decoded</p>
             <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              Notes from{" "}
-              <span className="text-accent">the studio.</span>
+              The machine,{" "}
+              <span className="text-accent">explained.</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Short essays on web, workflows, AI pricing, and how we think
-              about building production work for small businesses.
+              Plain-language writing on AI, workflows, and web — for people
+              who want to understand how it works without learning to build it.
             </p>
             <div className="mt-10">
               <NewsletterSignup variant="inline" />

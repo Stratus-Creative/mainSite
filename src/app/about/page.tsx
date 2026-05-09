@@ -55,7 +55,7 @@ export default function AboutPage() {
               <span className="text-accent">production-grade habits.</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Stratus Creative is run by James Farmer from SC. We build
+              Stratus Creative is run by James Farmer. We build
               websites, workflows, and online presence for businesses that
               want a real digital presence without the marketing-firm markup.
             </p>
@@ -98,15 +98,15 @@ export default function AboutPage() {
               <div className="lg:col-span-8">
                 <div className="space-y-6 text-base text-muted-foreground sm:text-lg">
                   <p>
-                    Before Stratus, James spent four years as an Industrial IT
-                    Specialist at Michelin North America — leading MES system
-                    deployments across eight international sites, running
-                    Kafka and Oracle in production, and writing the PowerShell
-                    automation that turned multi-day deployments into
-                    thirty-minute runs (now the standard across all sites).
+                    James didn&apos;t come up through an agency. He came up
+                    through Michelin — running MES deployments across eight
+                    international sites on three continents, managing Kafka and
+                    Oracle in production, and writing the PowerShell automation
+                    that compressed multi-day rollouts into thirty-minute runs.
+                    That script became the standard across every site it touched.
                   </p>
                   <p>
-                    On the side, he built{" "}
+                    While doing that, he built{" "}
                     <a
                       href="https://sparkanalyzer.com"
                       target="_blank"
@@ -115,18 +115,23 @@ export default function AboutPage() {
                     >
                       Spark Analyzer
                     </a>{" "}
-                    — an AI-powered Minecraft server diagnostics tool that has
-                    served 300+ registered users and processed 400+ reports.
-                    Through orchestration architecture and a smart pre-processing
-                    pipeline, the cost per analysis dropped from{" "}
-                    <span className="text-accent">$5–7 to cents</span>.
+                    from scratch — an AI diagnostics tool for Minecraft server
+                    performance. Five hundred users. Four hundred reports
+                    processed. Cost per analysis went from{" "}
+                    <span className="text-accent">$5–7 to cents</span> through
+                    orchestration architecture, not shortcuts.
                   </p>
                   <p>
-                    Stratus exists because most agencies don&apos;t actually
-                    know how AI workflows are priced — and they don&apos;t
-                    know how to run anything in production. We bring industrial
-                    IT discipline to the kind of work most freelancers can&apos;t
-                    handle and most agencies overcharge for.
+                    Most agencies have never shipped a real product. Most
+                    freelancers have never run anything at enterprise scale.
+                    Stratus exists at that intersection: eight years of
+                    production discipline, applied to web and AI work that
+                    actually needs to hold up.
+                  </p>
+                  <p>
+                    We don&apos;t demo things that fall apart. We don&apos;t
+                    bill for &ldquo;strategy&rdquo; when the answer is
+                    engineering.
                   </p>
                   <p className="serif-accent mt-10 text-3xl text-accent">
                     — James

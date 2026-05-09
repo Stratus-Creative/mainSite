@@ -115,7 +115,7 @@ export default async function NotePage({ params }: Params) {
       <BreadcrumbJsonLd
         items={[
           { name: "Home", url: "/" },
-          { name: "Notes", url: "/notes" },
+          { name: "Decoded", url: "/notes" },
           { name: note.title, url: `/notes/${note.slug}` },
         ]}
       />
@@ -127,7 +127,7 @@ export default async function NotePage({ params }: Params) {
             href="/notes"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
-            <span aria-hidden="true">←</span> Back to notes
+            <span aria-hidden="true">←</span> Back to Decoded
           </Link>
 
           <div className="mt-10">
@@ -162,7 +162,7 @@ export default async function NotePage({ params }: Params) {
               href="/notes"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
-              <span aria-hidden="true">←</span> All notes
+              <span aria-hidden="true">←</span> All Decoded
             </Link>
             <Link
               href="/start"
