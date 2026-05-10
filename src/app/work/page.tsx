@@ -2,6 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import {
+  FadeIn,
+  ScrollReveal,
+  Stagger,
+  AccentSweep,
+  RevealMask,
+} from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Work — Stratus Creative",
@@ -46,22 +53,32 @@ export default function WorkPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Work</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              What I&apos;ve <span className="text-accent">built.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              A studio is only as credible as what it ships. Here&apos;s
-              what we ship — client builds in flight, a live product with
-              real users, and enterprise automation running in production.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Work</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
+                  What I&apos;ve <span className="text-accent">
+                    <AccentSweep>built.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  A studio is only as credible as what it ships. Here&apos;s
+                  what we ship — client builds in flight, a live product with
+                  real users, and enterprise automation running in production.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Builds */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="mb-16 grid gap-8 lg:grid-cols-12">
+            <ScrollReveal className="mb-16 grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Selected builds</p>
               </div>
@@ -73,52 +90,56 @@ export default function WorkPage() {
                   </span>
                 </h2>
               </div>
-            </div>
+            </ScrollReveal>
 
             <div className="grid gap-px bg-border/60 lg:grid-cols-3">
+              <Stagger step={70}>
               {BUILDS.map((item) => (
-                <article
-                  key={item.title}
-                  className="group flex flex-col bg-background p-8 lg:p-10"
-                >
-                  <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md border border-border/60 bg-card">
-                    <div className="editorial-grid h-full w-full opacity-60" />
-                  </div>
-
-                  <p className="mt-8 font-mono text-xs tracking-widest text-accent">
-                    {item.label}
-                  </p>
-                  <h3 className="mt-4 text-xl font-semibold tracking-tight">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 flex-1 text-sm text-muted-foreground">
-                    {item.description}
-                  </p>
-                  {item.cta && (
-                    <div className="mt-6">
-                      {item.cta.external ? (
-                        <a
-                          href={item.cta.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm text-foreground"
-                        >
-                          <span className="underline-hover">{item.cta.label}</span>
-                          <span aria-hidden="true">↗</span>
-                        </a>
-                      ) : (
-                        <Link
-                          href={item.cta.href}
-                          className="inline-flex items-center gap-2 text-sm text-foreground"
-                        >
-                          <span className="underline-hover">{item.cta.label}</span>
-                          <span aria-hidden="true">→</span>
-                        </Link>
-                      )}
+                <RevealMask key={item.title} className="h-full">
+                  <ScrollReveal
+                    as="article"
+                    className="group flex h-full flex-col bg-background p-8 lg:p-10"
+                  >
+                    <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md border border-border/60 bg-card">
+                      <div className="editorial-grid h-full w-full opacity-60" />
                     </div>
-                  )}
-                </article>
+
+                    <p className="mt-8 font-mono text-xs tracking-widest text-accent">
+                      {item.label}
+                    </p>
+                    <h3 className="mt-4 text-xl font-semibold tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 flex-1 text-sm text-muted-foreground">
+                      {item.description}
+                    </p>
+                    {item.cta && (
+                      <div className="mt-6">
+                        {item.cta.external ? (
+                          <a
+                            href={item.cta.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm text-foreground"
+                          >
+                            <span className="underline-hover">{item.cta.label}</span>
+                            <span aria-hidden="true">↗</span>
+                          </a>
+                        ) : (
+                          <Link
+                            href={item.cta.href}
+                            className="inline-flex items-center gap-2 text-sm text-foreground"
+                          >
+                            <span className="underline-hover">{item.cta.label}</span>
+                            <span aria-hidden="true">→</span>
+                          </Link>
+                        )}
+                      </div>
+                    )}
+                  </ScrollReveal>
+                </RevealMask>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -126,7 +147,7 @@ export default function WorkPage() {
         {/* Be the first */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Case studies</p>
               </div>
@@ -146,7 +167,7 @@ export default function WorkPage() {
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

@@ -52,7 +52,7 @@ export function TrustStrip({ variant = "stack" }: TrustStripProps) {
   }
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 lg:p-8">
+    <div className="card-hover rounded-2xl border border-border bg-card p-6 lg:p-8">
       <p className="section-label">Built with the boring stuff that works</p>
       <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
         We use battle-tested infrastructure so your site stays fast, secure,

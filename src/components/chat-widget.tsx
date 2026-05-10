@@ -405,9 +405,11 @@ export function ChatWidget() {
     dragRef.current = null;
   };
 
+  // Mobile: full-width minus 12px margins, capped to viewport height (handles iOS browser chrome via dvh).
+  // Desktop (sm+): anchored bottom-right with max-width — drag enables custom position.
   const panelClassName = position
-    ? "fixed z-50 flex w-[calc(100vw-3rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl shadow-black/40"
-    : "fixed bottom-24 right-6 z-50 flex w-[calc(100vw-3rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl shadow-black/40 sm:right-8";
+    ? "fixed z-50 flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl shadow-black/40 w-[min(calc(100vw-1.5rem),24rem)] max-h-[calc(100dvh-2rem)]"
+    : "fixed inset-x-3 bottom-24 z-50 flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl shadow-black/40 max-h-[calc(100dvh-7rem)] sm:inset-x-auto sm:right-8 sm:w-[calc(100vw-3rem)] sm:max-w-sm";
 
   return (
     <>
@@ -424,16 +426,16 @@ export function ChatWidget() {
             onPointerMove={handleHeaderPointerMove}
             onPointerUp={handleHeaderPointerUp}
             onPointerCancel={handleHeaderPointerUp}
-            className="flex cursor-grab select-none items-center justify-between border-b border-border/60 px-4 py-3 active:cursor-grabbing"
+            className="flex cursor-grab select-none items-center justify-between gap-3 border-b border-border/60 px-4 py-3 active:cursor-grabbing"
           >
-            <div className="flex items-center gap-2.5">
-              <span className="size-2 rounded-full bg-accent" />
-              <span className="text-sm font-medium">Stratus Assistant</span>
+            <div className="flex min-w-0 items-center gap-2.5">
+              <span className="size-2 shrink-0 rounded-full bg-accent" />
+              <span className="truncate text-sm font-medium">Stratus Assistant</span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-3">
               <Link
                 href="/start"
-                className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
+                className="hidden font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground sm:inline"
               >
                 Talk to James →
               </Link>
@@ -450,7 +452,7 @@ export function ChatWidget() {
           </div>
 
           {/* Messages */}
-          <div className="flex flex-col gap-3 overflow-y-auto p-4" style={{ minHeight: 240, maxHeight: 360 }}>
+          <div className="flex min-h-[240px] flex-1 flex-col gap-3 overflow-y-auto overscroll-contain p-4 sm:max-h-[360px]">
             {messages.length === 0 && (
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
@@ -485,7 +487,7 @@ export function ChatWidget() {
               if (m.role !== "assistant") {
                 return (
                   <div key={m.id} className="flex justify-end">
-                    <div className="max-w-[85%] rounded-2xl bg-foreground px-3.5 py-2.5 text-sm text-background">
+                    <div className="max-w-[85%] rounded-2xl bg-foreground px-3.5 py-2.5 text-sm text-background break-words [overflow-wrap:anywhere]">
                       {text}
                     </div>
                   </div>
@@ -496,7 +498,7 @@ export function ChatWidget() {
               return (
                 <div key={m.id} className="flex flex-col items-start gap-2">
                   {before && (
-                    <div className="max-w-[85%] rounded-2xl bg-card px-3.5 py-2.5 text-sm text-foreground">
+                    <div className="max-w-[85%] rounded-2xl bg-card px-3.5 py-2.5 text-sm text-foreground break-words [overflow-wrap:anywhere]">
                       {before}
                     </div>
                   )}
@@ -506,7 +508,7 @@ export function ChatWidget() {
                     </div>
                   )}
                   {after && (
-                    <div className="max-w-[85%] rounded-2xl bg-card px-3.5 py-2.5 text-sm text-foreground">
+                    <div className="max-w-[85%] rounded-2xl bg-card px-3.5 py-2.5 text-sm text-foreground break-words [overflow-wrap:anywhere]">
                       {after}
                     </div>
                   )}

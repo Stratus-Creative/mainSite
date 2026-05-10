@@ -1,0 +1,333 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Motion primitives — editorial restraint, GPU-friendly, reduced-motion safe
+   Uses transform + opacity only (compositor-only properties).
+   ────────────────────────────────────────────────────────────────────────── */
+
+@keyframes motion-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes motion-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes motion-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes motion-slide-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-16px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes motion-number-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes motion-rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes motion-underline-sweep {
+  from {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+/* Mount-time entrance — applied via class on render */
+.motion-enter {
+  opacity: 0;
+  animation: motion-fade-up 520ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-delay: var(--motion-delay, 0ms);
+  will-change: transform, opacity;
+}
+
+.motion-enter-fade {
+  opacity: 0;
+  animation: motion-fade-in 360ms ease-out forwards;
+  animation-delay: var(--motion-delay, 0ms);
+  will-change: opacity;
+}
+
+.motion-enter-scale {
+  opacity: 0;
+  animation: motion-scale-in 420ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-delay: var(--motion-delay, 0ms);
+  will-change: transform, opacity;
+}
+
+.motion-enter-slide-left {
+  opacity: 0;
+  animation: motion-slide-left 560ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-delay: var(--motion-delay, 0ms);
+  will-change: transform, opacity;
+  /* Pair with the section-label rule-draw when applied to a section-label */
+}
+
+.motion-enter-slide-left.section-label::before {
+  transform-origin: left center;
+  animation: motion-rule-draw 700ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-delay: calc(var(--motion-delay, 0ms) + 120ms);
+}
+
+.motion-enter-number {
+  opacity: 0;
+  animation: motion-number-in 600ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-delay: var(--motion-delay, 0ms);
+  will-change: transform, opacity;
+  display: inline-block; /* required for transform to apply on inline content */
+}
+
+/* Accent-word underline sweep — wrap an accent span in <AccentSweep>.
+   Renders an absolutely-positioned line under the word that draws in. */
+.motion-accent-sweep {
+  position: relative;
+  display: inline-block;
+}
+.motion-accent-sweep::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.06em;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.55;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: motion-underline-sweep 720ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-delay: var(--motion-delay, 600ms);
+  will-change: transform;
+}
+
+/* Scroll-reveal — pre-state hides, .is-in-view triggers animation */
+.motion-reveal {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition: opacity 600ms cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--motion-delay, 0ms);
+  will-change: transform, opacity;
+}
+
+.motion-reveal.is-in-view {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Page transitions via Next.js View Transitions */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+::view-transition-old(root) {
+  animation-name: motion-fade-out-down;
+}
+
+::view-transition-new(root) {
+  animation-name: motion-fade-in-up;
+}
+
+@keyframes motion-fade-out-down {
+  from { opacity: 1; transform: translate3d(0, 0, 0); }
+  to { opacity: 0; transform: translate3d(0, -4px, 0); }
+}
+
+@keyframes motion-fade-in-up {
+  from { opacity: 0; transform: translate3d(0, 4px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Route-change page enter — wraps children of root layout */
+@keyframes motion-page-enter {
+  from { opacity: 0; transform: translate3d(0, 16px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.motion-page-enter {
+  animation: motion-page-enter 480ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+/* Section divider — hairline rule that draws across on intersect */
+.motion-divider {
+  height: 1px;
+  background: var(--border);
+  transform: scaleX(0);
+  transition: transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+.motion-divider.is-in-view { transform: scaleX(1); }
+
+/* Cursor orb — soft cobalt blur that lags the cursor inside its parent */
+.motion-cursor-orb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 220px;
+  margin-left: -110px;
+  margin-top: -110px;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    oklch(0.68 0.14 250 / 0.07) 0%,
+    transparent 65%
+  );
+  border-radius: 50%;
+  filter: blur(56px);
+  opacity: 0;
+  transition: opacity 600ms ease-out;
+  will-change: transform, opacity;
+  z-index: 0;
+}
+.motion-cursor-orb.is-active {
+  opacity: 0.7;
+}
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  .motion-cursor-orb {
+    display: none !important;
+  }
+}
+
+/* Drop cap — first-letter emphasis on article opener */
+.motion-drop-cap::first-letter {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 4em;
+  line-height: 0.85;
+  float: left;
+  margin: 0.05em 0.12em 0 0;
+  color: var(--accent);
+  opacity: 0;
+  transform: translate3d(-8px, 0, 0);
+  transition: opacity 600ms ease-out 200ms,
+    transform 600ms cubic-bezier(0.22, 0.61, 0.36, 1) 200ms;
+}
+.motion-drop-cap.is-active::first-letter {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-drop-cap::first-letter {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Reveal mask — cobalt scanning bar that sweeps across on viewport entry */
+.motion-reveal-mask {
+  position: relative;
+  overflow: hidden;
+}
+.motion-reveal-mask::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent) 30%,
+    var(--accent) 70%,
+    transparent 100%
+  );
+  opacity: 0.18;
+  transform: translateX(-100%);
+  transition: transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+.motion-reveal-mask.is-in-view::before {
+  transform: translateX(100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-reveal-mask::before {
+    display: none !important;
+  }
+}
+
+/* Honour user preferences — strip every animation if reduced motion is set */
+@media (prefers-reduced-motion: reduce) {
+  .motion-enter,
+  .motion-enter-fade,
+  .motion-enter-scale,
+  .motion-enter-slide-left,
+  .motion-enter-number {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .motion-enter-slide-left.section-label::before {
+    animation: none !important;
+    transform: none !important;
+  }
+  .motion-accent-sweep::after {
+    animation: none !important;
+    transform: scaleX(1) !important;
+  }
+  .motion-reveal {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+  .motion-page-enter {
+    animation: none !important;
+  }
+  .motion-divider {
+    transition: none !important;
+    transform: scaleX(1) !important;
+  }
+}

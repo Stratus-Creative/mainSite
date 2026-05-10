@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { FadeIn, Stagger } from "@/components/motion";
 
 const STATUS_STYLES: Record<string, string> = {
   received: "border-border text-muted-foreground",
@@ -163,6 +164,7 @@ export function SubmissionsList({ submissions }: { submissions: SubmissionRow[] 
 
       {/* List */}
       <div className="mt-4 divide-y divide-border/60">
+        <Stagger step={30}>
         {filtered.map((s) => {
           const isSnoozed = !!(s.snoozed_until && new Date(s.snoozed_until).getTime() > now);
           const tags = s.tags ?? [];
@@ -170,8 +172,8 @@ export function SubmissionsList({ submissions }: { submissions: SubmissionRow[] 
           const extraTags = tags.length - visibleTags.length;
 
           return (
+            <FadeIn key={s.id}>
             <Link
-              key={s.id}
               href={`/admin/${s.id}`}
               className="group flex items-center gap-4 py-4 transition-colors hover:bg-card/30 sm:gap-6"
             >
@@ -238,8 +240,10 @@ export function SubmissionsList({ submissions }: { submissions: SubmissionRow[] 
                 →
               </span>
             </Link>
+            </FadeIn>
           );
         })}
+        </Stagger>
 
         {filtered.length === 0 && (
           <p className="py-16 text-center text-sm text-muted-foreground">

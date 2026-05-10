@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { TrustStrip } from "@/components/trust-strip";
 import { HomeHeroFaq } from "@/components/home-hero-faq";
 import { SITE_SETTINGS } from "@/lib/site-settings";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, CursorOrb, ScrollType } from "@/components/motion";
 
 const PILLARS = [
   {
@@ -83,97 +84,106 @@ export default function Home() {
         {/* HERO — full bleed, manifesto */}
         <section className="relative overflow-hidden border-b border-border/60">
           <div className="editorial-grid absolute inset-0 opacity-40" aria-hidden="true" />
+          <CursorOrb />
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
 
           <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40">
-            {/* Top meta line */}
-            <div className="mb-16 flex items-center justify-between gap-6">
-              <p className="section-label">Design + Engineering · Est. 2026</p>
-              {SITE_SETTINGS.customSlotsThisQuarter !== null && (
-                <p className="hidden items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent sm:inline-flex">
-                  <span
-                    aria-hidden="true"
-                    className="size-1.5 rounded-full bg-accent"
-                  />
-                  {SITE_SETTINGS.customSlotsThisQuarter} Custom slots this quarter
-                </p>
-              )}
-            </div>
+            <Stagger step={120}>
+              <FadeIn>
+                {/* Top meta line */}
+                <div className="mb-16 flex items-center justify-between gap-6">
+                  <p className="section-label">Design + Engineering · Est. 2026</p>
+                  {SITE_SETTINGS.customSlotsThisQuarter !== null && (
+                    <p className="hidden items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent sm:inline-flex">
+                      <span
+                        aria-hidden="true"
+                        className="size-1.5 rounded-full bg-accent"
+                      />
+                      {SITE_SETTINGS.customSlotsThisQuarter} Custom slots this quarter
+                    </p>
+                  )}
+                </div>
+              </FadeIn>
 
-            <h1 className="display-heading max-w-5xl text-5xl sm:text-7xl lg:text-[7.5rem]">
-              The website you&apos;ve been putting off.
-              <br />
-              <span className="serif-accent text-accent">
-                Done in seven days.
-              </span>
-            </h1>
-
-            <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:items-end">
-              <p className="max-w-xl text-base text-muted-foreground sm:text-lg lg:col-span-7">
-                Custom-designed, mobile-first, search-ready.{" "}
-                <span className="text-foreground">
-                  <data value="1495">$1,495</data> flat. Yours the day it ships.
-                </span>{" "}
-                Workflows and AI when you need more, quoted firm from{" "}
-                <data value="5000">$5K</data>. No retainer, no template tax.
-              </p>
-
-              <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
-                <Link
-                  href="/start?plan=starter"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-all hover:bg-accent hover:text-accent-foreground"
-                >
-                  Get the <data value="1495">$1,495</data> Starter
-                  <span
-                    aria-hidden="true"
-                    className="transition-transform group-hover:translate-x-0.5"
-                  >
-                    →
+              <FadeIn>
+                <h1 className="display-heading max-w-5xl text-5xl sm:text-7xl lg:text-[7.5rem]">
+                  The website you&apos;ve been putting off.
+                  <br />
+                  <span className="serif-accent text-accent">
+                    <AccentSweep>Done in seven days.</AccentSweep>
                   </span>
-                </Link>
-                <Link
-                  href="/work"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-foreground"
-                >
-                  See selected work
-                </Link>
-              </div>
-            </div>
+                </h1>
+              </FadeIn>
 
-            <div className="mt-6 flex flex-wrap items-center gap-2 lg:justify-end">
-              <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
-                7-day money-back
-              </span>
-              <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
-                Fixed-price
-              </span>
-              <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
-                No retainer
-              </span>
-            </div>
+              <FadeIn>
+                <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:items-end">
+                  <p className="max-w-xl text-base text-muted-foreground sm:text-lg lg:col-span-7">
+                    Custom-designed, mobile-first, search-ready.{" "}
+                    <span className="text-foreground">
+                      <data value="1495">$1,495</data> flat. Yours the day it ships.
+                    </span>{" "}
+                    Workflows and AI when you need more, quoted firm from{" "}
+                    <data value="5000">$5K</data>. No retainer, no template tax.
+                  </p>
+
+                  <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
+                    <Link
+                      href="/start?plan=starter"
+                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-all hover:bg-accent hover:text-accent-foreground"
+                    >
+                      Get the <data value="1495">$1,495</data> Starter
+                      <span
+                        aria-hidden="true"
+                        className="transition-transform group-hover:translate-x-0.5"
+                      >
+                        →
+                      </span>
+                    </Link>
+                    <Link
+                      href="/work"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-foreground"
+                    >
+                      See selected work
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex flex-wrap items-center gap-2 lg:justify-end">
+                  <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                    7-day money-back
+                  </span>
+                  <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                    Fixed-price
+                  </span>
+                  <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
+                    No retainer
+                  </span>
+                </div>
+              </FadeIn>
+            </Stagger>
 
             {/* Inline FAQ — answers top 3 prospect questions before they scroll */}
-            <div className="mt-20 grid gap-10 lg:grid-cols-12">
+            <ScrollReveal className="mt-20 grid gap-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Quick answers</p>
               </div>
               <div className="lg:col-span-8">
                 <HomeHeroFaq />
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* PILLARS — three numbered services */}
         <section id="services" className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="mb-20 grid gap-8 lg:grid-cols-12">
+            <ScrollReveal className="mb-20 grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">What we do</p>
               </div>
               <div className="lg:col-span-8">
-                <h2 className="display-heading text-4xl sm:text-5xl lg:text-6xl">
-                  Three things, done seriously.
+                <h2>
+                  <ScrollType text="Three things, done seriously." className="display-heading text-4xl sm:text-5xl lg:text-6xl" />
                 </h2>
                 <p className="mt-6 max-w-2xl text-base text-muted-foreground">
                   Most agencies stretch themselves across twenty services and do
@@ -181,11 +191,13 @@ export default function Home() {
                   the needle for the kind of businesses we work with.
                 </p>
               </div>
-            </div>
+            </ScrollReveal>
 
             <div className="grid gap-px bg-border/60 sm:grid-cols-2 lg:grid-cols-3">
+              <Stagger step={70}>
               {PILLARS.map((pillar) => (
-                <article
+                <ScrollReveal
+                  as="article"
                   key={pillar.number}
                   className="group flex flex-col bg-background p-8 lg:p-10"
                 >
@@ -229,8 +241,9 @@ export default function Home() {
                     <span className="underline-hover">Explore the work</span>
                     <span aria-hidden="true">→</span>
                   </Link>
-                </article>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -238,7 +251,7 @@ export default function Home() {
         {/* FREE TOOLS CALLOUT */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <div className="grid gap-px bg-border/60 lg:grid-cols-5">
+            <ScrollReveal className="grid gap-px bg-border/60 lg:grid-cols-5">
               {/* Website audit — 3/5 */}
               <Link
                 href="/resources/free-website-audit"
@@ -285,59 +298,66 @@ export default function Home() {
                   <span aria-hidden="true">→</span>
                 </div>
               </Link>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* MANIFESTO STRIP */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Why Stratus</p>
               </div>
               <div className="lg:col-span-8">
                 <p className="text-2xl leading-snug tracking-tight sm:text-3xl lg:text-4xl">
-                  The agencies charging $10,000 for a four-page website aren&apos;t
-                  worth $10,000.{" "}
-                  <span className="text-muted-foreground">
-                    We build the same thing — often better — for a fraction of
-                    the price, then layer on the automations and online presence
-                    that turn a website into a working business asset.
-                  </span>{" "}
-                  <span className="text-accent">
-                    No retainers, no fluff, no gatekeeping.
-                  </span>
+                  <ScrollType>
+                    The agencies charging $10,000 for a four-page website aren&apos;t
+                    worth $10,000.{" "}
+                    <span className="text-muted-foreground">
+                      We build the same thing — often better — for a fraction of
+                      the price, then layer on the automations and online presence
+                      that turn a website into a working business asset.
+                    </span>{" "}
+                    <span className="text-accent">
+                      No retainers, no fluff, no gatekeeping.
+                    </span>
+                  </ScrollType>
                 </p>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* TRUST STRIP */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <TrustStrip variant="stack" />
+            <ScrollReveal>
+              <TrustStrip variant="stack" />
+            </ScrollReveal>
           </div>
         </section>
 
         {/* PROCESS */}
         <section id="how-it-works" className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="mb-20 grid gap-8 lg:grid-cols-12">
+            <ScrollReveal className="mb-20 grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">How we work</p>
               </div>
               <div className="lg:col-span-8">
                 <h2 className="display-heading text-4xl sm:text-5xl lg:text-6xl">
-                  Four steps. <span className="text-accent">No fog.</span>
+                  <ScrollType>
+                    Four steps. <span className="text-accent">No fog.</span>
+                  </ScrollType>
                 </h2>
               </div>
-            </div>
+            </ScrollReveal>
 
             <div className="grid gap-px bg-border/60 sm:grid-cols-2 lg:grid-cols-4">
+              <Stagger step={70}>
               {PROCESS.map((item) => (
-                <div
+                <ScrollReveal
                   key={item.step}
                   className="flex flex-col gap-6 bg-background p-8 lg:p-10"
                 >
@@ -350,8 +370,9 @@ export default function Home() {
                   <p className="text-sm text-muted-foreground">
                     {item.description}
                   </p>
-                </div>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -359,13 +380,15 @@ export default function Home() {
         {/* PRICING TEASER */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-7">
                 <p className="section-label">Pricing</p>
                 <h2 className="display-heading mt-6 text-4xl sm:text-5xl lg:text-6xl">
-                  Two ways to start.
-                  <br />
-                  <span className="text-accent">One way to talk.</span>
+                  <ScrollType>
+                    Two ways to start.
+                    <br />
+                    <span className="text-accent">One way to talk.</span>
+                  </ScrollType>
                 </h2>
               </div>
               <div className="lg:col-span-5">
@@ -382,9 +405,9 @@ export default function Home() {
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
 
-            <div className="mt-16 grid gap-px bg-border/60 lg:grid-cols-3">
+            <ScrollReveal className="mt-16 grid gap-px bg-border/60 lg:grid-cols-3">
               <div className="bg-background p-8 lg:p-10">
                 <p className="font-mono text-xs tracking-widest text-muted-foreground">
                   Starter
@@ -430,14 +453,14 @@ export default function Home() {
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* FINAL CTA */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-40">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-9">
                 <p className="section-label">Next</p>
                 <h2 className="display-heading mt-8 text-5xl sm:text-7xl lg:text-[6rem]">
@@ -460,7 +483,7 @@ export default function Home() {
                   </span>
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

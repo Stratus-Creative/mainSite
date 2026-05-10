@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CostEstimatorForm } from "@/components/cost-estimator-form";
 import { CostEstimatorJsonLd } from "@/components/structured-data";
+import { FadeIn, ScrollReveal, Stagger, ScrollType } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "AI Workflow Cost Estimator — Stratus Creative",
@@ -46,20 +47,28 @@ export default function CostEstimatorPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">Tools · Free</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-6xl lg:text-7xl">
-              AI Workflow Cost Estimator
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Most agencies hide the ongoing cost of AI. We don&apos;t.
-              Pick a workflow, set the volume, see what it would actually cost
-              to run per month — including LLM calls, third-party APIs, vector
-              storage, and our Care fee.
-            </p>
-            <p className="mt-4 max-w-2xl text-sm text-muted-foreground">
-              Built for honest budgeting. Every estimate runs in your browser —
-              we never see your numbers unless you send them to us.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Tools · Free</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-6xl lg:text-7xl">
+                  AI Workflow Cost Estimator
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  Most agencies hide the ongoing cost of AI. We don&apos;t.
+                  Pick a workflow, set the volume, see what it would actually cost
+                  to run per month — including LLM calls, third-party APIs, vector
+                  storage, and our Care fee.
+                </p>
+                <p className="mt-4 max-w-2xl text-sm text-muted-foreground">
+                  Built for honest budgeting. Every estimate runs in your browser —
+                  we never see your numbers unless you send them to us.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
@@ -73,11 +82,11 @@ export default function CostEstimatorPage() {
         {/* How this calculator works */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">How it works</p>
-                <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-                  The math behind the numbers.
+                <h2>
+                  <ScrollType text="The math behind the numbers." className="display-heading mt-6 text-3xl sm:text-4xl" />
                 </h2>
               </div>
               <div className="space-y-8 text-sm text-muted-foreground lg:col-span-8">
@@ -145,18 +154,18 @@ export default function CostEstimatorPage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Next */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">Next</p>
-                <h2 className="display-heading mt-8 text-4xl sm:text-5xl lg:text-6xl">
-                  Get a real quote.
+                <h2>
+                  <ScrollType text="Get a real quote." className="display-heading mt-8 text-4xl sm:text-5xl lg:text-6xl" />
                 </h2>
                 <p className="mt-6 max-w-2xl text-base text-muted-foreground">
                   Bring your estimate to a discovery call. We&apos;ll pressure-test
@@ -179,7 +188,7 @@ export default function CostEstimatorPage() {
                   See full pricing
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

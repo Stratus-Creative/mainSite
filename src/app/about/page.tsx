@@ -5,6 +5,15 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { TrustStrip } from "@/components/trust-strip";
 import { SITE_SETTINGS } from "@/lib/site-settings";
+import {
+  FadeIn,
+  ScrollReveal,
+  Stagger,
+  AccentSweep,
+  Timeline,
+  TimelineItem,
+  ScrollType,
+} from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "About — Stratus Creative",
@@ -49,23 +58,33 @@ export default function AboutPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">About</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              A small studio with{" "}
-              <span className="text-accent">production-grade habits.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Stratus Creative is run by James Farmer. We build
-              websites, workflows, and online presence for businesses that
-              want a real digital presence without the marketing-firm markup.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">About</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
+                  A small studio with{" "}
+                  <span className="text-accent">
+                    <AccentSweep>production-grade habits.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  Stratus Creative is run by James Farmer. We build
+                  websites, workflows, and online presence for businesses that
+                  want a real digital presence without the marketing-firm markup.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Story */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Background</p>
                 {/* Founder photo */}
@@ -138,6 +157,62 @@ export default function AboutPage() {
                   </p>
                 </div>
               </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* How we got here — timeline */}
+        <section className="border-b border-border/60">
+          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+            <ScrollReveal className="mb-16 grid gap-8 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">How we got here</p>
+              </div>
+              <div className="lg:col-span-8">
+                <h2 className="display-heading text-4xl sm:text-5xl">
+                  Four years of production work,{" "}
+                  <span className="text-accent">in four marks.</span>
+                </h2>
+              </div>
+            </ScrollReveal>
+
+            <div className="grid gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4" />
+              <div className="lg:col-span-8">
+                <Timeline>
+                  <Stagger step={120}>
+                    <ScrollReveal>
+                      <TimelineItem year="2022 — 2026" title="Michelin · Industrial IT">
+                        MES deployments across eight international sites. Kafka
+                        in production. PowerShell automation that compressed
+                        multi-day rollouts to thirty-minute runs — adopted as
+                        the standard everywhere it touched.
+                      </TimelineItem>
+                    </ScrollReveal>
+                    <ScrollReveal>
+                      <TimelineItem year="2024" title="Spark Analyzer · launched">
+                        AI diagnostics for Minecraft server performance. Grew
+                        to 300+ users and 400+ reports processed. Per-analysis
+                        cost reduced from $5–$7 to cents through orchestration
+                        architecture.
+                      </TimelineItem>
+                    </ScrollReveal>
+                    <ScrollReveal>
+                      <TimelineItem year="2026" title="Stratus Creative · founded">
+                        A studio at the intersection of enterprise discipline
+                        and product taste. Productized for the straightforward,
+                        custom for everything else.
+                      </TimelineItem>
+                    </ScrollReveal>
+                    <ScrollReveal>
+                      <TimelineItem year="Today" title="Building, in public">
+                        Client work in flight. Public pricing. Public estimator.
+                        Case studies as projects ship.
+                      </TimelineItem>
+                    </ScrollReveal>
+                  </Stagger>
+                </Timeline>
+              </div>
             </div>
           </div>
         </section>
@@ -145,7 +220,7 @@ export default function AboutPage() {
         {/* Principles */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="mb-16 grid gap-8 lg:grid-cols-12">
+            <ScrollReveal className="mb-16 grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Principles</p>
               </div>
@@ -155,11 +230,13 @@ export default function AboutPage() {
                   <span className="text-accent">In four lines.</span>
                 </h2>
               </div>
-            </div>
+            </ScrollReveal>
 
             <div className="grid gap-px bg-border/60 sm:grid-cols-2">
+              <Stagger step={70}>
               {PRINCIPLES.map((p) => (
-                <article
+                <ScrollReveal
+                  as="article"
                   key={p.number}
                   className="flex flex-col gap-4 bg-background p-8 lg:p-10"
                 >
@@ -170,8 +247,9 @@ export default function AboutPage() {
                     {p.title}
                   </h3>
                   <p className="text-sm text-muted-foreground">{p.body}</p>
-                </article>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -179,25 +257,29 @@ export default function AboutPage() {
         {/* Trust strip */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <TrustStrip variant="stack" />
+            <ScrollReveal>
+              <TrustStrip variant="stack" />
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Clients placeholder */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <TrustStrip variant="clients" />
+            <ScrollReveal>
+              <TrustStrip variant="clients" />
+            </ScrollReveal>
           </div>
         </section>
 
         {/* CTA */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">Next</p>
-                <h2 className="display-heading mt-8 text-5xl sm:text-6xl lg:text-7xl">
-                  Want to work with us?
+                <h2>
+                  <ScrollType text="Want to work with us?" className="display-heading mt-8 text-5xl sm:text-6xl lg:text-7xl" />
                 </h2>
                 <p className="mt-6 max-w-2xl text-base text-muted-foreground">
                   Tell us what you&apos;re trying to build. Reply within one
@@ -219,7 +301,7 @@ export default function AboutPage() {
                   See services
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

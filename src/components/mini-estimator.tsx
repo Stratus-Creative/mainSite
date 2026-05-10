@@ -139,7 +139,7 @@ function ButtonGroup<T extends string>({ options, value, onChange }: ButtonGroup
           type="button"
           onClick={() => onChange(opt.value)}
           className={cn(
-            "rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors",
+            "rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors motion-safe:active:scale-[0.98] motion-safe:[transition-duration:150ms]",
             value === opt.value
               ? "border-accent bg-accent/10 text-accent"
               : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground",
@@ -170,7 +170,7 @@ export function MiniEstimator() {
   );
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 lg:p-8">
+    <div className="card-hover rounded-2xl border border-border bg-card p-6 lg:p-8">
       {/* Header */}
       <p className="font-mono text-xs uppercase tracking-widest text-accent">
         Quick estimate
@@ -257,9 +257,12 @@ export function MiniEstimator() {
         This is an estimate.{" "}
         <Link
           href="/tools/cost-estimator"
-          className="text-foreground underline underline-offset-2 hover:text-accent transition-colors"
+          className="group inline-flex items-center gap-1 text-foreground underline underline-offset-2 hover:text-accent transition-colors"
         >
-          Run full breakdown →
+          Run full breakdown
+          <span aria-hidden="true" className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5">
+            →
+          </span>
         </Link>
       </p>
     </div>

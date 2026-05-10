@@ -11,6 +11,7 @@ import {
 import { ClarityScript } from "@/components/clarity-script";
 import { ChatWidget } from "@/components/chat-widget";
 import { PageViewTracker } from "@/components/page-view-tracker";
+import { PageTransition } from "@/components/motion";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -93,7 +94,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
+        <PageTransition>{children}</PageTransition>
         <OrganizationJsonLd />
         <PersonJsonLd />
         <WebsiteJsonLd />

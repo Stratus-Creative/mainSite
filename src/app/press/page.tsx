@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { FadeIn, ScrollReveal, Stagger, ScrollType } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Press kit — Stratus Creative",
@@ -41,38 +42,50 @@ export default function PressKitPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">Press · Brand · Partners</p>
-            <h1 className="display-heading mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
-              Press kit.
-            </h1>
-            <p className="mt-6 max-w-2xl text-base text-muted-foreground">
-              Everything you need to write about, reference, or partner with
-              Stratus Creative. For press inquiries, podcasts, or partnerships,
-              email{" "}
-              <a
-                href="mailto:business@stratus-creative.com"
-                className="underline-hover text-foreground"
-              >
-                business@stratus-creative.com
-              </a>
-              .
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Press · Brand · Partners</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
+                  Press kit.
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-6 max-w-2xl text-base text-muted-foreground">
+                  Everything you need to write about, reference, or partner with
+                  Stratus Creative. For press inquiries, podcasts, or partnerships,
+                  email{" "}
+                  <a
+                    href="mailto:business@stratus-creative.com"
+                    className="underline-hover text-foreground"
+                  >
+                    business@stratus-creative.com
+                  </a>
+                  .
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Quick facts */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <p className="section-label">Quick facts</p>
+            <ScrollReveal>
+              <p className="section-label">Quick facts</p>
+            </ScrollReveal>
             <div className="mt-8 grid gap-px bg-border/60 sm:grid-cols-2 lg:grid-cols-3">
+              <Stagger step={70}>
               {QUICK_FACTS.map((f) => (
-                <div key={f.label} className="bg-background p-6">
+                <ScrollReveal key={f.label} className="bg-background p-6">
                   <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                     {f.label}
                   </p>
                   <p className="mt-2 text-base text-foreground">{f.value}</p>
-                </div>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -80,8 +93,9 @@ export default function PressKitPage() {
         {/* About */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-            <p className="section-label">About Stratus Creative</p>
-            <div className="mt-8 space-y-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <ScrollReveal>
+              <p className="section-label">About Stratus Creative</p>
+              <div className="mt-8 space-y-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
               <p>
                 Stratus Creative is a one-person studio building websites,
                 workflows, and online presence for businesses that want to
@@ -104,16 +118,18 @@ export default function PressKitPage() {
                 ships in 5–7 business days. Custom engagements (multi-page,
                 automation, AI agents) start at $5,000.
               </p>
-            </div>
+              </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Founder */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-            <p className="section-label">Founder</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              James Farmer
+            <ScrollReveal>
+              <p className="section-label">Founder</p>
+            <h2>
+              <ScrollType text="James Farmer" className="display-heading mt-6 text-3xl sm:text-4xl" />
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Founder, Stratus Creative · Industrial IT Specialist, Michelin
@@ -165,19 +181,24 @@ export default function PressKitPage() {
                 Personal site — alecfarmer.com
               </a>
             </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Brand colors */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <p className="section-label">Brand colors</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              Color palette.
-            </h2>
+            <ScrollReveal>
+              <p className="section-label">Brand colors</p>
+              <h2>
+                <ScrollType text="Color palette." className="display-heading mt-6 text-3xl sm:text-4xl" />
+              </h2>
+            </ScrollReveal>
             <div className="mt-12 grid gap-px bg-border/60 sm:grid-cols-2 lg:grid-cols-5">
+              <Stagger step={70}>
               {COLORS.map((c) => (
-                <article
+                <ScrollReveal
+                  as="article"
                   key={c.name}
                   className="flex flex-col bg-background p-6"
                 >
@@ -194,8 +215,9 @@ export default function PressKitPage() {
                     {c.oklch}
                   </p>
                   <p className="mt-3 text-xs text-muted-foreground">{c.role}</p>
-                </article>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -203,11 +225,13 @@ export default function PressKitPage() {
         {/* Logo placeholder */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <p className="section-label">Logo</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              Marks &amp; wordmark.
-            </h2>
-            <div className="mt-12 rounded-2xl border border-dashed border-border/60 bg-card p-12 text-center">
+            <ScrollReveal>
+              <p className="section-label">Logo</p>
+              <h2>
+                <ScrollType text="Marks & wordmark." className="display-heading mt-6 text-3xl sm:text-4xl" />
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal className="mt-12 rounded-2xl border border-dashed border-border/60 bg-card p-12 text-center">
               <p className="text-base text-muted-foreground">
                 Logo files (SVG, PNG transparent, dark + light versions)
                 available on request. Email{" "}
@@ -222,18 +246,18 @@ export default function PressKitPage() {
               <p className="mt-3 text-xs text-muted-foreground">
                 Self-serve download will be added once the brand is finalized.
               </p>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Contact */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">For press</p>
-                <h2 className="display-heading mt-8 text-4xl sm:text-5xl">
-                  Get in touch.
+                <h2>
+                  <ScrollType text="Get in touch." className="display-heading mt-8 text-4xl sm:text-5xl" />
                 </h2>
                 <p className="mt-6 max-w-xl text-base text-muted-foreground">
                   We&apos;ll respond to press inquiries within one business
@@ -249,7 +273,7 @@ export default function PressKitPage() {
                   <span aria-hidden="true">→</span>
                 </a>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

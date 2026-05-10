@@ -55,10 +55,10 @@ export function SiteFooter() {
             </h2>
             <Link
               href="/start"
-              className="mt-10 inline-flex items-center gap-3 text-base text-foreground"
+              className="group mt-10 inline-flex items-center gap-3 text-base text-foreground"
             >
               <span className="underline-hover">Start a project</span>
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true" className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5">→</span>
             </Link>
           </div>
 

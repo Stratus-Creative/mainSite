@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, ScrollType } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Tools — Stratus Creative",
@@ -74,16 +75,26 @@ export default function ToolsPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Tools</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              Free tools.{" "}
-              <span className="text-accent">No signup.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Most agencies hide their math. We publish ours. Use these to
-              scope your project, run the numbers, or just qualify yourself
-              before reaching out — with or without us.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Tools</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
+                  Free tools.{" "}
+                  <span className="text-accent">
+                    <AccentSweep>No signup.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  Most agencies hide their math. We publish ours. Use these to
+                  scope your project, run the numbers, or just qualify yourself
+                  before reaching out — with or without us.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
@@ -91,6 +102,7 @@ export default function ToolsPage() {
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <div className="grid gap-px bg-border/60 lg:grid-cols-2">
+              <Stagger step={70}>
               {TOOLS.map((tool) => {
                 const wrapper = tool.href ? "a" : "div";
                 const interactive = !!tool.href;
@@ -137,19 +149,18 @@ export default function ToolsPage() {
                   </>
                 );
                 return wrapper === "a" ? (
-                  <Link
-                    key={tool.name}
-                    href={tool.href!}
-                    className={className}
-                  >
-                    {inner}
-                  </Link>
+                  <FadeIn key={tool.name} className="h-full">
+                    <Link href={tool.href!} className={`h-full ${className}`}>
+                      {inner}
+                    </Link>
+                  </FadeIn>
                 ) : (
-                  <div key={tool.name} className={className}>
-                    {inner}
-                  </div>
+                  <FadeIn key={tool.name} className="h-full">
+                    <div className={`h-full ${className}`}>{inner}</div>
+                  </FadeIn>
                 );
               })}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -157,11 +168,11 @@ export default function ToolsPage() {
         {/* CTA */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">Need something else?</p>
-                <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-                  Ask us to build a tool you&apos;d actually use.
+                <h2>
+                  <ScrollType text="Ask us to build a tool you'd actually use." className="display-heading mt-6 text-3xl sm:text-4xl" />
                 </h2>
               </div>
               <div className="lg:col-span-4 lg:justify-self-end">
@@ -173,7 +184,7 @@ export default function ToolsPage() {
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

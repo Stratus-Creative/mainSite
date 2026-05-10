@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, ScrollType } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Roadmap — Stratus Creative",
@@ -95,16 +96,26 @@ export default function PublicRoadmapPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">Roadmap · Public · Updated monthly</p>
-            <h1 className="display-heading mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
-              What we&apos;re{" "}
-              <span className="text-accent">building.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-base text-muted-foreground">
-              Most agencies hide their roadmap. We publish it. Here&apos;s
-              what&apos;s in flight, what&apos;s next, and what we&apos;ve
-              decided not to build.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Roadmap · Public · Updated monthly</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
+                  What we&apos;re{" "}
+                  <span className="text-accent">
+                    <AccentSweep>building.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-base text-muted-foreground">
+                  Most agencies hide their roadmap. We publish it. Here&apos;s
+                  what&apos;s in flight, what&apos;s next, and what we&apos;ve
+                  decided not to build.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
@@ -133,7 +144,8 @@ export default function PublicRoadmapPage() {
 
         <section className="border-t border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-            <p className="section-label">Have an idea?</p>
+            <ScrollReveal>
+              <p className="section-label">Have an idea?</p>
             <p className="mt-6 text-lg leading-relaxed text-foreground">
               If there&apos;s something you wish Stratus did, tell us. We
               read every message and take real suggestions seriously.
@@ -145,6 +157,7 @@ export default function PublicRoadmapPage() {
               <span className="underline-hover">Send us a note</span>
               <span aria-hidden="true">→</span>
             </Link>
+            </ScrollReveal>
           </div>
         </section>
       </main>
@@ -170,7 +183,7 @@ function RoadmapSection({
   return (
     <section className="border-b border-border/60">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-12">
+        <ScrollReveal className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <p
               className={`section-label ${
@@ -179,8 +192,8 @@ function RoadmapSection({
             >
               {label}
             </p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              {headline}
+            <h2>
+              <ScrollType text={headline} className="display-heading mt-6 text-3xl sm:text-4xl" />
             </h2>
           </div>
           <div className="lg:col-span-8">
@@ -197,7 +210,7 @@ function RoadmapSection({
               ))}
             </ul>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { FadeIn } from "@/components/motion";
 
 export const metadata = {
   title: "Refund Policy — Stratus Creative",
@@ -14,13 +15,15 @@ export default function RefundsPage() {
 
       <main className="flex-1">
         <article className="mx-auto max-w-3xl px-6 py-20 lg:py-24">
-          <p className="section-label">Legal</p>
-          <h1 className="display-heading mt-6 text-4xl sm:text-5xl">
-            Refund Policy
-          </h1>
-          <p className="mt-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            Last updated · May 9, 2026
-          </p>
+          <FadeIn>
+            <p className="section-label">Legal</p>
+            <h1 className="display-heading mt-6 text-4xl sm:text-5xl">
+              Refund Policy
+            </h1>
+            <p className="mt-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              Last updated · May 9, 2026
+            </p>
+          </FadeIn>
 
           <p className="mt-10 text-base text-muted-foreground">
             We&rsquo;d rather build something you keep than haggle over a

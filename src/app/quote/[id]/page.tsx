@@ -4,6 +4,7 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { createPublicClient } from "@/lib/supabase";
+import { FadeIn, ScrollReveal, Stagger } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Quote status — Stratus Creative",
@@ -93,25 +94,33 @@ export default async function QuotePage({ params }: Params) {
         <section className="relative overflow-hidden border-b border-border/60">
           <div className="editorial-grid absolute inset-0 opacity-30" aria-hidden="true" />
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-            <p className="section-label">Quote tracker</p>
-            <h1 className="display-heading mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
-              {data.business_name ?? data.owner_name ?? "Your project"}
-            </h1>
-            <div className="mt-8">
-              <span
-                className={`inline-flex items-center gap-2.5 rounded-full border px-4 py-2 font-mono text-sm ${config.badge}`}
-              >
-                <span aria-hidden="true" className={`size-2 rounded-full ${config.dot}`} />
-                {config.label}
-              </span>
-            </div>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Quote tracker</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-4xl text-4xl sm:text-6xl lg:text-7xl">
+                  {data.business_name ?? data.owner_name ?? "Your project"}
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <div className="mt-8">
+                  <span
+                    className={`inline-flex items-center gap-2.5 rounded-full border px-4 py-2 font-mono text-sm ${config.badge}`}
+                  >
+                    <span aria-hidden="true" className={`size-2 rounded-full ${config.dot}`} />
+                    {config.label}
+                  </span>
+                </div>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Status detail */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-5">
                 <p className="section-label">Where things stand</p>
                 <p className="mt-6 text-xl text-foreground">{config.description}</p>
@@ -169,7 +178,7 @@ export default async function QuotePage({ params }: Params) {
                   </div>
                 )}
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 

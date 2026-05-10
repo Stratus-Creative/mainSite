@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/structured-data";
 import { INDUSTRY_PAGES } from "@/lib/landing-data";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, ScrollType } from "@/components/motion";
 
 interface Params {
   params: Promise<{ industry: string }>;
@@ -67,15 +68,23 @@ export default async function IndustryPage({ params }: Params) {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">{i.hero.eyebrow}</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6rem]">
-              {i.hero.title}{" "}
-              <span className="text-accent">{i.hero.accent}</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              {i.hero.intro}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">{i.hero.eyebrow}</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6rem]">
+                  {i.hero.title}{" "}
+                  <span className="text-accent">
+                    <AccentSweep>{i.hero.accent}</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  {i.hero.intro}
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/start"
                 className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
@@ -89,20 +98,26 @@ export default async function IndustryPage({ params }: Params) {
               >
                 See pricing
               </Link>
-            </div>
+                </div>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Features */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">What you get</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              Built for {i.industry.toLowerCase()}.
-            </h2>
+            <ScrollReveal>
+              <p className="section-label">What you get</p>
+              <h2>
+                <ScrollType text={`Built for ${i.industry.toLowerCase()}.`} className="display-heading mt-6 text-3xl sm:text-4xl" />
+              </h2>
+            </ScrollReveal>
             <ul className="mt-12 grid gap-px bg-border/60 sm:grid-cols-2">
+              <Stagger step={70}>
               {i.features.map((feat) => (
-                <li
+                <ScrollReveal
+                  as="li"
                   key={feat}
                   className="flex items-start gap-4 bg-background p-6 text-base"
                 >
@@ -111,8 +126,9 @@ export default async function IndustryPage({ params }: Params) {
                     className="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent"
                   />
                   <span>{feat}</span>
-                </li>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </ul>
           </div>
         </section>
@@ -120,7 +136,7 @@ export default async function IndustryPage({ params }: Params) {
         {/* FAQ */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Common questions</p>
               </div>
@@ -138,18 +154,18 @@ export default async function IndustryPage({ params }: Params) {
                   ))}
                 </ul>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* CTA */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">Next</p>
-                <h2 className="display-heading mt-8 text-4xl sm:text-5xl">
-                  Ready to be the next one?
+                <h2>
+                  <ScrollType text="Ready to be the next one?" className="display-heading mt-8 text-4xl sm:text-5xl" />
                 </h2>
               </div>
               <div className="flex flex-col gap-3 lg:col-span-4 lg:items-end">
@@ -167,7 +183,7 @@ export default async function IndustryPage({ params }: Params) {
                   See our work
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

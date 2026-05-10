@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, ScrollType } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Services — Stratus Creative",
@@ -108,23 +109,33 @@ export default function ServicesPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Services</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              Three pillars.{" "}
-              <span className="text-accent">No filler.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Most agencies stretch themselves across twenty services and do
-              none of them well. We do three. Together they cover what most
-              businesses actually need to look bigger, work smarter, and grow.
-            </p>
-            <Link
-              href="/pricing"
-              className="mt-8 inline-flex items-center gap-2 text-sm text-foreground"
-            >
-              <span className="underline-hover">See typical pricing</span>
-              <span aria-hidden="true">→</span>
-            </Link>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Services</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
+                  Three pillars.{" "}
+                  <span className="text-accent">
+                    <AccentSweep>No filler.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  Most agencies stretch themselves across twenty services and do
+                  none of them well. We do three. Together they cover what most
+                  businesses actually need to look bigger, work smarter, and grow.
+                </p>
+                <Link
+                  href="/pricing"
+                  className="mt-8 inline-flex items-center gap-2 text-sm text-foreground"
+                >
+                  <span className="underline-hover">See typical pricing</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
@@ -139,7 +150,7 @@ export default function ServicesPage() {
             }
           >
             <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-              <div className="grid gap-12 lg:grid-cols-12">
+              <ScrollReveal className="grid gap-12 lg:grid-cols-12">
                 <div className="lg:col-span-5">
                   <div className="sticky top-32">
                     <span className="font-mono text-xs tracking-widest text-muted-foreground">
@@ -219,7 +230,7 @@ export default function ServicesPage() {
                     </div>
                   )}
                 </div>
-              </div>
+              </ScrollReveal>
             </div>
           </section>
         ))}
@@ -227,11 +238,11 @@ export default function ServicesPage() {
         {/* What we don't do — counterintuitive credibility section */}
         <section className="border-t border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">What we don&apos;t do</p>
-                <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-                  Things we turn down.
+                <h2>
+                  <ScrollType text="Things we turn down." className="display-heading mt-6 text-3xl sm:text-4xl" />
                 </h2>
                 <p className="mt-6 text-sm text-muted-foreground">
                   Three pillars done seriously beats twenty done sideways.
@@ -290,14 +301,14 @@ export default function ServicesPage() {
                   ))}
                 </ul>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* CTA */}
         <section className="border-t border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">Next</p>
                 <h2 className="display-heading mt-8 text-5xl sm:text-6xl lg:text-7xl">
@@ -323,7 +334,7 @@ export default function ServicesPage() {
                   See pricing
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { CheckoutButton } from "@/components/checkout-button";
 import { ServiceJsonLd, FaqJsonLd, BreadcrumbJsonLd } from "@/components/structured-data";
 import { MiniEstimator } from "@/components/mini-estimator";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, CountUp, ScrollType } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Pricing — Stratus Creative",
@@ -86,30 +87,40 @@ export default function PricingPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Pricing</p>
-            <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6rem]">
-              Two paths.{" "}
-              <span className="text-accent">One conversation.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Productized for the straightforward. Custom for everything else.
-              No tier ladders, no &quot;starting from $X*&quot; with hidden
-              footnotes — just transparent pricing.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Pricing</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6rem]">
+                  Two paths.{" "}
+                  <span className="text-accent">
+                    <AccentSweep>One conversation.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  Productized for the straightforward. Custom for everything else.
+                  No tier ladders, no &quot;starting from $X*&quot; with hidden
+                  footnotes — just transparent pricing.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Two pricing cards */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="mb-16 max-w-3xl">
+            <ScrollReveal className="mb-16 max-w-3xl">
               <p className="section-label">Two pricing paths</p>
               <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
                 How much does a website from Stratus{" "}
                 <span className="text-accent">cost?</span>
               </h2>
-            </div>
-            <div className="grid gap-px bg-border/60 lg:grid-cols-2">
+            </ScrollReveal>
+            <ScrollReveal className="grid gap-px bg-border/60 lg:grid-cols-2">
               {/* STARTER */}
               <article id="starter" className="scroll-mt-24 flex flex-col bg-background p-8 lg:p-12">
                 <div className="flex items-center justify-between">
@@ -125,14 +136,16 @@ export default function PricingPage() {
                   without the markup.
                 </h2>
 
-                <div className="mt-10 flex items-baseline gap-2">
+                <FadeIn variant="number" className="mt-10 flex items-baseline gap-2">
                   <span className="text-6xl font-semibold tracking-tight sm:text-7xl">
-                    <data value="1495">$1,495</data>
+                    <data value="1495">
+                      <CountUp value={1495} prefix="$" fallback="$1,495" />
+                    </data>
                   </span>
                   <span className="text-sm text-muted-foreground">
                     flat · one-time
                   </span>
-                </div>
+                </FadeIn>
                 <p className="mt-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">
                   vs $5,000–$10,000 at typical agencies
                 </p>
@@ -194,11 +207,14 @@ export default function PricingPage() {
                   </span>
                 </h2>
 
-                <div className="mt-10 flex items-baseline gap-2">
+                <FadeIn variant="number" className="mt-10 flex items-baseline gap-2">
                   <span className="text-6xl font-semibold tracking-tight sm:text-7xl">
-                    From <data value="5000">$5,000</data>
+                    From{" "}
+                    <data value="5000">
+                      <CountUp value={5000} prefix="$" fallback="$5,000" />
+                    </data>
                   </span>
-                </div>
+                </FadeIn>
                 <p className="mt-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">
                   vs $15,000–$50,000+ at full-service agencies
                 </p>
@@ -242,10 +258,10 @@ export default function PricingPage() {
                   </p>
                 </div>
               </article>
-            </div>
+            </ScrollReveal>
 
             {/* Capture path: doesn't fit either */}
-            <div className="mt-px bg-border/60">
+            <ScrollReveal className="mt-px bg-border/60">
               <div className="bg-background p-8 lg:p-12">
                 <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
                   <div className="lg:col-span-8">
@@ -277,14 +293,14 @@ export default function PricingPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Typical engagement ranges */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="mb-16 grid gap-8 lg:grid-cols-12">
+            <ScrollReveal className="mb-16 grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Typical ranges</p>
               </div>
@@ -299,9 +315,9 @@ export default function PricingPage() {
                   you can budget honestly before we talk.
                 </p>
               </div>
-            </div>
+            </ScrollReveal>
 
-            <div className="grid gap-px bg-border/60 lg:grid-cols-2">
+            <ScrollReveal className="grid gap-px bg-border/60 lg:grid-cols-2">
               {[
                 {
                   pillar: "Websites",
@@ -378,9 +394,9 @@ export default function PricingPage() {
                   )}
                 </div>
               ))}
-            </div>
+            </ScrollReveal>
 
-            <div className="mt-12 flex flex-col items-center gap-3 text-center">
+            <ScrollReveal className="mt-12 flex flex-col items-center gap-3 text-center">
               <div className="flex items-center gap-5">
                 <span
                   aria-hidden="true"
@@ -398,14 +414,14 @@ export default function PricingPage() {
               <p className="text-base font-medium text-accent sm:text-lg">
                 Ask for a real one — it&apos;s free.
               </p>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Hosting add-ons */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="mb-16 grid gap-8 lg:grid-cols-12">
+            <ScrollReveal className="mb-16 grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Hosting & care</p>
               </div>
@@ -420,9 +436,9 @@ export default function PricingPage() {
                   month-to-month.
                 </p>
               </div>
-            </div>
+            </ScrollReveal>
 
-            <div className="grid gap-px bg-border/60 sm:grid-cols-2">
+            <ScrollReveal className="grid gap-px bg-border/60 sm:grid-cols-2">
               <div className="bg-background p-8 lg:p-10">
                 <p className="section-label">Basic Hosting</p>
                 <p className="mt-8 text-5xl font-semibold tracking-tight">
@@ -495,14 +511,14 @@ export default function PricingPage() {
                   Subscribe — $99/mo
                 </CheckoutButton>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* AI Chat Widget — productized add-on */}
         <section id="ai-widget" className="scroll-mt-24 border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-px bg-border/60 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-px bg-border/60 lg:grid-cols-12">
               <article className="flex flex-col bg-background p-8 lg:col-span-12 lg:p-12">
                 <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
                   <div>
@@ -519,14 +535,16 @@ export default function PricingPage() {
                       <span className="text-accent">on this site. Yours.</span>
                     </h2>
 
-                    <div className="mt-8 flex items-baseline gap-2">
+                    <FadeIn variant="number" className="mt-8 flex items-baseline gap-2">
                       <span className="text-6xl font-semibold tracking-tight sm:text-7xl">
-                        <data value="800">$800</data>
+                        <data value="800">
+                          <CountUp value={800} prefix="$" fallback="$800" />
+                        </data>
                       </span>
                       <span className="text-sm text-muted-foreground">
                         flat · one-time
                       </span>
-                    </div>
+                    </FadeIn>
 
                     <p className="mt-6 text-sm text-muted-foreground">
                       A custom AI assistant, trained on your business and embedded on your site. The widget you&apos;re looking at in the corner of this page is exactly what you get — minus the Stratus branding. Ships in 3–5 business days.
@@ -577,14 +595,14 @@ export default function PricingPage() {
                   </div>
                 </div>
               </article>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* AI Workflow Care — three tiers */}
         <section id="ai-care" className="scroll-mt-24 border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="mb-16 grid gap-8 lg:grid-cols-12">
+            <ScrollReveal className="mb-16 grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">AI Workflow Care</p>
               </div>
@@ -609,9 +627,10 @@ export default function PricingPage() {
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
 
             <div className="grid gap-px bg-border/60 lg:grid-cols-3">
+              <Stagger step={70}>
               {[
                 {
                   name: "AI Care · Light",
@@ -659,7 +678,8 @@ export default function PricingPage() {
                   highlight: false,
                 },
               ].map((tier) => (
-                <article
+                <ScrollReveal
+                  as="article"
                   key={tier.name}
                   className="flex flex-col bg-background p-8 lg:p-10"
                 >
@@ -672,12 +692,18 @@ export default function PricingPage() {
                     )}
                   </div>
 
-                  <p className="mt-6 text-5xl font-semibold tracking-tight">
-                    <data value={tier.priceValue}>{tier.price}</data>
+                  <FadeIn variant="number" as="p" className="mt-6 text-5xl font-semibold tracking-tight">
+                    <data value={tier.priceValue}>
+                      <CountUp
+                        value={tier.priceValue}
+                        prefix="$"
+                        fallback={tier.price}
+                      />
+                    </data>
                     <span className="ml-2 text-base font-normal text-muted-foreground">
                       /month
                     </span>
-                  </p>
+                  </FadeIn>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {tier.hours}
                   </p>
@@ -706,8 +732,9 @@ export default function PricingPage() {
                       Discuss {tier.name.split("·")[1].trim()}
                     </Link>
                   </div>
-                </article>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -715,7 +742,7 @@ export default function PricingPage() {
         {/* How AI workflows are priced */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">How AI workflows are priced</p>
                 <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
@@ -782,14 +809,14 @@ export default function PricingPage() {
                   </Link>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Mini estimator */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Try the estimator</p>
                 <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
@@ -805,18 +832,18 @@ export default function PricingPage() {
               <div className="lg:col-span-8">
                 <MiniEstimator />
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* FAQ */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Common questions</p>
-                <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
-                  Anything else?
+                <h2>
+                  <ScrollType text="Anything else?" className="display-heading mt-6 text-4xl sm:text-5xl" />
                 </h2>
               </div>
               <div className="lg:col-span-8">
@@ -833,7 +860,7 @@ export default function PricingPage() {
                   ))}
                 </ul>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

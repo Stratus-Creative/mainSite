@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/structured-data";
 import { COMPARISONS } from "@/lib/comparison-data";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, ScrollType } from "@/components/motion";
 
 interface Params {
   params: Promise<{ competitor: string }>;
@@ -100,23 +101,35 @@ export default async function VsPage({ params }: Params) {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-            <p className="section-label">Comparison · Honest</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-4xl sm:text-6xl lg:text-7xl">
-              Stratus Creative vs{" "}
-              <span className="text-accent">{c.competitor}.</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-base text-muted-foreground">
-              {c.competitorTagline}.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Comparison · Honest</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-4xl sm:text-6xl lg:text-7xl">
+                  Stratus Creative vs{" "}
+                  <span className="text-accent">
+                    <AccentSweep>{c.competitor}.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-6 max-w-2xl text-base text-muted-foreground">
+                  {c.competitorTagline}.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Intro */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-            <p className="text-lg leading-relaxed text-foreground sm:text-xl">
-              {c.intro}
-            </p>
+            <ScrollReveal>
+              <p className="text-lg leading-relaxed text-foreground sm:text-xl">
+                {c.intro}
+              </p>
+            </ScrollReveal>
           </div>
         </section>
 
@@ -124,7 +137,8 @@ export default async function VsPage({ params }: Params) {
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <div className="grid gap-px bg-border/60 lg:grid-cols-2">
-              <article className="bg-background p-8 lg:p-10">
+              <Stagger step={70}>
+              <ScrollReveal as="article" className="bg-background p-8 lg:p-10">
                 <p className="section-label">When {c.competitor} is right</p>
                 <ul className="mt-8 space-y-4">
                   {c.whenCompetitor.map((item) => (
@@ -140,8 +154,8 @@ export default async function VsPage({ params }: Params) {
                     </li>
                   ))}
                 </ul>
-              </article>
-              <article className="bg-background p-8 lg:p-10">
+              </ScrollReveal>
+              <ScrollReveal as="article" className="bg-background p-8 lg:p-10">
                 <p className="section-label">When Stratus is right</p>
                 <ul className="mt-8 space-y-4">
                   {c.whenStratus.map((item) => (
@@ -157,7 +171,8 @@ export default async function VsPage({ params }: Params) {
                     </li>
                   ))}
                 </ul>
-              </article>
+              </ScrollReveal>
+              </Stagger>
             </div>
           </div>
         </section>
@@ -165,11 +180,13 @@ export default async function VsPage({ params }: Params) {
         {/* Comparison table */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">Side by side</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              The full comparison.
-            </h2>
-            <div className="mt-12 overflow-x-auto">
+            <ScrollReveal>
+              <p className="section-label">Side by side</p>
+              <h2>
+                <ScrollType text="The full comparison." className="display-heading mt-6 text-3xl sm:text-4xl" />
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal className="mt-12 overflow-x-auto">
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-border text-left">
@@ -196,14 +213,15 @@ export default async function VsPage({ params }: Params) {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Pricing math */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-20 lg:py-24">
-            <p className="section-label">Pricing math</p>
+            <ScrollReveal>
+              <p className="section-label">Pricing math</p>
             <p className="mt-6 text-lg leading-relaxed text-foreground sm:text-xl">
               {c.pricingNote}
             </p>
@@ -216,27 +234,30 @@ export default async function VsPage({ params }: Params) {
                 It&apos;s free.
               </Link>
             </p>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Closing */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-20 lg:py-24">
-            <p className="section-label">Bottom line</p>
-            <p className="mt-6 text-2xl leading-snug tracking-tight sm:text-3xl">
-              {c.closingThought}
-            </p>
+            <ScrollReveal>
+              <p className="section-label">Bottom line</p>
+              <p className="mt-6 text-2xl leading-snug tracking-tight sm:text-3xl">
+                {c.closingThought}
+              </p>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* CTA */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">Next</p>
-                <h2 className="display-heading mt-8 text-4xl sm:text-5xl">
-                  Want to talk it through?
+                <h2>
+                  <ScrollType text="Want to talk it through?" className="display-heading mt-8 text-4xl sm:text-5xl" />
                 </h2>
               </div>
               <div className="flex flex-col gap-3 lg:col-span-4 lg:items-end">
@@ -254,7 +275,7 @@ export default async function VsPage({ params }: Params) {
                   See our pricing
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FadeIn, Stagger } from "@/components/motion";
 import {
   buildEstimateSummary,
   buildModelComparison,
@@ -533,9 +534,9 @@ export function CostEstimatorForm() {
       <aside className="lg:col-span-5">
         <div className="sticky top-32 space-y-6">
           {/* Headline numbers */}
-          <div className="rounded-2xl border border-border bg-card p-6">
+          <FadeIn variant="number" className="rounded-2xl border border-border bg-card p-6">
             <p className="section-label">Estimated monthly</p>
-            <p className="mt-4 text-5xl font-semibold tracking-tight">
+            <p className="mt-4 text-5xl font-semibold tracking-tight tabular-nums">
               {formatRange(result.monthlyInvoiceLow, result.monthlyInvoiceHigh)}
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -572,12 +573,12 @@ export function CostEstimatorForm() {
               </div>
               <LatencyChart breakdown={latency.breakdown} totalMs={latency.totalMs} />
             </div>
-          </div>
+          </FadeIn>
 
           {/* Build estimate */}
-          <div className="rounded-2xl border border-border bg-card p-6">
+          <FadeIn variant="number" delay={120} className="rounded-2xl border border-border bg-card p-6">
             <p className="section-label">One-time build</p>
-            <p className="mt-4 text-3xl font-semibold tracking-tight">
+            <p className="mt-4 text-3xl font-semibold tracking-tight tabular-nums">
               {formatRange(buildEstimate.low, buildEstimate.high)}
               <span className="text-accent">+</span>
             </p>
@@ -586,7 +587,7 @@ export function CostEstimatorForm() {
               Range is a typical starting point — projects can extend higher
               based on scope. Quoted firm in your proposal.
             </p>
-          </div>
+          </FadeIn>
 
           {/* Breakdown */}
           <div className="rounded-2xl border border-border bg-card p-6">

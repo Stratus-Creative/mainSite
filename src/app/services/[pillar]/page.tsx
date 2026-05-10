@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/structured-data";
 import { PILLAR_PAGES } from "@/lib/landing-data";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, ScrollType } from "@/components/motion";
 
 interface Params {
   params: Promise<{ pillar: string }>;
@@ -68,46 +69,60 @@ export default async function PillarPage({ params }: Params) {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">{p.hero.eyebrow}</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              {p.hero.title}{" "}
-              <span className="text-accent">{p.hero.accent}</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              {p.hero.intro}
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">{p.hero.eyebrow}</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
+                  {p.hero.title}{" "}
+                  <span className="text-accent">
+                    <AccentSweep>{p.hero.accent}</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  {p.hero.intro}
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Problem */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">{p.problem.label}</p>
               </div>
               <div className="lg:col-span-8">
-                <h2 className="display-heading text-3xl sm:text-4xl">
-                  {p.problem.title}
+                <h2>
+                  <ScrollType text={p.problem.title} className="display-heading text-3xl sm:text-4xl" />
                 </h2>
                 <p className="mt-6 text-base text-muted-foreground sm:text-lg">
                   {p.problem.body}
                 </p>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Capabilities */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">What we build</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              What does Stratus build for {p.pillar.toLowerCase()}?
-            </h2>
+            <ScrollReveal>
+              <p className="section-label">What we build</p>
+              <h2>
+                <ScrollType text={`What does Stratus build for ${p.pillar.toLowerCase()}?`} className="display-heading mt-6 text-3xl sm:text-4xl" />
+              </h2>
+            </ScrollReveal>
             <ul className="mt-12 grid gap-px bg-border/60 sm:grid-cols-2">
+              <Stagger step={70}>
               {p.capabilities.map((cap) => (
-                <li
+                <ScrollReveal
+                  as="li"
                   key={cap}
                   className="flex items-start gap-4 bg-background p-6 text-base"
                 >
@@ -116,8 +131,9 @@ export default async function PillarPage({ params }: Params) {
                     className="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent"
                   />
                   <span>{cap}</span>
-                </li>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </ul>
           </div>
         </section>
@@ -125,13 +141,17 @@ export default async function PillarPage({ params }: Params) {
         {/* Pricing */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">Pricing</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              How much does {p.pillar.toLowerCase()} work cost?
-            </h2>
+            <ScrollReveal>
+              <p className="section-label">Pricing</p>
+              <h2>
+                <ScrollType text={`How much does ${p.pillar.toLowerCase()} work cost?`} className="display-heading mt-6 text-3xl sm:text-4xl" />
+              </h2>
+            </ScrollReveal>
             <div className="mt-12 grid gap-px bg-border/60 lg:grid-cols-3">
+              <Stagger step={70}>
               {p.pricing.ranges.map((r) => (
-                <article
+                <ScrollReveal
+                  as="article"
                   key={r.name}
                   className="flex flex-col bg-background p-8 lg:p-10"
                 >
@@ -142,10 +162,11 @@ export default async function PillarPage({ params }: Params) {
                   <p className="mt-4 text-sm text-muted-foreground">
                     {r.detail}
                   </p>
-                </article>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
-            <div className="mt-12 flex flex-wrap gap-4">
+            <ScrollReveal className="mt-12 flex flex-wrap gap-4">
               <Link
                 href="/pricing"
                 className="inline-flex items-center gap-2 text-sm text-foreground"
@@ -160,20 +181,24 @@ export default async function PillarPage({ params }: Params) {
                 <span className="underline-hover">Run the cost estimator</span>
                 <span aria-hidden="true">→</span>
               </Link>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Process */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">Process</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              How does Stratus deliver {p.pillar.toLowerCase()} projects?
-            </h2>
+            <ScrollReveal>
+              <p className="section-label">Process</p>
+              <h2>
+                <ScrollType text={`How does Stratus deliver ${p.pillar.toLowerCase()} projects?`} className="display-heading mt-6 text-3xl sm:text-4xl" />
+              </h2>
+            </ScrollReveal>
             <div className="mt-12 grid gap-px bg-border/60 sm:grid-cols-2 lg:grid-cols-4">
+              <Stagger step={70}>
               {p.process.map((step) => (
-                <article
+                <ScrollReveal
+                  as="article"
                   key={step.step}
                   className="flex flex-col gap-4 bg-background p-8"
                 >
@@ -186,8 +211,9 @@ export default async function PillarPage({ params }: Params) {
                   <p className="text-sm text-muted-foreground">
                     {step.detail}
                   </p>
-                </article>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -195,7 +221,7 @@ export default async function PillarPage({ params }: Params) {
         {/* FAQ */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Common questions</p>
               </div>
@@ -213,18 +239,18 @@ export default async function PillarPage({ params }: Params) {
                   ))}
                 </ul>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* CTA */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">Next</p>
-                <h2 className="display-heading mt-8 text-4xl sm:text-5xl">
-                  Tell us what you&apos;re building.
+                <h2>
+                  <ScrollType text="Tell us what you're building." className="display-heading mt-8 text-4xl sm:text-5xl" />
                 </h2>
               </div>
               <div className="flex flex-col gap-3 lg:col-span-4 lg:items-end">
@@ -242,7 +268,7 @@ export default async function PillarPage({ params }: Params) {
                   All services
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

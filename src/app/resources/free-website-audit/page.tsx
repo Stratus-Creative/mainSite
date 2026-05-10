@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { AuditForm } from "@/components/audit-form";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, ScrollType } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Free 15-min website audit — Stratus Creative",
@@ -74,30 +75,44 @@ export default function FreeWebsiteAuditPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-            <p className="section-label">Free · 15 minutes · No commitment</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-4xl sm:text-6xl lg:text-7xl">
-              Free 15-minute{" "}
-              <span className="text-accent">website audit.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Send us your URL. We&apos;ll record a Loom video reviewing your
-              site — performance, SEO basics, conversion red flags, three
-              specific recommendations. Free, no commitment, no sales pitch.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Free · 15 minutes · No commitment</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-4xl sm:text-6xl lg:text-7xl">
+                  Free 15-minute{" "}
+                  <span className="text-accent">
+                    <AccentSweep>website audit.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  Send us your URL. We&apos;ll record a Loom video reviewing your
+                  site — performance, SEO basics, conversion red flags, three
+                  specific recommendations. Free, no commitment, no sales pitch.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* What you get */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">What you get</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              A real review.{" "}
-              <span className="text-accent">Not a sales call.</span>
-            </h2>
+            <ScrollReveal>
+              <p className="section-label">What you get</p>
+              <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
+                A real review.{" "}
+                <span className="text-accent">Not a sales call.</span>
+              </h2>
+            </ScrollReveal>
             <ul className="mt-12 grid gap-px bg-border/60 sm:grid-cols-2">
+              <Stagger step={70}>
               {WHAT_YOU_GET.map((item) => (
-                <li
+                <ScrollReveal
+                  as="li"
                   key={item.label}
                   className="bg-background p-6 lg:p-8"
                 >
@@ -107,8 +122,9 @@ export default function FreeWebsiteAuditPage() {
                   <p className="mt-3 text-sm text-muted-foreground">
                     {item.detail}
                   </p>
-                </li>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </ul>
           </div>
         </section>
@@ -116,13 +132,16 @@ export default function FreeWebsiteAuditPage() {
         {/* How it works */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">How it works</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              Four steps.
-            </h2>
+            <ScrollReveal>
+              <p className="section-label">How it works</p>
+              <h2>
+                <ScrollType text="Four steps." className="display-heading mt-6 text-3xl sm:text-4xl" />
+              </h2>
+            </ScrollReveal>
             <div className="mt-12 grid gap-px bg-border/60 sm:grid-cols-2 lg:grid-cols-4">
+              <Stagger step={70}>
               {HOW_IT_WORKS.map((step) => (
-                <div
+                <ScrollReveal
                   key={step.step}
                   className="flex flex-col gap-4 bg-background p-8"
                 >
@@ -135,8 +154,9 @@ export default function FreeWebsiteAuditPage() {
                   <p className="text-sm text-muted-foreground">
                     {step.detail}
                   </p>
-                </div>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -144,9 +164,10 @@ export default function FreeWebsiteAuditPage() {
         {/* Form */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-20 lg:py-24">
-            <p className="section-label">Request your audit</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              Submit your site.
+            <ScrollReveal>
+              <p className="section-label">Request your audit</p>
+            <h2>
+              <ScrollType text="Submit your site." className="display-heading mt-6 text-3xl sm:text-4xl" />
             </h2>
             <p className="mt-4 text-sm text-muted-foreground">
               We respond within 1–3 business days with your Loom link.
@@ -154,17 +175,18 @@ export default function FreeWebsiteAuditPage() {
             <div className="mt-10">
               <AuditForm />
             </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* CTA */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">Already know you want to work with us?</p>
-                <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-                  Skip the audit and start.
+                <h2>
+                  <ScrollType text="Skip the audit and start." className="display-heading mt-6 text-3xl sm:text-4xl" />
                 </h2>
               </div>
               <div className="lg:col-span-4 lg:justify-self-end">
@@ -176,7 +198,7 @@ export default function FreeWebsiteAuditPage() {
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { BreadcrumbJsonLd } from "@/components/structured-data";
 import { CASE_STUDIES, getCaseStudy } from "@/lib/case-studies-data";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep } from "@/components/motion";
 
 interface Params {
   params: Promise<{ slug: string }>;
@@ -76,27 +77,41 @@ export default async function CaseStudyPage({ params }: Params) {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-            <p className="section-label">{c.hero.eyebrow}</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-4xl sm:text-6xl lg:text-7xl">
-              {c.hero.title}{" "}
-              <span className="text-accent">{c.hero.accent}</span>
-            </h1>
-            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-              <span>{c.client}</span>
-              <span>{c.industry}</span>
-              <span>{c.pillar}</span>
-              <span>{formatDate(c.date)}</span>
-            </div>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">{c.hero.eyebrow}</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-4xl sm:text-6xl lg:text-7xl">
+                  {c.hero.title}{" "}
+                  <span className="text-accent">
+                    <AccentSweep>{c.hero.accent}</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <div className="mt-8 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                  <span>{c.client}</span>
+                  <span>{c.industry}</span>
+                  <span>{c.pillar}</span>
+                  <span>{formatDate(c.date)}</span>
+                </div>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Outcome — surfaced first because it's what matters */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <p className="section-label">Outcome</p>
+            <ScrollReveal>
+              <p className="section-label">Outcome</p>
+            </ScrollReveal>
             <div className="mt-8 grid gap-px bg-border/60 sm:grid-cols-2 lg:grid-cols-4">
+              <Stagger step={70}>
               {c.outcome.map((item) => (
-                <article
+                <ScrollReveal
+                  as="article"
                   key={item.metric}
                   className="bg-background p-6 lg:p-8"
                 >
@@ -106,8 +121,9 @@ export default async function CaseStudyPage({ params }: Params) {
                   <p className="mt-3 text-3xl font-semibold tracking-tight text-accent">
                     {item.value}
                   </p>
-                </article>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </div>
           </div>
         </section>
@@ -115,26 +131,32 @@ export default async function CaseStudyPage({ params }: Params) {
         {/* Problem / Approach */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-            <p className="section-label">Problem</p>
-            <p className="mt-6 text-lg leading-relaxed text-foreground sm:text-xl">
-              {c.problem}
-            </p>
+            <ScrollReveal>
+              <p className="section-label">Problem</p>
+              <p className="mt-6 text-lg leading-relaxed text-foreground sm:text-xl">
+                {c.problem}
+              </p>
+            </ScrollReveal>
           </div>
         </section>
 
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-            <p className="section-label">Approach</p>
-            <p className="mt-6 text-lg leading-relaxed text-foreground sm:text-xl">
-              {c.approach}
-            </p>
+            <ScrollReveal>
+              <p className="section-label">Approach</p>
+              <p className="mt-6 text-lg leading-relaxed text-foreground sm:text-xl">
+                {c.approach}
+              </p>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Details */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-            <p className="section-label">What we built</p>
+            <ScrollReveal>
+              <p className="section-label">What we built</p>
+            </ScrollReveal>
             <ul className="mt-8 space-y-4">
               {c.details.map((d) => (
                 <li
@@ -155,24 +177,26 @@ export default async function CaseStudyPage({ params }: Params) {
         {/* Tech stack */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-            <p className="section-label">Tech</p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {c.techStack.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full border border-border px-4 py-1.5 font-mono text-xs text-muted-foreground"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
+            <ScrollReveal>
+              <p className="section-label">Tech</p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                  {c.techStack.map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-border px-4 py-1.5 font-mono text-xs text-muted-foreground"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* CTA */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">Next</p>
                 <h2 className="display-heading mt-8 text-4xl sm:text-5xl">
@@ -194,7 +218,7 @@ export default async function CaseStudyPage({ params }: Params) {
                   Back to work
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

@@ -6,6 +6,7 @@ import { SupportFaq } from "@/components/support-faq";
 import { SupportForm } from "@/components/support-form";
 import { FaqJsonLd } from "@/components/structured-data";
 import { SUPPORT_FAQ } from "@/lib/faq-data";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, ScrollType } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Support — Stratus Creative",
@@ -27,47 +28,57 @@ export default function SupportPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Support</p>
-            <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6rem]">
-              How can{" "}
-              <span className="text-accent">we help?</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Browse common questions below, or submit a request — we reply
-              within{" "}
-              <span className="font-medium text-foreground">
-                24–48 business hours
-              </span>
-              .
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Support</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6rem]">
+                  How can{" "}
+                  <span className="text-accent">
+                    <AccentSweep>we help?</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  Browse common questions below, or submit a request — we reply
+                  within{" "}
+                  <span className="font-medium text-foreground">
+                    24–48 business hours
+                  </span>
+                  .
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* FAQ */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Frequently asked</p>
-                <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
-                  The questions we hear most.
+                <h2>
+                  <ScrollType text="The questions we hear most." className="display-heading mt-6 text-4xl sm:text-5xl" />
                 </h2>
               </div>
               <div className="lg:col-span-8">
                 <SupportFaq />
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Contact form */}
         <section id="contact" className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <div className="grid gap-12 lg:grid-cols-12">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="section-label">Submit a request</p>
-                <h2 className="display-heading mt-6 text-4xl sm:text-5xl">
-                  Tell us what&apos;s going on.
+                <h2>
+                  <ScrollType text="Tell us what's going on." className="display-heading mt-6 text-4xl sm:text-5xl" />
                 </h2>
                 <p className="mt-6 text-sm text-muted-foreground">
                   For existing clients only.{" "}
@@ -82,7 +93,7 @@ export default function SupportPage() {
               <div className="lg:col-span-8">
                 <SupportForm />
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>
