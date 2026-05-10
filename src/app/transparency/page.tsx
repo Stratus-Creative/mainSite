@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep, ScrollType } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Transparency — Stratus Creative",
@@ -24,33 +25,46 @@ export default function TransparencyPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Transparency</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6rem]">
-              Real numbers.{" "}
-              <span className="text-accent">Real soon.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Most agencies talk about pricing in the abstract. Once we have
-              real client data we&apos;re cleared to share, this page will
-              show the actual monthly cost ranges, AI workflow API spend, and
-              uptime numbers from our live deployments — anonymized.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Transparency</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6rem]">
+                  Real numbers.{" "}
+                  <span className="text-accent">
+                    <AccentSweep>Real soon.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  Most agencies talk about pricing in the abstract. Once we have
+                  real client data we&apos;re cleared to share, this page will
+                  show the actual monthly cost ranges, AI workflow API spend, and
+                  uptime numbers from our live deployments — anonymized.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         {/* Placeholder structure */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <p className="section-label">When this goes live</p>
-            <h2 className="display-heading mt-6 text-3xl sm:text-4xl">
-              What will Stratus actually publish here?
-            </h2>
-            <p className="mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
-              We&apos;ll publish this page once we have 5+ AI workflow clients
-              in production. The data will be anonymized, aggregated, and
-              updated monthly. Specifically:
-            </p>
+            <ScrollReveal>
+              <p className="section-label">When this goes live</p>
+              <h2>
+                <ScrollType text="What will Stratus actually publish here?" className="display-heading mt-6 text-3xl sm:text-4xl" />
+              </h2>
+              <p className="mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
+                We&apos;ll publish this page once we have 5+ AI workflow clients
+                in production. The data will be anonymized, aggregated, and
+                updated monthly. Specifically:
+              </p>
+            </ScrollReveal>
             <ul className="mt-8 grid gap-px bg-border/60 sm:grid-cols-2">
+              <Stagger step={70}>
               {[
                 {
                   title: "Median monthly invoice",
@@ -83,7 +97,8 @@ export default function TransparencyPage() {
                     "How long clients stay with us and why they leave.",
                 },
               ].map((item) => (
-                <article
+                <ScrollReveal
+                  as="article"
                   key={item.title}
                   className="bg-background p-6 lg:p-8"
                 >
@@ -93,8 +108,9 @@ export default function TransparencyPage() {
                   <p className="mt-3 text-sm text-muted-foreground">
                     {item.detail}
                   </p>
-                </article>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </ul>
           </div>
         </section>
@@ -102,24 +118,26 @@ export default function TransparencyPage() {
         {/* Why */}
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-3xl px-6 py-20 lg:py-24">
-            <p className="section-label">Why publish this</p>
-            <p className="mt-6 text-lg leading-relaxed text-foreground sm:text-xl">
-              Most agencies talk about pricing in glossy abstractions. We&apos;d
-              rather show the real numbers. If we&apos;re proud of how our
-              client deployments perform, this page is a competitive moat. If
-              we&apos;re not, it&apos;s a forcing function for us to do better.
-            </p>
+            <ScrollReveal>
+              <p className="section-label">Why publish this</p>
+              <p className="mt-6 text-lg leading-relaxed text-foreground sm:text-xl">
+                Most agencies talk about pricing in glossy abstractions. We&apos;d
+                rather show the real numbers. If we&apos;re proud of how our
+                client deployments perform, this page is a competitive moat. If
+                we&apos;re not, it&apos;s a forcing function for us to do better.
+              </p>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* CTA */}
         <section>
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+            <ScrollReveal className="grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="section-label">In the meantime</p>
-                <h2 className="display-heading mt-8 text-4xl sm:text-5xl">
-                  How can I see real numbers today?
+                <h2>
+                  <ScrollType text="How can I see real numbers today?" className="display-heading mt-8 text-4xl sm:text-5xl" />
                 </h2>
                 <p className="mt-6 max-w-xl text-base text-muted-foreground">
                   We don&apos;t have client data yet, but we built a public
@@ -141,7 +159,7 @@ export default function TransparencyPage() {
                   Start a project
                 </Link>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

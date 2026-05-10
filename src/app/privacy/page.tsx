@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { FadeIn } from "@/components/motion";
 
 export const metadata = {
   title: "Privacy Policy — Stratus Creative",
@@ -14,13 +15,15 @@ export default function PrivacyPage() {
 
       <main className="flex-1">
         <article className="mx-auto max-w-3xl px-6 py-20 lg:py-24">
-          <p className="section-label">Legal</p>
-          <h1 className="display-heading mt-6 text-4xl sm:text-5xl">
-            Privacy Policy
-          </h1>
-          <p className="mt-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            Last updated · May 9, 2026
-          </p>
+          <FadeIn>
+            <p className="section-label">Legal</p>
+            <h1 className="display-heading mt-6 text-4xl sm:text-5xl">
+              Privacy Policy
+            </h1>
+            <p className="mt-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              Last updated · May 9, 2026
+            </p>
+          </FadeIn>
 
           {/* TL;DR card */}
           <div className="mt-10 rounded-lg border border-accent/40 bg-accent/5 p-6">

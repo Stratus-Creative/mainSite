@@ -54,12 +54,12 @@ export function NewsletterSignup({
             placeholder="your@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-60 rounded-full border border-border bg-card px-5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-foreground focus:outline-none"
+            className="w-60 rounded-full border border-border bg-card px-5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
           />
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
+            className="group inline-flex items-center gap-1.5 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground motion-safe:active:scale-[0.98] motion-safe:[transition-duration:150ms] disabled:opacity-60"
           >
             {submitting ? "…" : "Subscribe"}
           </button>
@@ -98,14 +98,23 @@ export function NewsletterSignup({
             placeholder="your@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 border-b border-border bg-transparent py-1.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-foreground focus:outline-none sm:w-56 sm:flex-none"
+            className="flex-1 border-b border-border bg-transparent py-1.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors focus:border-accent focus:outline-none sm:w-56 sm:flex-none"
           />
           <button
             type="submit"
             disabled={submitting}
-            className="text-sm font-medium text-foreground transition-colors hover:text-accent disabled:opacity-60"
+            className="group inline-flex items-center gap-1 text-sm font-medium text-foreground transition-colors hover:text-accent motion-safe:active:scale-[0.98] disabled:opacity-60"
           >
-            {submitting ? "…" : "Subscribe →"}
+            {submitting ? (
+              "…"
+            ) : (
+              <>
+                Subscribe
+                <span aria-hidden="true" className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5">
+                  →
+                </span>
+              </>
+            )}
           </button>
         </form>
         {error && (
@@ -129,7 +138,7 @@ export function NewsletterSignup({
   }
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-8">
+    <div className="card-hover rounded-2xl border border-border bg-card p-8">
       <p className="font-mono text-[11px] uppercase tracking-widest text-accent">
         Notes by email
       </p>
@@ -150,12 +159,12 @@ export function NewsletterSignup({
           placeholder="your@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="flex-1 rounded-full border border-border bg-background px-5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/80 focus:border-foreground focus:outline-none"
+          className="flex-1 rounded-full border border-border bg-background px-5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/80 transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
         />
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-full bg-foreground px-6 py-2.5 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
+          className="rounded-full bg-foreground px-6 py-2.5 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground motion-safe:active:scale-[0.98] motion-safe:[transition-duration:150ms] disabled:opacity-60"
         >
           {submitting ? "Subscribing…" : "Subscribe"}
         </button>

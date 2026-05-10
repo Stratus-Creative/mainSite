@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PrintButton } from "@/components/print-button";
+import { FadeIn, Stagger, AccentSweep } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "What Your Website Should Actually Cost in 2026",
@@ -41,17 +42,25 @@ export default function WebsiteCostGuidePage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-            <p className="section-label">Free guide · 2 pages · No email required</p>
-            <h1 className="display-heading mt-8 max-w-4xl text-4xl sm:text-5xl lg:text-6xl">
-              What your website should actually cost{" "}
-              <span className="text-accent">in 2026.</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-              The honest math behind small-business websites — design, build,
-              hosting, AI. No upsell, no email gate. Use the print button to
-              save as PDF.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Free guide · 2 pages · No email required</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-4xl text-4xl sm:text-5xl lg:text-6xl">
+                  What your website should actually cost{" "}
+                  <span className="text-accent">
+                    <AccentSweep>in 2026.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
+                  The honest math behind small-business websites — design, build,
+                  hosting, AI. No upsell, no email gate. Use the print button to
+                  save as PDF.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
               <PrintButton className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground print-only-hide">
                 Save as PDF
                 <span aria-hidden="true">↓</span>
@@ -62,7 +71,9 @@ export default function WebsiteCostGuidePage() {
               >
                 See our pricing
               </Link>
-            </div>
+                </div>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 

@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { getAllNotes } from "@/lib/notes";
+import { FadeIn, ScrollReveal, Stagger, AccentSweep } from "@/components/motion";
 
 // 10 minutes — short enough that newly-due articles surface promptly,
 // long enough that we're not regenerating on every visit.
@@ -39,26 +40,37 @@ export default async function NotesIndex() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Decoded</p>
-            <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              The machine,{" "}
-              <span className="text-accent">explained.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              Plain-language writing on AI, workflows, and web — for people
-              who want to understand how it works without learning to build it.
-            </p>
-            <div className="mt-10">
-              <NewsletterSignup variant="inline" />
-            </div>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Decoded</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-4xl text-5xl sm:text-7xl lg:text-[6.5rem]">
+                  The machine,{" "}
+                  <span className="text-accent">
+                    <AccentSweep>explained.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  Plain-language writing on AI, workflows, and web — for people
+                  who want to understand how it works without learning to build it.
+                </p>
+                <div className="mt-10">
+                  <NewsletterSignup variant="inline" />
+                </div>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 
         <section className="border-b border-border/60">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <ul className="divide-y divide-border/60 border-y border-border/60">
+              <Stagger step={70}>
               {notes.map((note) => (
-                <li key={note.slug}>
+                <ScrollReveal as="li" key={note.slug}>
                   <Link
                     href={`/notes/${note.slug}`}
                     className="group grid gap-4 py-8 lg:grid-cols-12 lg:items-baseline lg:gap-8"
@@ -91,8 +103,9 @@ export default async function NotesIndex() {
                       </span>
                     </div>
                   </Link>
-                </li>
+                </ScrollReveal>
               ))}
+              </Stagger>
             </ul>
           </div>
         </section>

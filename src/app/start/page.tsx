@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { StartForm } from "@/components/start-form";
+import { FadeIn, Stagger, AccentSweep } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Start a project — Stratus Creative",
@@ -40,18 +41,28 @@ export default function StartPage() {
             aria-hidden="true"
           />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-            <p className="section-label">Start a project</p>
-            <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
-              Tell us what
-              <br />
-              you&apos;re{" "}
-              <span className="text-accent">trying to build.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
-              The more specific you can be, the more useful our reply will be.
-              Don&apos;t worry about getting it perfect — we&apos;ll fill in
-              the gaps on the call.
-            </p>
+            <Stagger step={120}>
+              <FadeIn variant="slide-left">
+                <p className="section-label">Start a project</p>
+              </FadeIn>
+              <FadeIn>
+                <h1 className="display-heading mt-8 max-w-5xl text-5xl sm:text-7xl lg:text-[6.5rem]">
+                  Tell us what
+                  <br />
+                  you&apos;re{" "}
+                  <span className="text-accent">
+                    <AccentSweep>trying to build.</AccentSweep>
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn>
+                <p className="mt-8 max-w-2xl text-lg text-muted-foreground">
+                  The more specific you can be, the more useful our reply will be.
+                  Don&apos;t worry about getting it perfect — we&apos;ll fill in
+                  the gaps on the call.
+                </p>
+              </FadeIn>
+            </Stagger>
           </div>
         </section>
 

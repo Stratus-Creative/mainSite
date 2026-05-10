@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { getAllNotesSlugs, getNote } from "@/lib/notes";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/structured-data";
 import { NewsletterSignup } from "@/components/newsletter-signup";
+import { FadeIn, DropCap } from "@/components/motion";
 
 export const revalidate = 600;
 
@@ -91,6 +92,7 @@ function renderInline(html: string): string {
 // Minimal markdown renderer — supports paragraphs, **bold**, [text](url), bullet lists
 function renderBody(body: string) {
   const paragraphs = body.split(/\n\n+/);
+  let firstParaUsed = false;
   return paragraphs.map((para, i) => {
     const html = renderInline(para);
 
@@ -110,6 +112,17 @@ function renderBody(body: string) {
             </li>
           ))}
         </ul>
+      );
+    }
+
+    if (!firstParaUsed) {
+      firstParaUsed = true;
+      return (
+        <DropCap
+          key={i}
+          className="my-6 text-base leading-relaxed text-muted-foreground sm:text-lg"
+          html={html}
+        />
       );
     }
 
@@ -155,7 +168,7 @@ export default async function NotePage({ params }: Params) {
             <span aria-hidden="true">←</span> Back to Decoded
           </Link>
 
-          <div className="mt-10">
+          <FadeIn className="mt-10">
             <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
               {formatDate(note.published_at!)}
             </p>
@@ -172,7 +185,7 @@ export default async function NotePage({ params }: Params) {
                 </span>
               ))}
             </div>
-          </div>
+          </FadeIn>
 
           <div className="mt-12 border-t border-border/60 pt-12">
             <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">

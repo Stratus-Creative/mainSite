@@ -45,10 +45,10 @@ export function HomeHeroFaq() {
               <p>{item.a}</p>
               <Link
                 href={item.cta.href}
-                className="mt-3 inline-flex items-center gap-2 text-sm text-foreground"
+                className="group mt-3 inline-flex items-center gap-2 text-sm text-foreground"
               >
                 <span className="underline-hover">{item.cta.label}</span>
-                <span aria-hidden="true">→</span>
+                <span aria-hidden="true" className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5">→</span>
               </Link>
             </div>
           </Accordion.Panel>

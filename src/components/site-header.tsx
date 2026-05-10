@@ -46,7 +46,7 @@ export function SiteHeader({ activePath: _ }: { activePath?: string } = {}) {
           >
             <span
               aria-hidden="true"
-              className="inline-block size-2 rounded-full bg-accent"
+              className="logo-dot inline-block size-2 rounded-full bg-accent motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-125"
             />
             <span>Stratus Creative</span>
           </Link>
@@ -81,12 +81,12 @@ export function SiteHeader({ activePath: _ }: { activePath?: string } = {}) {
             </Link>
             <Link
               href="/start"
-              className="group hidden sm:inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background"
+              className="group hidden sm:inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-all hover:border-foreground hover:bg-foreground hover:text-background motion-safe:active:scale-[0.98] motion-safe:[transition-duration:240ms]"
             >
               Start a project
               <span
                 aria-hidden="true"
-                className="transition-transform group-hover:translate-x-0.5"
+                className="motion-safe:transition-transform motion-safe:duration-240 group-hover:translate-x-0.5"
               >
                 →
               </span>
@@ -146,11 +146,11 @@ export function SiteHeader({ activePath: _ }: { activePath?: string } = {}) {
             <Link
               href="/"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2.5 text-sm font-semibold tracking-tight"
+              className="group flex items-center gap-2.5 text-sm font-semibold tracking-tight"
             >
               <span
                 aria-hidden="true"
-                className="inline-block size-2 rounded-full bg-accent"
+                className="logo-dot inline-block size-2 rounded-full bg-accent motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-125"
               />
               <span>Stratus Creative</span>
             </Link>
@@ -206,18 +206,18 @@ export function SiteHeader({ activePath: _ }: { activePath?: string } = {}) {
             <Link
               href="/start"
               onClick={() => setOpen(false)}
-              className="flex items-center justify-between rounded-full bg-foreground px-6 py-4 text-base font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="group flex items-center justify-between rounded-full bg-foreground px-6 py-4 text-base font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground motion-safe:active:scale-[0.98] motion-safe:transition-transform motion-safe:duration-150"
             >
               Start a project
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true" className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5">→</span>
             </Link>
             <Link
               href="/resources/free-website-audit"
               onClick={() => setOpen(false)}
-              className="flex items-center justify-between rounded-full border border-border px-6 py-4 text-base font-medium text-foreground transition-colors hover:border-foreground"
+              className="group flex items-center justify-between rounded-full border border-border px-6 py-4 text-base font-medium text-foreground transition-colors hover:border-foreground motion-safe:active:scale-[0.98]"
             >
               Free audit
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true" className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5">→</span>
             </Link>
           </div>
         </div>
