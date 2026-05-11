@@ -4,26 +4,17 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-type ProjectType = "starter" | "custom" | "unsure";
+type ProjectType = "starter" | "ai-widget" | "workflow" | "online-presence" | "custom" | "unsure";
 type Budget = "under-2k" | "2k-5k" | "5k-15k" | "15k-plus" | "unsure";
 type ContactPref = "email" | "text" | "either";
 
 const PROJECT_TYPES: Array<{ value: ProjectType; label: string; hint: string }> = [
-  {
-    value: "starter",
-    label: "Starter",
-    hint: "$1,495 productized site",
-  },
-  {
-    value: "custom",
-    label: "Custom",
-    hint: "Multi-page · workflows · AI",
-  },
-  {
-    value: "unsure",
-    label: "Not sure",
-    hint: "Help me figure it out",
-  },
+  { value: "starter",          label: "Starter Site",      hint: "$1,495 flat · 5–7 days" },
+  { value: "ai-widget",        label: "AI Chat Widget",    hint: "$800 · trained on your business" },
+  { value: "workflow",         label: "AI Workflow",       hint: "$5K–$20K custom build" },
+  { value: "online-presence",  label: "Online Presence",   hint: "GBP · reviews · local SEO" },
+  { value: "custom",           label: "Custom / Bundle",   hint: "Multiple services · complex scope" },
+  { value: "unsure",           label: "Not sure",          hint: "Help me figure it out" },
 ];
 
 const BUDGETS: Array<{ value: Budget; label: string }> = [
@@ -59,11 +50,14 @@ export function StartForm() {
   const fromEstimator = searchParams.get("fromEstimator") === "1";
   const prefilledMessage = searchParams.get("summary") ?? "";
   const planParam = searchParams.get("plan");
+  const nameParam = searchParams.get("name") ?? "";
+  const businessParam = searchParams.get("business") ?? "";
 
   // Determine initial project type from query param, then estimator flag, then default.
+  const VALID_PLANS: ProjectType[] = ["starter", "ai-widget", "workflow", "online-presence", "custom", "unsure"];
   const initialProjectType: ProjectType =
-    planParam === "starter" || planParam === "custom"
-      ? planParam
+    VALID_PLANS.includes(planParam as ProjectType)
+      ? (planParam as ProjectType)
       : fromEstimator
       ? "custom"
       : "unsure";
@@ -77,8 +71,8 @@ export function StartForm() {
   const [smsConsent, setSmsConsent] = useState(false);
   const [message, setMessage] = useState(prefilledMessage);
   const [restored, setRestored] = useState(false);
-  const [ownerName, setOwnerName] = useState("");
-  const [businessName, setBusinessName] = useState("");
+  const [ownerName, setOwnerName] = useState(nameParam);
+  const [businessName, setBusinessName] = useState(businessParam);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [phone, setPhone] = useState("");
@@ -99,8 +93,8 @@ export function StartForm() {
         setMessage(saved.message);
         setRestored(true);
       }
-      if (saved.ownerName) setOwnerName(saved.ownerName);
-      if (saved.businessName) setBusinessName(saved.businessName);
+      if (saved.ownerName && !nameParam) setOwnerName(saved.ownerName);
+      if (saved.businessName && !businessParam) setBusinessName(saved.businessName);
       if (saved.email) setEmail(saved.email);
       if (saved.phone) setPhone(saved.phone);
     } catch {
@@ -141,10 +135,12 @@ export function StartForm() {
     submitted,
   ]);
 
-  // If the URL param updates after mount, sync it.
+  // If the URL params update after mount, sync them.
   useEffect(() => {
     if (prefilledMessage) setMessage(prefilledMessage);
-  }, [prefilledMessage]);
+    if (nameParam) setOwnerName(nameParam);
+    if (businessParam) setBusinessName(businessParam);
+  }, [prefilledMessage, nameParam, businessParam]);
 
   function clearSaved() {
     if (typeof window === "undefined") return;
@@ -262,7 +258,7 @@ export function StartForm() {
       {/* Project type */}
       <fieldset className="space-y-4">
         <legend className="section-label">01 — What kind of project</legend>
-        <div className="grid gap-px bg-border/60 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-px bg-border/60 sm:grid-cols-3">
           {PROJECT_TYPES.map((opt) => {
             const active = projectType === opt.value;
             return (

@@ -8,7 +8,7 @@ import type { UIMessage } from "ai";
 import { TextStreamChatTransport } from "ai";
 import Link from "next/link";
 
-const HIDDEN_PATHS = ["/support", "/start", "/success", "/cancel", "/admin"];
+const HIDDEN_PATHS = ["/support", "/success", "/cancel", "/admin"];
 const NUDGE_PATHS = ["/pricing", "/services"];
 const NUDGE_KEY = "stratus_nudge_shown";
 const NUDGE_DELAY_MS = 45_000;
@@ -19,6 +19,8 @@ const MESSAGE_WARN_CHARS = 1500;
 const INQUIRY_KEY = "stratus_inquiry_submitted";
 const MIN_PANEL_WIDTH = 300;
 const MIN_PANEL_HEIGHT = 380;
+const MAX_PANEL_WIDTH = 560;
+const MAX_PANEL_HEIGHT = 660;
 
 interface InquiryCardData {
   email: string;
@@ -85,7 +87,7 @@ function buildStartUrl(allMessages: UIMessage[]): string {
 // Renders bot message text: **bold**, /path links, and newlines.
 // /start gets special styling and carries conversation prefill context.
 function renderMessageText(text: string, startUrl: string): ReactNode {
-  const TOKEN_RE = /(\*\*[^*\n]+\*\*|\/[\w-][\w/-]*)/g;
+  const TOKEN_RE = /(\*\*[^*\n]+\*\*|(?<![a-zA-Z0-9])\/[\w-][\w/-]+)/g;
   const nodes: ReactNode[] = [];
   const lines = text.split("\n");
 
@@ -130,6 +132,80 @@ function renderMessageText(text: string, startUrl: string): ReactNode {
   });
 
   return <>{nodes}</>;
+}
+
+interface StartCtaData {
+  plan: string;
+  name?: string;
+  business?: string;
+  summary: string;
+}
+
+function parseStartCta(text: string): {
+  before: string;
+  cta: StartCtaData | null;
+  after: string;
+  partial: boolean;
+} {
+  const startIdx = text.indexOf("<start-cta");
+  if (startIdx === -1) return { before: text, cta: null, after: "", partial: false };
+
+  const tail = text.slice(startIdx);
+  const match = tail.match(/<start-cta\s+([^>]*?)\s*\/?>(?:<\/start-cta>)?/);
+  if (!match) {
+    return { before: text.slice(0, startIdx).trim(), cta: null, after: "", partial: true };
+  }
+
+  const attrs: Record<string, string> = {};
+  const attrRegex = /(\w+)="([^"]*)"/g;
+  let m;
+  while ((m = attrRegex.exec(match[1]))) {
+    attrs[m[1]] = m[2];
+  }
+
+  if (!attrs.summary) {
+    return { before: text.slice(0, startIdx).trim(), cta: null, after: "", partial: true };
+  }
+
+  const ctaEnd = startIdx + match[0].length;
+  return {
+    before: text.slice(0, startIdx).trim(),
+    cta: {
+      plan: attrs.plan ?? "unsure",
+      name: attrs.name || undefined,
+      business: attrs.business || undefined,
+      summary: attrs.summary,
+    },
+    after: text.slice(ctaEnd).trim(),
+    partial: false,
+  };
+}
+
+function buildStartCtaUrl(cta: StartCtaData): string {
+  const params = new URLSearchParams();
+  params.set("plan", cta.plan);
+  params.set("summary", cta.summary.slice(0, 400));
+  if (cta.name) params.set("name", cta.name);
+  if (cta.business) params.set("business", cta.business);
+  return `/start?${params.toString()}`;
+}
+
+function StartCtaCard({ data }: { data: StartCtaData }) {
+  const href = buildStartCtaUrl(data);
+  return (
+    <div className="rounded-2xl border border-accent/30 bg-accent/5 p-3.5">
+      <p className="font-mono text-[10px] uppercase tracking-widest text-accent">
+        Ready to start
+      </p>
+      <p className="mt-1.5 text-xs text-muted-foreground">{data.summary}</p>
+      <Link
+        href={href}
+        className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-foreground px-3 py-2 text-xs font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
+      >
+        Open the start form →
+      </Link>
+    </div>
+  );
 }
 
 function getSessionId(): string {
@@ -340,6 +416,12 @@ export function ChatWidget() {
   }, [open]);
 
   useEffect(() => {
+    if (open && status === "ready") {
+      inputRef.current?.focus();
+    }
+  }, [status, open]);
+
+  useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -421,8 +503,8 @@ export function ChatWidget() {
         setSize((prev) => {
           if (!prev) return prev;
           return {
-            width: Math.min(prev.width, window.innerWidth - 16),
-            height: Math.min(prev.height, window.innerHeight - 100),
+            width: Math.min(prev.width, MAX_PANEL_WIDTH, window.innerWidth - 48),
+            height: Math.min(prev.height, MAX_PANEL_HEIGHT, window.innerHeight - 120),
           };
         });
       }
@@ -459,8 +541,8 @@ export function ChatWidget() {
       dW = e.clientX - startX;
       dH = e.clientY - startY;
     }
-    const newW = Math.max(MIN_PANEL_WIDTH, Math.min(window.innerWidth - 16, startW + dW));
-    const newH = Math.max(MIN_PANEL_HEIGHT, Math.min(window.innerHeight - 100, startH + dH));
+    const newW = Math.max(MIN_PANEL_WIDTH, Math.min(Math.min(MAX_PANEL_WIDTH, window.innerWidth - 48), startW + dW));
+    const newH = Math.max(MIN_PANEL_HEIGHT, Math.min(Math.min(MAX_PANEL_HEIGHT, window.innerHeight - 120), startH + dH));
     setSize({ width: newW, height: newH });
   };
 
@@ -667,7 +749,12 @@ export function ChatWidget() {
               }
 
               const startUrl = buildStartUrl(messages);
-              const { before, card, after } = parseInquiryCard(text);
+              const { before: iqBefore, card, after: iqAfter } = parseInquiryCard(text);
+              // If no inquiry card, check the full text for a start-cta
+              const ctaSource = card ? "" : text;
+              const { before, cta, after } = card
+                ? { before: iqBefore, cta: null, after: iqAfter }
+                : parseStartCta(ctaSource);
               return (
                 <div key={m.id} className="flex flex-col items-start gap-2">
                   {before && (
@@ -678,6 +765,11 @@ export function ChatWidget() {
                   {card && (
                     <div className="w-full max-w-[85%]">
                       <InquiryCard data={card} />
+                    </div>
+                  )}
+                  {cta && (
+                    <div className="w-full max-w-[85%]">
+                      <StartCtaCard data={cta} />
                     </div>
                   )}
                   {after && (
