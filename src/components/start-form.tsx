@@ -7,6 +7,8 @@ import Link from "next/link";
 type ProjectType = "starter" | "ai-widget" | "workflow" | "online-presence" | "custom" | "unsure";
 type Budget = "under-2k" | "2k-5k" | "5k-15k" | "15k-plus" | "unsure";
 type ContactPref = "email" | "text" | "either";
+type Timeline = "asap" | "1-3mo" | "3-6mo" | "exploring";
+type ReferralSource = "google" | "referral" | "friend" | "social" | "other";
 
 const PROJECT_TYPES: Array<{ value: ProjectType; label: string; hint: string }> = [
   { value: "starter",          label: "Starter Site",      hint: "$1,495 flat · 5–7 days" },
@@ -25,11 +27,29 @@ const BUDGETS: Array<{ value: Budget; label: string }> = [
   { value: "unsure", label: "Unsure" },
 ];
 
-const STORAGE_KEY = "stratus.start-form.v1";
+const TIMELINES: Array<{ value: Timeline; label: string }> = [
+  { value: "asap",      label: "As soon as possible" },
+  { value: "1-3mo",     label: "1–3 months" },
+  { value: "3-6mo",     label: "3–6 months" },
+  { value: "exploring", label: "Just exploring" },
+];
+
+const REFERRAL_SOURCES: Array<{ value: ReferralSource; label: string }> = [
+  { value: "google",   label: "Google search" },
+  { value: "referral", label: "Referral" },
+  { value: "friend",   label: "Friend or colleague" },
+  { value: "social",   label: "Social media" },
+  { value: "other",    label: "Other" },
+];
+
+const STORAGE_KEY = "stratus.start-form.v2";
 
 interface StoredState {
   projectType?: ProjectType;
   budget?: Budget;
+  timeline?: Timeline;
+  referralSource?: ReferralSource;
+  existingUrl?: string;
   contactPref?: ContactPref;
   smsConsent?: boolean;
   message?: string;
@@ -67,6 +87,9 @@ export function StartForm() {
   const [submissionId, setSubmissionId] = useState<string | null>(null);
   const [projectType, setProjectType] = useState<ProjectType>(initialProjectType);
   const [budget, setBudget] = useState<Budget>("unsure");
+  const [timeline, setTimeline] = useState<Timeline | null>(null);
+  const [referralSource, setReferralSource] = useState<ReferralSource | null>(null);
+  const [existingUrl, setExistingUrl] = useState("");
   const [contactPref, setContactPref] = useState<ContactPref>("email");
   const [smsConsent, setSmsConsent] = useState(false);
   const [message, setMessage] = useState(prefilledMessage);
@@ -87,6 +110,9 @@ export function StartForm() {
       const saved: StoredState = JSON.parse(raw);
       if (saved.projectType && !planParam) setProjectType(saved.projectType);
       if (saved.budget) setBudget(saved.budget);
+      if (saved.timeline) setTimeline(saved.timeline);
+      if (saved.referralSource) setReferralSource(saved.referralSource);
+      if (saved.existingUrl) setExistingUrl(saved.existingUrl);
       if (saved.contactPref) setContactPref(saved.contactPref);
       if (saved.smsConsent) setSmsConsent(saved.smsConsent);
       if (saved.message) {
@@ -109,6 +135,9 @@ export function StartForm() {
     const data: StoredState = {
       projectType,
       budget,
+      timeline: timeline ?? undefined,
+      referralSource: referralSource ?? undefined,
+      existingUrl,
       contactPref,
       smsConsent,
       message,
@@ -125,6 +154,9 @@ export function StartForm() {
   }, [
     projectType,
     budget,
+    timeline,
+    referralSource,
+    existingUrl,
     contactPref,
     smsConsent,
     message,
@@ -241,6 +273,9 @@ export function StartForm() {
               clearSaved();
               setProjectType("unsure");
               setBudget("unsure");
+              setTimeline(null);
+              setReferralSource(null);
+              setExistingUrl("");
               setMessage("");
               setOwnerName("");
               setBusinessName("");
@@ -322,9 +357,94 @@ export function StartForm() {
         </div>
       </fieldset>
 
+      {/* Existing URL + Timeline */}
+      <fieldset className="space-y-6">
+        <legend className="section-label">03 — A few more details</legend>
+
+        {/* Existing website */}
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground mb-3">
+            Existing website URL <span className="normal-case tracking-normal">(optional)</span>
+          </p>
+          <input
+            id="existingUrl"
+            name="existingUrl"
+            type="url"
+            value={existingUrl}
+            onChange={(e) => setExistingUrl(e.target.value)}
+            placeholder="https://yoursite.com"
+            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground/80 transition-colors focus:border-foreground focus:outline-none font-mono text-sm"
+          />
+        </div>
+
+        {/* Timeline */}
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground mb-3">
+            When do you want to start?
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {TIMELINES.map((opt) => {
+              const active = timeline === opt.value;
+              return (
+                <label
+                  key={opt.value}
+                  className={`cursor-pointer rounded-full border px-4 py-2 text-sm transition-colors ${
+                    active
+                      ? "border-accent bg-accent text-accent-foreground"
+                      : "border-border bg-background text-muted-foreground hover:border-foreground hover:text-foreground"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="timeline"
+                    value={opt.value}
+                    checked={active}
+                    onChange={() => setTimeline(opt.value)}
+                    className="sr-only"
+                  />
+                  {opt.label}
+                </label>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Referral source */}
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground mb-3">
+            How did you find us?
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {REFERRAL_SOURCES.map((opt) => {
+              const active = referralSource === opt.value;
+              return (
+                <label
+                  key={opt.value}
+                  className={`cursor-pointer rounded-full border px-4 py-2 text-sm transition-colors ${
+                    active
+                      ? "border-accent bg-accent text-accent-foreground"
+                      : "border-border bg-background text-muted-foreground hover:border-foreground hover:text-foreground"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="referralSource"
+                    value={opt.value}
+                    checked={active}
+                    onChange={() => setReferralSource(opt.value)}
+                    className="sr-only"
+                  />
+                  {opt.label}
+                </label>
+              );
+            })}
+          </div>
+        </div>
+      </fieldset>
+
       {/* Contact details */}
       <fieldset className="space-y-6">
-        <legend className="section-label">03 — Tell us about you</legend>
+        <legend className="section-label">04 — Tell us about you</legend>
         <div className="grid gap-px bg-border/60 sm:grid-cols-2">
           <FormField
             id="ownerName"
@@ -439,7 +559,7 @@ export function StartForm() {
 
       {/* Project details */}
       <fieldset className="space-y-4">
-        <legend className="section-label">04 — What are you trying to do?</legend>
+        <legend className="section-label">05 — What are you trying to do?</legend>
         <textarea
           id="message"
           name="message"
