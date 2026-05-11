@@ -161,7 +161,7 @@ export async function POST(req: Request) {
       model: anthropic(CHAT_MODEL_ID),
       system: await getSystemPrompt(pageUrl),
       messages: modelMessages,
-      maxOutputTokens: 400,
+      maxOutputTokens: 220,
       onFinish: async ({ text, usage }) => {
         void recordAiUsage(
           "chat_widget",

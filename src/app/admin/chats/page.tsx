@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+export const dynamic = "force-dynamic";
+
 type RawMessage = {
   content: string | null;
   role: string | null;
@@ -22,6 +24,11 @@ type RawConversation = {
   page_url: string | null;
   created_at: string;
   messages: RawMessage[] | null;
+};
+
+type AiUsageRow = {
+  metadata: { conversation_id?: string } | null;
+  cost_usd: number | string | null;
 };
 
 function formatDate(iso: string) {
@@ -38,19 +45,51 @@ function truncate(text: string, max = 80) {
   return cleaned.slice(0, max - 1).trimEnd() + "…";
 }
 
+function fmtUsd(n: number): string {
+  if (!Number.isFinite(n) || n === 0) return "—";
+  if (Math.abs(n) >= 0.01) return `$${n.toFixed(3)}`;
+  return `$${n.toFixed(4)}`;
+}
+
+function num(v: unknown): number {
+  if (typeof v === "number") return v;
+  if (typeof v === "string") {
+    const p = Number(v);
+    return Number.isFinite(p) ? p : 0;
+  }
+  return 0;
+}
+
 export default async function AdminChatsPage() {
   const admin = await getCurrentAdmin();
   if (!admin) redirect("/admin/login");
 
   const supabase = createServerClient();
-  const { data } = await supabase
-    .from("conversations")
-    .select(
-      "id, session_id, page_url, created_at, messages(content, role, created_at)"
-    )
-    .order("created_at", { ascending: false });
+
+  const [{ data }, { data: usageData }] = await Promise.all([
+    supabase
+      .from("conversations")
+      .select("id, session_id, page_url, created_at, messages(content, role, created_at)")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("ai_usage")
+      .select("metadata, cost_usd")
+      .eq("feature", "chat_widget"),
+  ]);
 
   const conversations = (data as RawConversation[] | null) ?? [];
+
+  // Build per-conversation cost map from ai_usage metadata
+  const costByConversation = new Map<string, number>();
+  let totalChatCost = 0;
+  for (const row of (usageData as AiUsageRow[] | null) ?? []) {
+    const convId = row.metadata?.conversation_id;
+    const cost = num(row.cost_usd);
+    totalChatCost += cost;
+    if (convId) {
+      costByConversation.set(convId, (costByConversation.get(convId) ?? 0) + cost);
+    }
+  }
 
   const enriched = conversations.map((c) => {
     const messages = c.messages ?? [];
@@ -69,6 +108,7 @@ export default async function AdminChatsPage() {
         ? truncate(firstUser.content, 80)
         : null,
       last_message_at: lastMessage?.created_at ?? c.created_at,
+      cost: costByConversation.get(c.id) ?? 0,
     };
   });
 
@@ -94,36 +134,48 @@ export default async function AdminChatsPage() {
         </Link>
 
         {/* Summary tiles */}
-        <div className="mt-6 grid grid-cols-2 gap-px bg-border/60 sm:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 gap-px bg-border/60 sm:grid-cols-5">
           {[
             {
               label: "Conversations",
-              value: enriched.length,
+              value: String(enriched.length),
               style: "text-foreground",
             },
             {
               label: "Total messages",
-              value: totalMessages,
+              value: String(totalMessages),
               style: "text-foreground",
             },
             {
               label: "Last 7 days",
-              value: last7,
+              value: String(last7),
               style: "text-accent",
             },
             {
               label: "Avg msgs / convo",
-              value: avgMessages,
+              value: String(avgMessages),
               style: "text-muted-foreground",
+            },
+            {
+              label: "Total AI cost",
+              value: totalChatCost > 0 ? `$${totalChatCost.toFixed(3)}` : "—",
+              style: "text-emerald-400",
+              href: "/admin/ai-costs",
             },
           ].map((stat) => (
             <div key={stat.label} className="bg-background px-6 py-5">
               <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                 {stat.label}
               </p>
-              <p className={`mt-2 text-3xl font-semibold ${stat.style}`}>
-                {stat.value}
-              </p>
+              {"href" in stat ? (
+                <Link href={stat.href!} className={`mt-2 block text-3xl font-semibold transition-opacity hover:opacity-75 ${stat.style}`}>
+                  {stat.value}
+                </Link>
+              ) : (
+                <p className={`mt-2 text-3xl font-semibold ${stat.style}`}>
+                  {stat.value}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -187,6 +239,12 @@ export default async function AdminChatsPage() {
                     Started: {formatDate(c.created_at)}
                   </p>
                 </div>
+
+                {c.cost > 0 && (
+                  <span className="shrink-0 font-mono text-[10px] text-emerald-400/80">
+                    {fmtUsd(c.cost)}
+                  </span>
+                )}
 
                 <span
                   aria-hidden="true"

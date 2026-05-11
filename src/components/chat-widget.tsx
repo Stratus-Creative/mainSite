@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
+import type { UIMessage } from "ai";
 import { TextStreamChatTransport } from "ai";
 import Link from "next/link";
 
@@ -15,6 +17,8 @@ const MAX_SESSION_MESSAGES = 20;
 const MAX_MESSAGE_CHARS = 2000;
 const MESSAGE_WARN_CHARS = 1500;
 const INQUIRY_KEY = "stratus_inquiry_submitted";
+const MIN_PANEL_WIDTH = 300;
+const MIN_PANEL_HEIGHT = 380;
 
 interface InquiryCardData {
   email: string;
@@ -59,6 +63,73 @@ function parseInquiryCard(text: string): {
     after: text.slice(cardEnd).trim(),
     partial: false,
   };
+}
+
+function getMessageText(m: UIMessage): string {
+  return m.parts
+    .filter((p): p is { type: "text"; text: string } => p.type === "text")
+    .map((p) => p.text)
+    .join("");
+}
+
+function buildStartUrl(allMessages: UIMessage[]): string {
+  const userContext = allMessages
+    .filter((m) => m.role === "user")
+    .map(getMessageText)
+    .join(". ")
+    .trim();
+  if (!userContext) return "/start";
+  return `/start?summary=${encodeURIComponent(userContext.slice(0, 400))}`;
+}
+
+// Renders bot message text: **bold**, /path links, and newlines.
+// /start gets special styling and carries conversation prefill context.
+function renderMessageText(text: string, startUrl: string): ReactNode {
+  const TOKEN_RE = /(\*\*[^*\n]+\*\*|\/[\w-][\w/-]*)/g;
+  const nodes: ReactNode[] = [];
+  const lines = text.split("\n");
+
+  lines.forEach((line, li) => {
+    if (li > 0) nodes.push(<br key={`nl-${li}`} />);
+
+    let last = 0;
+    const re = new RegExp(TOKEN_RE.source, "g");
+    let match: RegExpExecArray | null;
+
+    while ((match = re.exec(line)) !== null) {
+      if (match.index > last) {
+        nodes.push(<span key={`${li}-t-${last}`}>{line.slice(last, match.index)}</span>);
+      }
+      const token = match[0];
+      const key = `${li}-${match.index}`;
+
+      if (token.startsWith("**")) {
+        nodes.push(<strong key={key}>{token.slice(2, -2)}</strong>);
+      } else {
+        const isStart = token === "/start";
+        nodes.push(
+          <Link
+            key={key}
+            href={isStart ? startUrl : token}
+            className={
+              isStart
+                ? "inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-0.5 text-[11px] font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
+                : "underline underline-offset-2 hover:text-accent"
+            }
+          >
+            {isStart ? "Start your project →" : token}
+          </Link>
+        );
+      }
+      last = match.index + token.length;
+    }
+
+    if (last < line.length) {
+      nodes.push(<span key={`${li}-t-end`}>{line.slice(last)}</span>);
+    }
+  });
+
+  return <>{nodes}</>;
 }
 
 function getSessionId(): string {
@@ -215,6 +286,7 @@ export function ChatWidget() {
   const [errorReason, setErrorReason] = useState<string | null>(null);
   const [position, setPosition] = useState<Position | null>(null);
   const [nudgeVisible, setNudgeVisible] = useState(false);
+  const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -223,6 +295,12 @@ export function ChatWidget() {
     startY: number;
     panelX: number;
     panelY: number;
+  } | null>(null);
+  const resizeDragRef = useRef<{
+    startX: number;
+    startY: number;
+    startW: number;
+    startH: number;
   } | null>(null);
 
   const { messages, sendMessage, status, error } = useChat({
@@ -322,25 +400,74 @@ export function ChatWidget() {
     return cleanup;
   }, [pathname]);
 
-  // If viewport resizes and the dragged panel falls off-screen, pull it back into bounds
+  // Clamp position and size when viewport shrinks so panel stays on screen
   useEffect(() => {
-    if (!position) return;
+    if (!position && !size) return;
     const onResize = () => {
       const panel = panelRef.current;
       if (!panel) return;
       const w = panel.offsetWidth;
       const h = panel.offsetHeight;
-      setPosition((prev) => {
-        if (!prev) return prev;
-        return {
-          x: Math.max(8, Math.min(window.innerWidth - w - 8, prev.x)),
-          y: Math.max(8, Math.min(window.innerHeight - h - 8, prev.y)),
-        };
-      });
+      if (position) {
+        setPosition((prev) => {
+          if (!prev) return prev;
+          return {
+            x: Math.max(8, Math.min(window.innerWidth - w - 8, prev.x)),
+            y: Math.max(8, Math.min(window.innerHeight - h - 8, prev.y)),
+          };
+        });
+      }
+      if (size) {
+        setSize((prev) => {
+          if (!prev) return prev;
+          return {
+            width: Math.min(prev.width, window.innerWidth - 16),
+            height: Math.min(prev.height, window.innerHeight - 100),
+          };
+        });
+      }
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [position]);
+  }, [position, size]);
+
+  const handleResizePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const panel = panelRef.current;
+    if (!panel) return;
+    const rect = panel.getBoundingClientRect();
+    resizeDragRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      startW: rect.width,
+      startH: rect.height,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const handleResizePointerMove = (e: React.PointerEvent<HTMLDivElement>, direction: "tl" | "br") => {
+    if (!resizeDragRef.current) return;
+    const { startX, startY, startW, startH } = resizeDragRef.current;
+    let dW: number;
+    let dH: number;
+    if (direction === "tl") {
+      // Top-left handle: moving left/up grows the panel (anchored bottom-right)
+      dW = startX - e.clientX;
+      dH = startY - e.clientY;
+    } else {
+      // Bottom-right handle: moving right/down grows the panel (anchored top-left)
+      dW = e.clientX - startX;
+      dH = e.clientY - startY;
+    }
+    const newW = Math.max(MIN_PANEL_WIDTH, Math.min(window.innerWidth - 16, startW + dW));
+    const newH = Math.max(MIN_PANEL_HEIGHT, Math.min(window.innerHeight - 100, startH + dH));
+    setSize({ width: newW, height: newH });
+  };
+
+  const handleResizePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.currentTarget.releasePointerCapture(e.pointerId);
+    resizeDragRef.current = null;
+  };
 
   if (HIDDEN_PATHS.some((p) => pathname?.startsWith(p))) return null;
 
@@ -405,11 +532,27 @@ export function ChatWidget() {
     dragRef.current = null;
   };
 
-  // Mobile: full-width minus 12px margins, capped to viewport height (handles iOS browser chrome via dvh).
-  // Desktop (sm+): anchored bottom-right with max-width — drag enables custom position.
-  const panelClassName = position
-    ? "fixed z-50 flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl shadow-black/40 w-[min(calc(100vw-1.5rem),24rem)] max-h-[calc(100dvh-2rem)]"
-    : "fixed inset-x-3 bottom-24 z-50 flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl shadow-black/40 max-h-[calc(100dvh-7rem)] sm:inset-x-auto sm:right-8 sm:w-[calc(100vw-3rem)] sm:max-w-sm";
+  // Base panel class — size and position come from style when explicit size is set.
+  const panelBase = "fixed z-50 flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl shadow-black/40";
+  let panelClassName: string;
+  let panelStyle: React.CSSProperties | undefined;
+
+  if (size) {
+    panelClassName = panelBase;
+    if (position) {
+      panelStyle = { top: position.y, left: position.x, width: size.width, height: size.height };
+    } else {
+      // Anchored bottom-right; panel grows up/left as size increases.
+      panelStyle = { right: 32, bottom: 96, width: size.width, height: size.height };
+    }
+  } else if (position) {
+    panelClassName = `${panelBase} w-[min(calc(100vw-1.5rem),24rem)] max-h-[calc(100dvh-2rem)]`;
+    panelStyle = { top: position.y, left: position.x };
+  } else {
+    // Default: full-width on mobile, max-w-sm anchored bottom-right on desktop.
+    panelClassName = `${panelBase} inset-x-3 bottom-24 max-h-[calc(100dvh-7rem)] sm:inset-x-auto sm:right-8 sm:w-[calc(100vw-3rem)] sm:max-w-sm`;
+    panelStyle = undefined;
+  }
 
   return (
     <>
@@ -418,8 +561,40 @@ export function ChatWidget() {
         <div
           ref={panelRef}
           className={panelClassName}
-          style={position ? { top: position.y, left: position.x } : undefined}
+          style={panelStyle}
         >
+          {/* Resize handle — top-left when anchored, bottom-right when dragged */}
+          {!position && (
+            <div
+              aria-hidden="true"
+              title="Drag to resize"
+              onPointerDown={handleResizePointerDown}
+              onPointerMove={(e) => handleResizePointerMove(e, "tl")}
+              onPointerUp={handleResizePointerUp}
+              onPointerCancel={handleResizePointerUp}
+              className="absolute left-0 top-0 z-20 flex h-5 w-5 cursor-nw-resize touch-none items-start justify-start p-1"
+            >
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" className="rotate-180 text-muted-foreground/30">
+                <path d="M7 1L1 7M7 4L4 7M7 7L7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </div>
+          )}
+          {position && (
+            <div
+              aria-hidden="true"
+              title="Drag to resize"
+              onPointerDown={handleResizePointerDown}
+              onPointerMove={(e) => handleResizePointerMove(e, "br")}
+              onPointerUp={handleResizePointerUp}
+              onPointerCancel={handleResizePointerUp}
+              className="absolute bottom-0 right-0 z-20 flex h-5 w-5 cursor-se-resize touch-none items-end justify-end p-1"
+            >
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" className="text-muted-foreground/30">
+                <path d="M7 1L1 7M7 4L4 7M7 7L7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </div>
+          )}
+
           {/* Header — drag handle */}
           <div
             onPointerDown={handleHeaderPointerDown}
@@ -451,8 +626,8 @@ export function ChatWidget() {
             </div>
           </div>
 
-          {/* Messages */}
-          <div className="flex min-h-[240px] flex-1 flex-col gap-3 overflow-y-auto overscroll-contain p-4 sm:max-h-[360px]">
+          {/* Messages — max-h cap only applies when no explicit size is set */}
+          <div className={`flex min-h-[240px] flex-1 flex-col gap-3 overflow-y-auto overscroll-contain p-4${size ? "" : " sm:max-h-[360px]"}`}>
             {messages.length === 0 && (
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
@@ -478,10 +653,7 @@ export function ChatWidget() {
             )}
 
             {messages.map((m) => {
-              const text = m.parts
-                .filter((p): p is { type: "text"; text: string } => p.type === "text")
-                .map((p) => p.text)
-                .join("");
+              const text = getMessageText(m);
               if (!text) return null;
 
               if (m.role !== "assistant") {
@@ -494,12 +666,13 @@ export function ChatWidget() {
                 );
               }
 
+              const startUrl = buildStartUrl(messages);
               const { before, card, after } = parseInquiryCard(text);
               return (
                 <div key={m.id} className="flex flex-col items-start gap-2">
                   {before && (
                     <div className="max-w-[85%] rounded-2xl bg-card px-3.5 py-2.5 text-sm text-foreground break-words [overflow-wrap:anywhere]">
-                      {before}
+                      {renderMessageText(before, startUrl)}
                     </div>
                   )}
                   {card && (
@@ -509,7 +682,7 @@ export function ChatWidget() {
                   )}
                   {after && (
                     <div className="max-w-[85%] rounded-2xl bg-card px-3.5 py-2.5 text-sm text-foreground break-words [overflow-wrap:anywhere]">
-                      {after}
+                      {renderMessageText(after, startUrl)}
                     </div>
                   )}
                 </div>
