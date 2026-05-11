@@ -19,6 +19,8 @@ const MESSAGE_WARN_CHARS = 1500;
 const INQUIRY_KEY = "stratus_inquiry_submitted";
 const MIN_PANEL_WIDTH = 300;
 const MIN_PANEL_HEIGHT = 380;
+const MAX_PANEL_WIDTH = 560;
+const MAX_PANEL_HEIGHT = 660;
 
 interface InquiryCardData {
   email: string;
@@ -501,8 +503,8 @@ export function ChatWidget() {
         setSize((prev) => {
           if (!prev) return prev;
           return {
-            width: Math.min(prev.width, window.innerWidth - 16),
-            height: Math.min(prev.height, window.innerHeight - 100),
+            width: Math.min(prev.width, MAX_PANEL_WIDTH, window.innerWidth - 48),
+            height: Math.min(prev.height, MAX_PANEL_HEIGHT, window.innerHeight - 120),
           };
         });
       }
@@ -539,8 +541,8 @@ export function ChatWidget() {
       dW = e.clientX - startX;
       dH = e.clientY - startY;
     }
-    const newW = Math.max(MIN_PANEL_WIDTH, Math.min(window.innerWidth - 16, startW + dW));
-    const newH = Math.max(MIN_PANEL_HEIGHT, Math.min(window.innerHeight - 100, startH + dH));
+    const newW = Math.max(MIN_PANEL_WIDTH, Math.min(Math.min(MAX_PANEL_WIDTH, window.innerWidth - 48), startW + dW));
+    const newH = Math.max(MIN_PANEL_HEIGHT, Math.min(Math.min(MAX_PANEL_HEIGHT, window.innerHeight - 120), startH + dH));
     setSize({ width: newW, height: newH });
   };
 
